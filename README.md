@@ -1,36 +1,39 @@
 # SHINES — Headlight Restoration
 
-Marketing site and booking platform for SHINES headlight restoration (Belgium & Europe).
+Marketing site and online booking for SHINES headlight restoration (Belgium & Europe).
 
 ## Local development
 
 ```bash
 npm install
 cp .env.example .env.local
-# Enable booking locally:
-# NEXT_PUBLIC_BOOKING_ENABLED=true
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Public site vs booking
+## GitHub (public repo) — what stays private
 
-Online booking is **disabled by default** (`NEXT_PUBLIC_BOOKING_ENABLED=false`).
+A **public** GitHub repo is fine for Vercel’s free Hobby plan. You do **not** need to disable booking on the live site.
 
-- Marketing pages, pricing, contact, and news remain public.
-- `/book`, `/booking/*`, and booking APIs redirect or return 403 until you set `NEXT_PUBLIC_BOOKING_ENABLED=true` in Vercel.
+What must **never** be committed (already in `.gitignore`):
+
+- `.env.local` — passwords, Stripe keys, Resend API keys
+- `data/bookings.json` — real customer appointments and PII
+
+The booking **source code** in the repo is visible on a public repo (that is normal for open-source sites). If you want the codebase private too, switch the repo to **Private** on GitHub — Vercel still deploys private repos on the free plan.
+
+Secrets and customer data stay in Vercel Environment Variables and your database/storage, not in git.
 
 ## Deploy on Vercel (free tier)
 
-1. Push this repo to GitHub (public is fine for the free Hobby plan).
-2. Import the repo in [Vercel](https://vercel.com/new).
-3. Add environment variables from `.env.example` (do **not** commit secrets).
-4. Leave `NEXT_PUBLIC_BOOKING_ENABLED=false` until you are ready to accept online bookings.
-5. Deploy.
+1. Import [SHINES-HEADLIGHT-RESTORATION/shines-website](https://github.com/SHINES-HEADLIGHT-RESTORATION/shines-website) in [Vercel](https://vercel.com/new).
+2. Add environment variables from `.env.example` in the Vercel dashboard (never commit real values).
+3. Set `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`, and any Stripe/Resend keys you use.
+4. Deploy — booking stays on unless you set `NEXT_PUBLIC_BOOKING_ENABLED=false`.
 
-**Note:** Bookings are stored in `data/bookings.json` locally. Vercel serverless has a read-only filesystem, so persistent booking on production requires a database or blob storage (future work).
+**Note:** Bookings are stored in `data/bookings.json` locally. Vercel serverless has a read-only filesystem, so production persistence needs a database (e.g. Neon via Vercel Marketplace) when you take live bookings on Vercel.
 
 ## Admin
 
-`/admin` is password-protected via `ADMIN_PASSWORD`. Keep a strong password in Vercel env vars only.
+`/admin` is password-protected via `ADMIN_PASSWORD`. Use a strong value in Vercel env vars only.

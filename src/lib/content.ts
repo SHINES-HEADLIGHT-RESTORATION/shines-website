@@ -18,7 +18,7 @@ export const faqs = [
   },
   {
     question: "How long does restoration take?",
-    answer: `At our garage, professional restoration takes ${site.turnaround.local.toLowerCase()}, often a bit less for one lens. Both headlights usually take around two hours. Mail-in orders typically take ${site.turnaround.mailIn.toLowerCase()}.`,
+    answer: `At our garage, ${site.turnaround.localDetail} Mail-in orders typically take ${site.turnaround.mailIn.toLowerCase()}.`,
   },
   {
     question: "Can I drive home right after restoration?",

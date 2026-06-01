@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 export const processPagePath = "/headlight-restoration-process" as const;
 
 export const processSummary =
-  `SHINES restores headlights with a professional strip, recoat, and in-shop UV cure workflow. One headlight typically takes about one hour. When you leave, the coating is already rock-hard. No delicate drive home, no keeping the car dust-free overnight. Results are UV-protected and backed by our ${site.warranty.toLowerCase()}.`;
+  `SHINES restores headlights with a professional strip, recoat, and in-shop UV cure workflow. Each headlight or tail light typically takes about 30–60 minutes; both headlights usually about 45–90 minutes depending on size and condition. When you leave, the coating is already rock-hard. No delicate drive home, no keeping the car dust-free overnight. Results are UV-protected and backed by our ${site.warranty.toLowerCase()}.`;
 
 export const processInstantCureBenefit =
   "Many shops polish and seal, but skip full in-shop curing. We harden every lens on-site before handover, so you can drive straight home, through rain, or to the car wash without worrying about dust, fingerprints, or a soft finish ruining the result.";
@@ -92,9 +92,9 @@ export const processProof = [
   },
   {
     id: "turnaround",
-    title: "About one hour per headlight",
+    title: "About 30–60 minutes per lens",
     description:
-      "A standard lens is typically completed within an hour at our garage. Both headlights usually take around two hours, fast enough for same-day service and thorough enough for lasting results.",
+      "Restoration plus full in-shop cure typically takes about 30–60 minutes per headlight or tail light, or about 45–90 minutes for both headlights depending on size and oxidation severity. The coating is fully hardened before you drive away.",
     source: "SHINES service standard",
     url: null,
   },

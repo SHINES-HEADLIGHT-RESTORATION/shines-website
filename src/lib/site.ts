@@ -93,7 +93,10 @@ export const site = {
     OTHER: 25,
   },
   turnaround: {
-    local: "About 1 hour per headlight",
+    local:
+      "About 30–60 minutes per headlight or tail light; about 45–90 minutes for both",
+    localDetail:
+      "Typically, restoration plus full in-shop cure takes about 30–60 minutes per headlight or tail light, or about 45–90 minutes for both headlights depending on size and oxidation severity. The coating is fully hardened before you drive away.",
     mailIn: "3–5 business days plus shipping",
   },
   warranty: "1-year clarity guarantee",

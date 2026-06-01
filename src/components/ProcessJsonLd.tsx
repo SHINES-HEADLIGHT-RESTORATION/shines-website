@@ -69,7 +69,7 @@ export function ProcessJsonLd() {
     "@type": "HowTo",
     name: "Professional headlight restoration at SHINES",
     description: processSummary,
-    totalTime: "PT1H",
+    totalTime: "PT1H30M",
     step: processOverview.map((step, index) => ({
       "@type": "HowToStep",
       name: step.title,
