@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+.env*.local
+*.log
+.DS_Store
+
+# Local booking data (may contain customer PII)
+data/bookings.json
