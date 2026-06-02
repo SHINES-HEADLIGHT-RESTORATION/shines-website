@@ -11,6 +11,28 @@ import pg from "pg";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 
+function loadEnvLocal() {
+  const envPath = join(root, ".env.local");
+  if (!existsSync(envPath)) return;
+  for (const line of readFileSync(envPath, "utf8").split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (!process.env[key]) process.env[key] = value;
+  }
+}
+
+loadEnvLocal();
+
 const url = process.env.DATABASE_URL?.trim() || process.env.POSTGRES_URL?.trim();
 if (!url) {
   console.error("Set DATABASE_URL or POSTGRES_URL (from Vercel Neon integration).");
