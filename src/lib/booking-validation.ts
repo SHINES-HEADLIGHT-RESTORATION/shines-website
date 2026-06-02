@@ -1,4 +1,7 @@
 import type { HeadlightQuantity, ServiceMethodId } from "@/lib/booking";
+import { validateBookingFieldsLocalized } from "@/lib/i18n/catalog";
+import { en } from "@/lib/i18n/messages/en";
+import type { SiteMessages } from "@/lib/i18n/messages/types";
 
 export type BookingFieldName =
   | "quantity"
@@ -57,64 +60,17 @@ export function bookingFieldsForInput(input: BookingValidationInput): BookingFie
   return fields;
 }
 
+export function validateBookingFields(
+  input: BookingValidationInput,
+  messages: Pick<SiteMessages, "booking"> = en,
+): BookingFieldErrors {
+  return validateBookingFieldsLocalized(messages, input);
+}
+
 export function validateBookingField(
   field: BookingFieldName,
   input: BookingValidationInput,
+  messages: Pick<SiteMessages, "booking"> = en,
 ): string | undefined {
-  return validateBookingFields(input)[field];
-}
-
-export function validateBookingFields(input: BookingValidationInput): BookingFieldErrors {
-  const errors: BookingFieldErrors = {};
-
-  if (!input.firstName.trim()) {
-    errors.firstName = "Enter your first name.";
-  }
-
-  if (!input.lastName.trim()) {
-    errors.lastName = "Enter your last name.";
-  }
-
-  if (input.serviceId === "mobile" || input.serviceId === "ship") {
-    if (!input.street.trim()) {
-      errors.street = "Enter your street and number.";
-    }
-    if (!input.postalCode.trim()) {
-      errors.postalCode = "Enter your postal code.";
-    }
-    if (!input.city.trim()) {
-      errors.city = "Enter your city.";
-    }
-  }
-
-  if (input.needsVatInvoice) {
-    if (!input.companyName.trim()) {
-      errors.companyName = "Enter your company name.";
-    }
-    if (!input.vatNumber.trim()) {
-      errors.vatNumber = "Enter your VAT number.";
-    }
-  }
-
-  if (!input.email.trim()) {
-    errors.email = "Enter your email address.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email.trim())) {
-    errors.email = "Enter a valid email address.";
-  }
-
-  if (!input.phone.trim()) {
-    errors.phone = "Enter your mobile phone number.";
-  } else if (!/^\+?[\d\s().-]{8,}$/.test(input.phone.trim()) || input.phone.replace(/\D/g, "").length < 9) {
-    errors.phone = "Enter a valid mobile phone number.";
-  }
-
-  if (!input.vehicle.trim()) {
-    errors.vehicle = "Enter your car make and model.";
-  }
-
-  if (input.serviceId !== "ship" && !input.preferredSlot.trim()) {
-    errors.preferredSlot = "Choose your preferred date and time.";
-  }
-
-  return errors;
+  return validateBookingFields(input, messages)[field];
 }

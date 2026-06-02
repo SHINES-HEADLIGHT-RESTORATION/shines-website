@@ -1,0 +1,15 @@
+# SHINES Headlight Restoration
+
+> Professional headlight restoration in Belgium with mail-in service across Europe.
+
+- Website: https://shines.be
+- Contact: info@shines.be
+- Services: garage visit, mobile (Belgium), mail-in (Europe)
+- Pricing from €149 for both headlights (pair)
+- Process: https://shines.be/headlight-restoration-process
+- Belgium cities: https://shines.be/locations
+- Europe countries: https://shines.be/europe
+- FAQ: https://shines.be/#faq
+- Book: https://shines.be/book
+
+Languages: English, Dutch, French, German (auto-detected from browser; override at /choose-country-region).

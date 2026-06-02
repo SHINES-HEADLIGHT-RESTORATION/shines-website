@@ -1,13 +1,16 @@
 "use client";
 
-import { mailInNotes, mailInSteps, visitDropOffNote } from "@/lib/mail-in-flow";
+import { useI18n } from "@/components/I18nProvider";
 import { site } from "@/lib/site";
 import type { ServiceMethodId } from "@/lib/booking";
 
 export function BookingServiceNotes({ serviceId }: { serviceId: ServiceMethodId }) {
+  const { messages } = useI18n();
+  const flow = messages.mailInFlow;
+
   if (serviceId === "visit") {
     return (
-      <p className="text-sm leading-relaxed text-text-body">{visitDropOffNote}</p>
+      <p className="text-sm leading-relaxed text-text-body">{flow.visitNote}</p>
     );
   }
 
@@ -16,14 +19,14 @@ export function BookingServiceNotes({ serviceId }: { serviceId: ServiceMethodId 
       <details className="group text-sm text-[#1d1d1f]">
         <summary className="cursor-pointer list-none text-action-primary [&::-webkit-details-marker]:hidden">
           <span className="inline-flex items-center gap-1">
-            How mail-in works
+            {messages.booking.mailInHow}
             <span aria-hidden="true" className="transition-transform group-open:rotate-90">
               ›
             </span>
           </span>
         </summary>
         <ol className="mt-4 space-y-3 border-t border-[#d2d2d7] pt-4">
-          {mailInSteps.map((step, index) => (
+          {flow.stepDetails.map((step, index) => (
             <li key={step.title} className="flex gap-3">
               <span className="w-5 shrink-0 text-text-body">{index + 1}.</span>
               <div>
@@ -36,7 +39,7 @@ export function BookingServiceNotes({ serviceId }: { serviceId: ServiceMethodId 
           ))}
         </ol>
         <ul className="mt-4 space-y-1.5 text-text-body">
-          {mailInNotes.map((note) => (
+          {flow.notes.map((note) => (
             <li key={note}>• {note}</li>
           ))}
         </ul>

@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { BookNowHeroLink } from "@/components/BookNowCta";
-import { locationLabel } from "@/lib/site";
+import { useI18n } from "@/components/I18nProvider";
 
 export function Hero() {
+  const { messages } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -63,21 +64,19 @@ export function Hero() {
       >
         <div className="flex flex-col gap-2">
           <h1 className="text-[34px] font-semibold leading-[1.1] tracking-tight text-text-on-dark">
-            Drive with confidence after dark
+            {messages.hero.title}
           </h1>
           <p className="max-w-md text-[14px] leading-normal text-text-on-dark/85">
-            Foggy headlights cut your visibility when you need it most. SHINES
-            restores clarity so you see further, drive safer, and pass
-            inspection in {locationLabel()} or by mail across Europe.
+            {messages.hero.subtitle}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <BookNowHeroLink>Fix your headlights now</BookNowHeroLink>
+          <BookNowHeroLink>{messages.hero.cta}</BookNowHeroLink>
           <Link
             href="#technology"
             className="text-sm font-medium text-text-on-dark/90 underline underline-offset-4 transition-colors hover:text-text-on-dark"
           >
-            See before &amp; after
+            {messages.hero.secondary}
           </Link>
         </div>
       </div>

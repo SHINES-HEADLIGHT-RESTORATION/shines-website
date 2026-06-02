@@ -25,6 +25,7 @@ import {
   MOBILE_DEFAULT_ONE_WAY_KM,
 } from "@/lib/appointments/duration";
 import { formatSlotLabel } from "@/lib/appointments/slots";
+import { useI18n } from "@/components/I18nProvider";
 import { BookingFieldError } from "@/components/BookingCheckoutFields";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +41,7 @@ export function BookingAppointmentPicker({
   serviceId,
   oneWayKm,
   error,
-  label = "Preferred date & time",
+  label,
 }: {
   value: string | null;
   onChange: (slot: string | null) => void;
@@ -50,6 +51,9 @@ export function BookingAppointmentPicker({
   error?: string;
   label?: string;
 }) {
+  const { messages } = useI18n();
+  const picker = messages.booking.picker;
+  const fieldLabel = label ?? messages.booking.fields.preferredSlot;
   const id = useId();
   const errorId = `${id}-error`;
   const [open, setOpen] = useState(false);
@@ -160,7 +164,7 @@ export function BookingAppointmentPicker({
   }
 
   function displayLabel(): string {
-    if (!value) return "Choose a date and time";
+    if (!value) return picker.chooseDate;
     if (serviceId === "mobile") {
       return formatAppointmentRange(value, serviceId, { oneWayKm });
     }
@@ -204,7 +208,7 @@ export function BookingAppointmentPicker({
                 error ? "text-action-danger" : "text-text-body",
               )}
             >
-              {label}
+              {fieldLabel}
             </span>
             <span
               className={cn(
@@ -238,16 +242,12 @@ export function BookingAppointmentPicker({
           {selectedDate && (
             <div className="border-t p-3">
               <p className="mb-2 text-sm font-medium text-text-primary">
-                {serviceId === "mobile" && blockHours
-                  ? `Available arrival times (${blockHours}h block)`
-                  : "Available times"}
+                {picker.chooseTime}
               </p>
               {loadingSlots ? (
-                <p className="text-sm text-text-body">Loading times…</p>
+                <p className="text-sm text-text-body">{picker.loading}</p>
               ) : timeSlots.length === 0 ? (
-                <p className="text-sm text-text-body">
-                  No times left on this date.
-                </p>
+                <p className="text-sm text-text-body">{picker.noSlots}</p>
               ) : (
                 <div className="grid grid-cols-3 gap-2">
                   {timeSlots.map((time) => (

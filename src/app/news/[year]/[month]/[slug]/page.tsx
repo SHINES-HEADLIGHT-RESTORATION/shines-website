@@ -6,10 +6,12 @@ import { NewsJsonLd } from "@/components/NewsJsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import {
   getAllNewsArticles,
-  getNewsArticle,
+  getNewsArticleAsync,
   newsArticlePath,
   newsArticleSegments,
 } from "@/lib/news";
+import { getRequestMessages } from "@/lib/i18n/server";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import { site } from "@/lib/site";
 
 type PageProps = {
@@ -22,31 +24,22 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { year, month, slug } = await params;
-  const article = getNewsArticle(year, month, slug);
+  const { locale, messages } = await getRequestMessages();
+  const article = await getNewsArticleAsync(year, month, slug, locale);
   if (!article) return { title: site.name };
 
-  const url = `${site.url}${newsArticlePath(article)}`;
-
-  return {
+  return buildPageMetadata({
+    path: newsArticlePath(article),
+    locale,
     title: `${article.title} | ${site.name}`,
     description: article.dek,
-    alternates: { canonical: url },
-    openGraph: {
-      title: article.title,
-      description: article.dek,
-      url,
-      siteName: site.name,
-      locale: "en_BE",
-      type: "article",
-      publishedTime: article.publishedAt,
-    },
-    keywords: article.tags,
-  };
+  });
 }
 
 export default async function NewsArticlePage({ params }: PageProps) {
   const { year, month, slug } = await params;
-  const article = getNewsArticle(year, month, slug);
+  const { locale } = await getRequestMessages();
+  const article = await getNewsArticleAsync(year, month, slug, locale);
   if (!article) notFound();
 
   return (

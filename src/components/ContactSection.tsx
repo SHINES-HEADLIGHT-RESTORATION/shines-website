@@ -1,9 +1,13 @@
+"use client";
+
 import { BookNowPrimaryButton } from "@/components/BookNowCta";
 import {
   SectionHeading,
   SectionShell,
   TextLink,
 } from "@/components/SectionShell";
+import { useI18n } from "@/components/I18nProvider";
+import { formatMessage } from "@/lib/i18n/format-message";
 import {
   formatAddressLines,
   locationLabel,
@@ -12,15 +16,16 @@ import {
 } from "@/lib/site";
 
 export function ContactSection() {
+  const { messages } = useI18n();
+  const { contact: c } = messages;
   const addressLines = formatAddressLines();
+  const loc = locationLabel();
 
   return (
     <SectionShell evenPadding>
-      <SectionHeading>Contact &amp; visit</SectionHeading>
+      <SectionHeading>{c.title}</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
-        Book online for the fastest response, or reach us directly for
-        questions about drop-off, mobile service, or mail-in restoration across
-        Europe.
+        {c.intro}
       </p>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
@@ -30,7 +35,7 @@ export function ContactSection() {
               id="contact-address"
               className="text-xs font-semibold uppercase tracking-wide text-text-body"
             >
-              Address
+              {c.addressTitle}
             </h2>
             <address className="mt-3 not-italic text-sm leading-relaxed text-text-primary">
               {addressLines.map((line) => (
@@ -41,8 +46,7 @@ export function ContactSection() {
             </address>
             {!site.contact.street && (
               <p className="mt-2 text-xs text-text-body">
-                Full street address coming soon. Book online or email us for
-                directions in {locationLabel()}.
+                {formatMessage(c.addressPendingTemplate, { location: loc })}
               </p>
             )}
             {site.contact.mapsLink && (
@@ -53,7 +57,7 @@ export function ContactSection() {
                   rel="noopener noreferrer"
                   className="text-sm text-action-primary hover:underline"
                 >
-                  Get directions
+                  {c.directionsLabel}
                 </a>
               </p>
             )}
@@ -64,10 +68,10 @@ export function ContactSection() {
               id="contact-hours"
               className="text-xs font-semibold uppercase tracking-wide text-text-body"
             >
-              Opening hours
+              {c.hoursTitle}
             </h2>
             <ul className="mt-3 space-y-1 text-sm text-text-primary">
-              {site.contact.hours.map((row) => (
+              {c.hoursRows.map((row) => (
                 <li key={row.days} className="flex justify-between gap-4">
                   <span>{row.days}</span>
                   <span className="text-text-body">{row.hours}</span>
@@ -81,12 +85,12 @@ export function ContactSection() {
               id="contact-reach"
               className="text-xs font-semibold uppercase tracking-wide text-text-body"
             >
-              Reach us
+              {c.reachTitle}
             </h2>
             <ul className="mt-3 space-y-2 text-sm text-text-primary">
               <li>
                 <a
-                  href={mailtoQuote("Contact SHINES")}
+                  href={mailtoQuote(c.emailCta)}
                   className="text-action-primary hover:underline"
                 >
                   {site.email}
@@ -110,19 +114,19 @@ export function ContactSection() {
               id="contact-notes"
               className="text-xs font-semibold uppercase tracking-wide text-text-body"
             >
-              Drop-off &amp; mail-in
+              {c.dropOffTitle}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-text-body">
-              {site.contact.parkingNote} {site.contact.mailInNote}
+              {c.parkingNote} {c.mailInNote}
             </p>
           </section>
 
-          <BookNowPrimaryButton>Book online</BookNowPrimaryButton>
+          <BookNowPrimaryButton>{c.bookCta}</BookNowPrimaryButton>
         </div>
 
         <section aria-labelledby="contact-map" className="min-h-[320px]">
           <h2 id="contact-map" className="sr-only">
-            Map
+            {c.mapSrOnly}
           </h2>
           {site.contact.mapsEmbedUrl ? (
             <iframe
@@ -135,14 +139,11 @@ export function ContactSection() {
             />
           ) : (
             <div className="flex h-[320px] flex-col items-center justify-center rounded-2xl border border-text-primary/10 bg-surface px-6 text-center lg:h-full lg:min-h-[420px]">
-              <p className="text-sm text-text-body">
-                Map will appear here once your Google Maps embed URL is added in
-                site settings.
-              </p>
+              <p className="text-sm text-text-body">{c.mapPlaceholder}</p>
               <p className="mt-4 text-sm text-text-body">
-                Serving {locationLabel()} and mail-in customers across Europe.{" "}
+                {messages.locations.belgiumDescription}{" "}
                 <TextLink href="/locations" className="inline-flex">
-                  View all locations
+                  {c.viewAllLocations}
                   <span aria-hidden="true">&rsaquo;</span>
                 </TextLink>
               </p>

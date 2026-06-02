@@ -2,24 +2,16 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { PricingSummarySection } from "@/components/PricingSummarySection";
 import { SiteFooter } from "@/components/SiteFooter";
-import { pricingFromLabel, pricingPagePath, pricingSummary } from "@/lib/pricing";
-import { formatPrice, locationLabel, site } from "@/lib/site";
+import { localizedPageMetadata } from "@/lib/i18n/page-metadata";
+import { pricingPagePath } from "@/lib/pricing";
 
-export const metadata: Metadata = {
-  title: `Headlight Restoration Pricing | ${site.name} | ${locationLabel()}`,
-  description: `${pricingSummary} ${pricingFromLabel()}. Single from ${formatPrice(site.pricing.single.from)}, mail-in from ${formatPrice(site.pricing.mailIn.from)}.`,
-  openGraph: {
-    title: `Headlight restoration pricing | ${site.name}`,
-    description: pricingSummary,
-    url: `${site.url}${pricingPagePath}`,
-    siteName: site.name,
-    locale: "en_BE",
-    type: "website",
-  },
-  alternates: {
-    canonical: `${site.url}${pricingPagePath}`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedPageMetadata(
+    pricingPagePath,
+    "pricingTitle",
+    "pricingDescription",
+  );
+}
 
 export default function PricingPage() {
   return (

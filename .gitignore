@@ -4,6 +4,9 @@ out
 .env*.local
 *.log
 .DS_Store
+tsconfig.tsbuildinfo
+tst/
 
 # Local booking data (may contain customer PII)
 data/bookings.json
+.vercel

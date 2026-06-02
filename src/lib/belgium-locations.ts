@@ -18,7 +18,7 @@ function city(name: string, slug?: string): BelgiumCity {
   };
 }
 
-/** SEO location index — expand cities as you add service areas. */
+/** SEO location index, expand cities as you add service areas. */
 export const belgiumProvinces: BelgiumProvince[] = [
   {
     id: "west-vlaanderen",

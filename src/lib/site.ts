@@ -1,13 +1,13 @@
 export const site = {
   name: "SHINES",
-  email: "hello@shines.be",
+  email: "info@shines.be",
   url: "https://shines.be",
   location: {
     /** Set your garage city for local SEO, e.g. "Antwerp" */
     city: null as string | null,
     country: "Belgium",
   },
-  /** Garage contact details — fill in when your workshop address is confirmed. */
+  /** Garage contact details, fill in when your workshop address is confirmed. */
   contact: {
     street: null as string | null,
     postalCode: null as string | null,
@@ -42,7 +42,7 @@ export const site = {
   },
   /** Garage coordinates for mobile travel fee calculations. */
   workshop: {
-    /** Full garage address — or set WORKSHOP_ADDRESS in .env.local */
+    /** Full garage address, or set WORKSHOP_ADDRESS in .env.local */
     address: null as string | null,
     latitude: null as number | null,
     longitude: null as number | null,
@@ -57,10 +57,10 @@ export const site = {
     perKmRate: 0.95,
     /** Auto-calculated travel quote up to this one-way km */
     autoQuoteRadiusKm: 45,
-    /** Hard limit — beyond this, mobile is not offered online */
+    /** Hard limit, beyond this, mobile is not offered online */
     maxServiceRadiusKm: 75,
   },
-  /** Flat fee per service channel (incl. BTW) — covers handling / on-site setup. */
+  /** Flat fee per service channel (incl. BTW), covers handling / on-site setup. */
   serviceChannelFees: {
     ship: 25,
     mobile: 25,
@@ -82,7 +82,7 @@ export const site = {
     /** Your Belgian VAT number (BE0xxx.xxx.xxx) for invoices */
     vatNumber: null as string | null,
   },
-  /** Fixed return shipping (incl. BTW) by customer country — tune from real carrier invoices. */
+  /** Fixed return shipping (incl. BTW) by customer country, tune from real carrier invoices. */
   mailInReturnShipping: {
     BE: 12,
     NL: 15,

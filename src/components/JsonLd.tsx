@@ -1,13 +1,24 @@
-import { faqs } from "@/lib/content";
+import { getRequestMessages } from "@/lib/i18n/server";
+import { buildLanguageAlternates } from "@/lib/seo/alternates";
+import { buildOpeningHoursSpecification } from "@/lib/seo/opening-hours-schema";
 import { activeSocialLinks, site } from "@/lib/site";
+import { publicContact, publicEmail } from "@/lib/site-runtime";
 
-export function JsonLd() {
+export async function JsonLd() {
+  const { messages } = await getRequestMessages();
+  const homeAlternates = buildLanguageAlternates("/");
+  const contact = publicContact();
+  const openingHours = buildOpeningHoursSpecification();
+
   const localBusiness = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
+    "@id": `${site.url}/#organization`,
     name: site.name,
     url: site.url,
-    email: site.email,
+    email: publicEmail(),
+    ...(contact.phone && { telephone: contact.phone }),
+    ...(openingHours.length > 0 && { openingHoursSpecification: openingHours }),
     ...(activeSocialLinks().length > 0 && {
       sameAs: activeSocialLinks().map((link) => link.href),
     }),
@@ -15,12 +26,14 @@ export function JsonLd() {
       "Professional headlight restoration in Belgium with mail-in service across Europe.",
     areaServed: [
       { "@type": "Country", name: "Belgium" },
-      { "@type": "Place", name: "Europe" },
+      { "@type": "Continent", name: "Europe" },
     ],
-    ...(site.location.city && {
+    ...(contact.city && {
       address: {
         "@type": "PostalAddress",
-        addressLocality: site.location.city,
+        ...(contact.street && { streetAddress: contact.street }),
+        ...(contact.postalCode && { postalCode: contact.postalCode }),
+        addressLocality: contact.city,
         addressCountry: "BE",
       },
     }),
@@ -66,10 +79,20 @@ export function JsonLd() {
     },
   };
 
+  const webSite = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${site.url}/#website`,
+    name: site.name,
+    url: site.url,
+    publisher: { "@id": `${site.url}/#organization` },
+    inLanguage: Object.keys(homeAlternates.languages),
+  };
+
   const faqPage = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: messages.faq.items.map((faq) => ({
       "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
@@ -84,6 +107,10 @@ export function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSite) }}
       />
       <script
         type="application/ld+json"

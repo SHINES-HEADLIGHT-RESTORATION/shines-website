@@ -95,7 +95,7 @@ function AddressCell({ appointment }: { appointment: Appointment }) {
   const lines = formatCustomerAddressLines(appointment);
 
   if (!heading || lines.length === 0) {
-    return <span className="text-xs text-text-body">—</span>;
+    return <span className="text-xs text-text-body">-</span>;
   }
 
   return (
@@ -127,7 +127,7 @@ function CustomerDetailsCell({ appointment }: { appointment: Appointment }) {
 function BookingDetailsCell({ appointment }: { appointment: Appointment }) {
   const lines = formatAppointmentBookingLines(appointment);
   if (lines.length === 0) {
-    return <span className="text-xs text-text-body">—</span>;
+    return <span className="text-xs text-text-body">-</span>;
   }
   return (
     <div className="space-y-0.5 text-xs text-text-body">
@@ -391,7 +391,7 @@ export function AppointmentsAdmin() {
         <div>
           <h1 className="text-3xl font-semibold text-text-primary">Appointments</h1>
           <p className="mt-1 text-sm text-text-body">
-            All bookings in one place — visit, ship, and mobile.
+            All bookings in one place: visit, ship, and mobile.
           </p>
         </div>
         <Button variant="outline" onClick={handleLogout}>

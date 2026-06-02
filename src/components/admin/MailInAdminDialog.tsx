@@ -42,10 +42,10 @@ function saveMessage(data: {
     return `Saved. Email issue: ${data.emailWarning}`;
   }
   if (data.notified === "arrived") {
-    return "Saved — customer emailed (parcel arrived).";
+    return "Saved. Customer emailed (parcel arrived).";
   }
   if (data.notified === "ready_to_return") {
-    return "Saved — customer emailed (ready to return + pay link).";
+    return "Saved, customer emailed (ready to return + pay link).";
   }
   return "Saved.";
 }
@@ -204,7 +204,7 @@ export function MailInAdminDialog({
     setMessage(
       data.emailWarning
         ? `Return shipped. Email issue: ${data.emailWarning}`
-        : "Return shipped — customer emailed with tracking.",
+        : "Return shipped. Customer emailed with tracking.",
     );
     setOpen(false);
     await onUpdated();

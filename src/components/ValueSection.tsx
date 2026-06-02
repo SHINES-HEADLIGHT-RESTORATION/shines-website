@@ -1,113 +1,106 @@
+"use client";
+
 import { BookNowTextLink } from "@/components/BookNowCta";
 import { SectionHeading, SectionShell, TextLink } from "@/components/SectionShell";
 import { type AppleCardItem } from "@/components/AppleCard";
 import { AppleCardIcons } from "@/components/AppleCardIcons";
 import { CardCarousel } from "@/components/CardCarousel";
+import { useI18n } from "@/components/I18nProvider";
 import { processPagePath } from "@/lib/process";
-import { locationLabel, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
-const outcomeCards: AppleCardItem[] = [
-  {
-    id: "visibility",
-    title: "See the road again",
-    description:
-      "Restored lenses improve light output so rain, unlit roads, and oncoming traffic feel manageable again, not something you white-knuckle through.",
-    icon: AppleCardIcons.eye,
-  },
-  {
-    id: "confidence",
-    title: "Drive without that knot in your stomach",
-    description:
-      "No more guessing how far you can see. No more avoiding night drives because your lights let you down when you need them most.",
-    icon: AppleCardIcons.heart,
-  },
-  {
-    id: "value",
-    title: "Pass inspection. Protect resale value.",
-    description:
-      "Clear headlights help with technical inspection and make your car look cared-for. Buyers notice immediately when the lenses look new.",
-    icon: AppleCardIcons.checkBadge,
-  },
-];
-
-const trustCards: AppleCardItem[] = [
+const TRUST_CARD_MEDIA = [
   {
     id: "oem",
-    eyebrow: "Process",
-    title: "OEM-grade process",
-    description:
-      "Same standards as the industry that builds your headlights, finished with in-shop UV curing so the coat is rock-hard before you drive away.",
     image: {
       src: "/images/eom.png",
       alt: "EOM stamp representing OEM-grade restoration standards",
-      position: "near-center",
-      size: "lg",
+      position: "near-center" as const,
+      size: "lg" as const,
       offsetX: 0,
       offsetY: 0,
     },
     href: processPagePath,
-    linkLabel: "Read our process",
   },
   {
     id: "results",
-    eyebrow: "Results",
-    title: "Before & after, every time",
-    description:
-      "You see the difference before you leave. Crystal-clear lenses with professional sealing and UV protection.",
     image: {
       src: "/images/carheadligthexample.png",
       alt: "Mustang at night with clear headlight beam after restoration",
-      position: "center",
+      position: "center" as const,
     },
   },
   {
     id: "service-area",
-    eyebrow: "Service",
-    title: "Belgium garage, Europe-wide",
-    description: `Drop off locally in ${locationLabel()}, or ship your headlights for mail-in restoration anywhere in Europe.`,
     image: {
       src: "/images/boxsendtopackage.png",
       alt: "Shipping box for mail-in headlight restoration across Europe",
-      position: "lower-right",
+      position: "lower-right" as const,
     },
   },
-];
+] as const;
 
 export function ValueSection() {
+  const { messages } = useI18n();
+  const { value: v } = messages;
+
+  const outcomeCards: AppleCardItem[] = [
+    {
+      id: "visibility",
+      title: v.outcomes[0]!.title,
+      description: v.outcomes[0]!.description,
+      icon: AppleCardIcons.eye,
+    },
+    {
+      id: "confidence",
+      title: v.outcomes[1]!.title,
+      description: v.outcomes[1]!.description,
+      icon: AppleCardIcons.heart,
+    },
+    {
+      id: "value",
+      title: v.outcomes[2]!.title,
+      description: v.outcomes[2]!.description,
+      icon: AppleCardIcons.checkBadge,
+    },
+  ];
+
+  const trustCards: AppleCardItem[] = v.trustCards.map((card, index) => {
+    const media = TRUST_CARD_MEDIA[index]!;
+    return {
+      id: media.id,
+      eyebrow: card.eyebrow,
+      title: card.title,
+      description: card.description,
+      image: media.image,
+      href: "href" in media ? media.href : undefined,
+      linkLabel: card.linkLabel,
+    };
+  });
+
   return (
     <SectionShell id="proof">
       <div className="pb-16 md:pb-20">
-        <SectionHeading>
-          What changes when your headlights are restored
-        </SectionHeading>
+        <SectionHeading>{v.outcomesTitle}</SectionHeading>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
-          Headlight restoration is not about making your car look pretty. It is
-          about getting back the visibility and confidence you lost.
+          {v.outcomesIntro}
         </p>
-        <CardCarousel items={outcomeCards} ariaLabel="Restoration outcomes" />
+        <CardCarousel items={outcomeCards} ariaLabel={v.outcomesTitle} />
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-text-body">
-          Most local restorations are completed within{" "}
-          <span className="font-semibold text-text-primary">
-            {site.turnaround.local.toLowerCase()}
-          </span>
-          , backed by our {site.warranty.toLowerCase()}. Every lens is UV-cured
-          on-site, hardened before you leave, not days later.
+          {v.turnaroundNote}
         </p>
       </div>
 
       <div className="pt-16 md:pt-20">
-        <SectionHeading>
-          Trusted by drivers across Belgium and Europe
-        </SectionHeading>
+        <SectionHeading>{v.trustTitle}</SectionHeading>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
-          Real results from real drivers: restored clarity, safer night driving,
-          and headlights that stay clear because we seal them properly.{" "}
+          {v.trustIntro}{" "}
           <BookNowTextLink className="inline-flex">
-            Book now
+            {v.bookCta}
             <span aria-hidden="true">&rsaquo;</span>
           </BookNowTextLink>
         </p>
-        <CardCarousel items={trustCards} ariaLabel="Why choose Shines" />
+        <CardCarousel items={trustCards} ariaLabel={v.trustTitle} />
       </div>
     </SectionShell>
   );

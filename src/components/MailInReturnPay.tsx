@@ -47,7 +47,7 @@ export function MailInReturnPay({ booking, returnPaidBanner }: MailInReturnPayPr
 
       {returnPaidBanner && (
         <p className="mt-2 text-sm font-medium text-action-primary">
-          Payment received — thank you. We&apos;ll ship your headlights soon.
+          Payment received. Thank you. We&apos;ll ship your headlights soon.
         </p>
       )}
 
@@ -61,7 +61,7 @@ export function MailInReturnPay({ booking, returnPaidBanner }: MailInReturnPayPr
         <>
           <p className="mt-2 text-sm leading-relaxed text-text-body">
             Your restoration is done. Pay return shipping (
-            {booking.returnShippingLabel}) in one step — then we send your headlights
+            {booking.returnShippingLabel}) in one step, then we send your headlights
             to your saved address.
           </p>
           {!booking.returnPaymentAvailable ? (
@@ -78,7 +78,7 @@ export function MailInReturnPay({ booking, returnPaidBanner }: MailInReturnPayPr
                 disabled={loading}
                 className="mt-4 inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-action-primary text-base font-medium text-text-on-dark transition-opacity hover:opacity-90 disabled:opacity-60 sm:w-auto sm:px-8"
               >
-                {loading ? "Opening checkout…" : `Pay return shipping — ${booking.returnShippingLabel}`}
+                {loading ? "Opening checkout…" : `Pay return shipping (${booking.returnShippingLabel})`}
               </button>
             </>
           )}

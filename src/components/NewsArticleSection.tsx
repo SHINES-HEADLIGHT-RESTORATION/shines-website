@@ -4,11 +4,11 @@ import { NewsArticleCard } from "@/components/NewsArticleCard";
 import { NewsArticleMedia } from "@/components/NewsArticleMedia";
 import { NewsroomSubnav } from "@/components/NewsroomSubnav";
 import { SectionShell, TextLink } from "@/components/SectionShell";
+import { getRequestMessages } from "@/lib/i18n/server";
 import {
   formatNewsDate,
-  getRelatedNewsArticles,
+  getRelatedNewsArticlesAsync,
   newsArticlePath,
-  newsCategoryLabels,
   newsPagePath,
   type NewsArticle,
   type NewsBlock,
@@ -43,8 +43,10 @@ type NewsArticleSectionProps = {
   article: NewsArticle;
 };
 
-export function NewsArticleSection({ article }: NewsArticleSectionProps) {
-  const related = getRelatedNewsArticles(article);
+export async function NewsArticleSection({ article }: NewsArticleSectionProps) {
+  const { locale, messages } = await getRequestMessages();
+  const related = await getRelatedNewsArticlesAsync(article, 3, locale);
+  const categories = messages.news.categories;
 
   return (
     <>
@@ -115,7 +117,7 @@ export function NewsArticleSection({ article }: NewsArticleSectionProps) {
                   Category
                 </p>
                 <p className="mt-1 text-sm text-text-primary">
-                  {newsCategoryLabels[article.category]}
+                  {categories[article.category]}
                 </p>
               </div>
               {article.tags.length > 0 && (
@@ -149,7 +151,12 @@ export function NewsArticleSection({ article }: NewsArticleSectionProps) {
             </h2>
             <div className="mt-2 grid md:grid-cols-2 md:gap-x-12 lg:grid-cols-3">
               {related.map((item) => (
-                <NewsArticleCard key={item.slug} article={item} compact />
+                <NewsArticleCard
+                  key={item.slug}
+                  article={item}
+                  compact
+                  categories={categories}
+                />
               ))}
             </div>
             <p className="mt-8">

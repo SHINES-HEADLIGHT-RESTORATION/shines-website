@@ -1,0 +1,404 @@
+import type { NewsArticle } from "@/lib/news/types";
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type LabeledOption = {
+  label: string;
+  description: string;
+};
+
+export type SiteMessages = {
+  common: {
+    included: string;
+    optional: string;
+    close: string;
+    loading: string;
+    bookFromTemplate: string;
+    viewPricing: string;
+    contact: string;
+    seeProcess: string;
+    bookNow: string;
+    backToHome: string;
+    breadcrumbHome: string;
+    europe: string;
+    locations: string;
+    shinesHome: string;
+    openMenu: string;
+    closeMenu: string;
+    menu: string;
+    previous: string;
+    next: string;
+  };
+  meta: {
+    homeTitle: string;
+    homeDescription: string;
+    aboutTitle: string;
+    aboutDescription: string;
+    contactTitle: string;
+    contactDescription: string;
+    pricingTitle: string;
+    pricingDescription: string;
+    processTitle: string;
+    processDescription: string;
+    bookTitle: string;
+    bookDescription: string;
+    newsTitle: string;
+    newsDescription: string;
+    locationsTitle: string;
+    locationsDescription: string;
+    regionTitle: string;
+    regionDescription: string;
+    bookingLookupTitle: string;
+    bookingLookupDescription: string;
+    myBookingTitle: string;
+    privacyTitle: string;
+    privacyDescription: string;
+    termsTitle: string;
+    termsDescription: string;
+    cityTitleTemplate: string;
+    cityDescriptionTemplate: string;
+  };
+  nav: {
+    home: string;
+    process: string;
+    pricing: string;
+    news: string;
+    about: string;
+    contact: string;
+    bookNow: string;
+    locationsBelgium: string;
+    locationsEurope: string;
+  };
+  hero: {
+    title: string;
+    subtitle: string;
+    cta: string;
+    secondary: string;
+  };
+  restoration: {
+    title: string;
+    intro: string;
+    reasons: { title: string; text: string }[];
+    cta: string;
+    imageAlts: { yellowed: string; restored: string; mustang: string };
+  };
+  value: {
+    outcomesTitle: string;
+    outcomesIntro: string;
+    outcomes: { title: string; description: string }[];
+    turnaroundNote: string;
+    trustTitle: string;
+    trustIntro: string;
+    trustCards: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      linkLabel?: string;
+    }[];
+    bookCta: string;
+  };
+  howItWorks: {
+    title: string;
+    intro: string;
+    introLink: string;
+    steps: { eyebrow: string; title: string; description: string }[];
+    processBody: string;
+    processLink: string;
+    carouselLabel: string;
+  };
+  bookCta: {
+    title: string;
+    body: string;
+    link: string;
+  };
+  about: {
+    title: string;
+    intro: string;
+    whyTitle: string;
+    whyBody: string;
+    whereTitle: string;
+    whereBody: string;
+    promiseTitle: string;
+    promiseItems: string[];
+    processTitle: string;
+    processBody: string;
+    processLink: string;
+    cta: string;
+  };
+  contact: {
+    title: string;
+    intro: string;
+    addressTitle: string;
+    addressPendingTemplate: string;
+    directionsLabel: string;
+    hoursTitle: string;
+    hoursRows: { days: string; hours: string }[];
+    reachTitle: string;
+    dropOffTitle: string;
+    mapSrOnly: string;
+    mapPlaceholder: string;
+    viewAllLocations: string;
+    parkingNote: string;
+    mailInNote: string;
+    bookCta: string;
+    emailCta: string;
+  };
+  pricing: {
+    title: string;
+    summary: string;
+    bookLink: string;
+    comparisonTitle: string;
+    comparisonIntro: string;
+    tableHeadAspect: string;
+    tableHeadShines: string;
+    tableHeadDiy: string;
+    comingSoon: string;
+    tiersTitle: string;
+    modifiersTitle: string;
+    footerCta: string;
+    tiers: { label: string; description: string; includes: string }[];
+    valueRows: { label: string }[];
+    modifiers: { label: string; detail: string }[];
+    comparisonClosing: string;
+  };
+  processPage: {
+    label: string;
+    title: string;
+    summary: string;
+    bookCta: string;
+    instantCureTitle: string;
+    instantCureBody: string;
+    oemTitle: string;
+    oemBody1: string;
+    oemBody2: string;
+    pillarsTitle: string;
+    overviewTitle: string;
+    overviewTiming: string;
+    stepLabelTemplate: string;
+    pillars: { title: string; description: string }[];
+    overview: { title: string; description: string }[];
+    proofTitle: string;
+    proofIntro: string;
+    proof: { title: string; description: string; source: string }[];
+    comparisonTitle: string;
+    comparisonHeaders: { aspect: string; diy: string; professional: string };
+    comparisonRows: { aspect: string; diy: string; professional: string }[];
+    standardsTitle: string;
+    standards: string[];
+    closingTitle: string;
+    closingBody: string;
+    backHome: string;
+  };
+  faq: {
+    title: string;
+    intro: string;
+    contactPrompt: string;
+    contactOr: string;
+    contactLink: string;
+    items: FaqItem[];
+  };
+  footer: {
+    finePrint: string[];
+    breadcrumb: string;
+    followTitle: string;
+    copyrightTemplate: string;
+    contactLineBooking: string;
+    contactLineEmail: string;
+    columns: {
+      bookPricing: { title: string; links: { label: string; href: string }[] };
+      learn: { title: string; links: { label: string; href: string }[] };
+      service: { title: string; links: { label: string; href: string }[] };
+      shines: { title: string; links: { label: string; href: string }[] };
+    };
+    legal: {
+      privacy: string;
+      terms: string;
+      warranty: string;
+      locations: string;
+      europe: string;
+    };
+    changeRegionLabel: string;
+  };
+  europe: {
+    hubTitle: string;
+    hubDescription: string;
+    countryTitleTemplate: string;
+    countryIntroTemplate: string;
+    mailInNote: string;
+    belgiumGarage: string;
+    viewPricing: string;
+  };
+  locations: {
+    belgiumTitle: string;
+    belgiumDescription: string;
+    europeLink: string;
+    cityWarrantyTemplate: string;
+    cityBookCta: string;
+    cityPricingCta: string;
+  };
+  regions: {
+    pageTitle: string;
+    pageIntro: string;
+    breadcrumb: string;
+    groups: { title: string }[];
+  };
+  news: {
+    indexTitle: string;
+    latestTitle: string;
+    featuredSr: string;
+    aboutTitle: string;
+    aboutBody: string;
+    relatedTitle: string;
+    readMore: string;
+    categories: Record<string, string>;
+    subnav: { news: string; about: string; process: string };
+  };
+  legal: {
+    privacyHeading: string;
+    privacyBody: string;
+    termsHeading: string;
+    termsBody: string;
+  };
+  booking: {
+    pageTitle: string;
+    pageIntro: string;
+    popularLabel: string;
+    stepLegends: {
+      quantity: string;
+      quantitySingleMobile: string;
+      size: string;
+      sizeHint: string;
+      condition: string;
+      conditionHint: string;
+      service: string;
+    };
+    contactDetailsTitle: string;
+    shipAddressNote: string;
+    mobileOutOfAreaNote: string;
+    distanceLoading: string;
+    distanceLoadingSlots: string;
+    mobileAddressRequired: string;
+    submitEmailHint: string;
+    summaryTitle: string;
+    summaryVat: string;
+    summaryLabels: {
+      size: string;
+      condition: string;
+      service: string;
+      quantity: string;
+      pair: string;
+      single: string;
+    };
+    returnShippingNote: string;
+    priceFrom: string;
+    mobileTravelQuote: string;
+    steps: { options: string; details: string; schedule: string; confirm: string };
+    chooseOptions: string;
+    quantity: LabeledOption[];
+    sizes: LabeledOption[];
+    conditions: (LabeledOption & { shortLabel: string })[];
+    services: LabeledOption[];
+    priceLabels: {
+      base: string;
+      size: string;
+      condition: string;
+      service: string;
+      travel: string;
+      total: string;
+      mailInHandling: string;
+      mobileService: string;
+    };
+    continue: string;
+    back: string;
+    confirmBooking: string;
+    whereTitle: { mobile: string; ship: string; default: string };
+    whereSubtitle: string;
+    fields: {
+      firstName: string;
+      lastName: string;
+      suffix: string;
+      street: string;
+      apartment: string;
+      postalCode: string;
+      city: string;
+      country: string;
+      businessAddress: string;
+      companyName: string;
+      vatNumber: string;
+      billingAddress: string;
+      email: string;
+      phone: string;
+      vehicle: string;
+      notes: string;
+      preferredSlot: string;
+    };
+    contactAside: string;
+    aboutSection: { ship: string; default: string };
+    mailInHow: string;
+    pairOnlyMobile: string;
+    slotError: string;
+    travelFeeNote: string;
+    validation: Record<string, string>;
+    lookup: {
+      title: string;
+      intro: string;
+      label: string;
+      placeholder: string;
+      submit: string;
+      error: string;
+    };
+    hub: {
+      title: string;
+      loading: string;
+      cancelled: string;
+      bookmarkShip: string;
+      bookmarkDefault: string;
+      details: string;
+      cancel: string;
+      cancelConfirm: string;
+      reference: string;
+    };
+    mailIn: {
+      confirmationTitle: string;
+      confirmationSteps: string[];
+      shippingTitle: string;
+      shippingCarrier: string;
+      shippingTracking: string;
+      shippingSave: string;
+      returnPayTitle: string;
+      returnPayBody: string;
+      returnPayButton: string;
+      returnPaid: string;
+    };
+    picker: {
+      chooseDate: string;
+      chooseTime: string;
+      noSlots: string;
+      loading: string;
+    };
+  };
+  mailInFlow: {
+    steps: string[];
+    stepDetails: { title: string; description: string }[];
+    notes: string[];
+    shipToNote: string;
+    visitNote: string;
+    unboxingNote: string;
+    workshopNote: string;
+  };
+  mailInStatus: Record<string, string>;
+  mobilePricing: {
+    manualQuoteTemplate: string;
+    breakdownLabels: { regio: string; extra: string; total: string };
+  };
+  appointments: {
+    goTo: string;
+    returnTo: string;
+    mailInAwaiting: string;
+    mobileNoticeTemplate: string;
+  };
+  articles: NewsArticle[];
+};

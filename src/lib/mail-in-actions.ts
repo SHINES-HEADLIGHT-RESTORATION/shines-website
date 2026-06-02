@@ -15,7 +15,7 @@ export type MailInStatusNotification = "arrived" | "ready_to_return";
 function emailWarningFromResult(result: SendEmailResult): string | undefined {
   if (!result.ok) return result.error;
   if ("skipped" in result && result.skipped) {
-    return "Email not sent (RESEND_API_KEY missing — logged in dev).";
+    return "Email not sent (RESEND_API_KEY missing). Logged in dev.";
   }
   return undefined;
 }

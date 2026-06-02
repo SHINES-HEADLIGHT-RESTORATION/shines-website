@@ -1,10 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import { BookNowTextLink } from "@/components/BookNowCta";
 import { SectionHeading, SectionShell } from "@/components/SectionShell";
+import { useI18n } from "@/components/I18nProvider";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
 
 export function BookCtaSection() {
+  const { messages } = useI18n();
+
   if (!isPublicBookingEnabled()) return null;
+
+  const { bookCta: c } = messages;
 
   return (
     <SectionShell evenPadding>
@@ -19,14 +26,13 @@ export function BookCtaSection() {
             aria-hidden
           />
         </div>
-        <SectionHeading>Ready to see the road clearly again?</SectionHeading>
+        <SectionHeading>{c.title}</SectionHeading>
         <p className="mt-3 max-w-md text-base leading-relaxed text-text-body">
-          Book online in minutes. Choose your size, condition, and service
-          method. Your price updates instantly. No quote needed.
+          {c.body}
         </p>
         <div className="mt-4">
           <BookNowTextLink>
-            Book now
+            {c.link}
             <span aria-hidden="true">&rsaquo;</span>
           </BookNowTextLink>
         </div>

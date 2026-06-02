@@ -48,7 +48,7 @@ export async function sendMailInReadyToReturnEmail(appointment: Appointment) {
 <p>Your restoration is complete. Pay return shipping (${price}) on your booking page and we&apos;ll send your headlights back to you.</p>
 ${referenceLine(appointment)}
 <p style="margin:20px 0"><a href="${hub}" style="display:inline-block;padding:12px 20px;background:#0f62fe;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">Pay return shipping</a></p>
-<p style="font-size:14px;color:#6e6e73">One payment, one step — then we ship to your saved address.</p>
+<p style="font-size:14px;color:#6e6e73">One payment, one step, then we ship to your saved address.</p>
 `);
   return sendTransactionalEmail({
     to: appointment.email,
@@ -76,7 +76,7 @@ ${tracking}
     to: appointment.email,
     subject: `Your headlights are on the way${appointment.reference ? ` · ${appointment.reference}` : ""}`,
     html,
-    text: `Return shipment sent. ${appointment.returnCarrier ?? ""} ${appointment.returnTracking ?? ""} — ${hub}`,
+    text: `Return shipment sent. ${appointment.returnCarrier ?? ""} ${appointment.returnTracking ?? ""}. ${hub}`,
   });
 }
 

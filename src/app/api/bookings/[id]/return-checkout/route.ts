@@ -60,7 +60,7 @@ export async function POST(
           currency: "eur",
           unit_amount: cents,
           product_data: {
-            name: "Return shipping — mail-in headlights",
+            name: "Return shipping (mail-in headlights)",
             description: `${site.name} · ${reference}`,
           },
         },

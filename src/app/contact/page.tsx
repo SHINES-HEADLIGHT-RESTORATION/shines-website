@@ -2,15 +2,11 @@ import type { Metadata } from "next";
 import { ContactSection } from "@/components/ContactSection";
 import { Header } from "@/components/Header";
 import { SiteFooter } from "@/components/SiteFooter";
-import { locationLabel, site } from "@/lib/site";
+import { localizedPageMetadata } from "@/lib/i18n/page-metadata";
 
-export const metadata: Metadata = {
-  title: `Contact ${site.name} | ${locationLabel()}`,
-  description: `Visit our garage in ${locationLabel()}, book online, or email ${site.email}. Headlight restoration, mobile service, and mail-in across Europe.`,
-  alternates: {
-    canonical: `${site.url}/contact`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedPageMetadata("/contact", "contactTitle", "contactDescription");
+}
 
 export default function ContactPage() {
   return (

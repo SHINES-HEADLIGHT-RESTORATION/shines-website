@@ -160,8 +160,8 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
         ) : (
           <p className="mt-4 text-sm text-text-body">
             {booking.serviceId === "ship"
-              ? "No account needed — bookmark this page to track your parcel and manage your mail-in booking."
-              : "No account needed — bookmark this page to view or cancel your appointment."}
+              ? "No account needed. Bookmark this page to track your parcel and manage your mail-in booking."
+              : "No account needed. Bookmark this page to view or cancel your appointment."}
           </p>
         )}
 

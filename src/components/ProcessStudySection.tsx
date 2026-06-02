@@ -4,33 +4,27 @@ import {
   SectionShell,
   TextLink,
 } from "@/components/SectionShell";
-import {
-  processComparison,
-  processInstantCureBenefit,
-  processOverview,
-  processPillars,
-  processProof,
-  processStandards,
-  processSummary,
-} from "@/lib/process";
-import { formatPrice, locationLabel, site } from "@/lib/site";
+import { formatMessage } from "@/lib/i18n/format-message";
+import { getRequestMessages } from "@/lib/i18n/server";
+import { formatPrice, site } from "@/lib/site";
 
-export function ProcessStudySection() {
+export async function ProcessStudySection() {
+  const { messages } = await getRequestMessages();
+  const p = messages.processPage;
+
   return (
     <SectionShell evenPadding>
       <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-        Process
+        {p.label}
       </p>
-      <SectionHeading className="mt-2">
-        Professional headlight restoration you can trust
-      </SectionHeading>
+      <SectionHeading className="mt-2">{p.title}</SectionHeading>
 
       <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-body">
-        {processSummary}
+        {p.summary}
       </p>
 
       <div className="mt-8">
-        <BookNowPrimaryButton>Book restoration</BookNowPrimaryButton>
+        <BookNowPrimaryButton>{p.bookCta}</BookNowPrimaryButton>
       </div>
 
       <aside
@@ -41,10 +35,10 @@ export function ProcessStudySection() {
           id="instant-cure"
           className="text-xl font-semibold text-[#0B0B0E] md:text-2xl"
         >
-          Drive away fully cured, not days later
+          {p.instantCureTitle}
         </h2>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#1d1d1f]">
-          {processInstantCureBenefit}
+          {p.instantCureBody}
         </p>
       </aside>
 
@@ -53,18 +47,13 @@ export function ProcessStudySection() {
           id="why-oem"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          Why &ldquo;OEM-grade&rdquo; is not marketing. It is chemistry.
+          {p.oemTitle}
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-body">
-          Polycarbonate headlights ship from the factory with a hard UV coat.
-          When that coat fails, the plastic yellows and hazes. A quick buff or
-          DIY kit only polishes the damage. It does not replace the protection
-          layer. Without a new UV hard coat, clarity fades again within months.
+          {p.oemBody1}
         </p>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-body">
-          Our workflow follows the professional restoration sequence: strip,
-          refine, coat, cure. That is why results look and perform like new
-          lenses, not like a temporary shine.
+          {p.oemBody2}
         </p>
       </section>
 
@@ -73,12 +62,12 @@ export function ProcessStudySection() {
           id="three-pillars"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          The three-part system
+          {p.pillarsTitle}
         </h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {processPillars.map((pillar) => (
+          {p.pillars.map((pillar) => (
             <article
-              key={pillar.id}
+              key={pillar.title}
               className="rounded-2xl border border-text-primary/10 bg-surface p-6"
             >
               <h3 className="text-lg font-semibold text-text-primary">
@@ -97,20 +86,19 @@ export function ProcessStudySection() {
           id="overview"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          What happens when you book
+          {p.overviewTitle}
         </h2>
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-text-body">
-          Typical timing: {site.turnaround.local.toLowerCase()} at our garage in{" "}
-          {locationLabel()}. Severe damage or oversized lenses may take longer.
+          {p.overviewTiming}
         </p>
         <ol className="mt-8 grid gap-4 md:grid-cols-2">
-          {processOverview.map((step, index) => (
+          {p.overview.map((step, index) => (
             <li
-              key={step.id}
+              key={step.title}
               className="rounded-2xl border border-text-primary/10 bg-surface p-6"
             >
               <p className="text-xs font-semibold uppercase tracking-wide text-text-body">
-                Step {index + 1}
+                {formatMessage(p.stepLabelTemplate, { n: index + 1 })}
               </p>
               <h3 className="mt-2 text-lg font-semibold text-[#0B0B0E]">
                 {step.title}
@@ -128,10 +116,10 @@ export function ProcessStudySection() {
           id="standards"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          Our standards on every job
+          {p.standardsTitle}
         </h2>
         <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-relaxed text-text-body">
-          {processStandards.map((item) => (
+          {p.standards.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
@@ -142,16 +130,15 @@ export function ProcessStudySection() {
           id="proof"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          Why customers choose SHINES
+          {p.proofTitle}
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-body">
-          We focus on outcomes and standards you can verify at handover, not
-          workshop jargon.
+          {p.proofIntro}
         </p>
         <ul className="mt-8 space-y-4">
-          {processProof.map((item) => (
+          {p.proof.map((item) => (
             <li
-              key={item.id}
+              key={item.title}
               className="rounded-2xl border border-text-primary/10 bg-surface p-6"
             >
               <h3 className="text-lg font-semibold text-[#0B0B0E]">
@@ -170,25 +157,25 @@ export function ProcessStudySection() {
           id="comparison"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          DIY kit vs. professional restoration
+          {p.comparisonTitle}
         </h2>
         <div className="mt-8 overflow-x-auto rounded-2xl border border-text-primary/10 bg-surface">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead>
               <tr className="border-b border-text-primary/10">
                 <th className="px-6 py-4 font-semibold text-[#0B0B0E]">
-                  Factor
+                  {p.comparisonHeaders.aspect}
                 </th>
                 <th className="px-6 py-4 font-semibold text-[#0B0B0E]">
-                  DIY / quick buff
+                  {p.comparisonHeaders.diy}
                 </th>
                 <th className="px-6 py-4 font-semibold text-[#0B0B0E]">
-                  SHINES
+                  {p.comparisonHeaders.professional}
                 </th>
               </tr>
             </thead>
             <tbody>
-              {processComparison.map((row) => (
+              {p.comparisonRows.map((row) => (
                 <tr
                   key={row.aspect}
                   className="border-b border-text-primary/10 last:border-0"
@@ -215,18 +202,15 @@ export function ProcessStudySection() {
           id="book-cta"
           className="text-2xl font-semibold tracking-tight text-text-primary"
         >
-          Ready for factory-clear headlights?
+          {p.closingTitle}
         </h2>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-text-body">
-          Book online in minutes. Fixed pricing from{" "}
-          {formatPrice(site.pricing.pair.from)} for both headlights. Visit our
-          garage in {locationLabel()}, choose mobile service, or ship across
-          Europe.
+          {p.closingBody}
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-6">
-          <BookNowPrimaryButton>Book now</BookNowPrimaryButton>
+          <BookNowPrimaryButton>{messages.common.bookNow}</BookNowPrimaryButton>
           <TextLink href="/">
-            Back to home
+            {p.backHome}
             <span aria-hidden="true">&rsaquo;</span>
           </TextLink>
         </div>

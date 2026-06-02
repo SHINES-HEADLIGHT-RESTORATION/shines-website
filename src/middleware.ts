@@ -1,30 +1,84 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
+import {
+  defaultLocale,
+  isSupportedLocale,
+  LOCALE_COOKIE,
+} from "@/lib/i18n/config";
+import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
+
+const LOCALE_MAX_AGE = 60 * 60 * 24 * 365;
+
+const BOOKING_PATHS = [
+  "/book",
+  "/booking",
+  "/api/appointments",
+  "/api/bookings",
+  "/api/booking",
+];
+
+function isBookingPath(pathname: string): boolean {
+  return BOOKING_PATHS.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
 
 export function middleware(request: NextRequest) {
-  if (isPublicBookingEnabled()) {
+  const { pathname } = request.nextUrl;
+
+  if (isBookingPath(pathname) && !isPublicBookingEnabled()) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json(
+        { error: "Online booking is not available yet." },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL("/contact", request.url));
+  }
+
+  if (
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/_next")
+  ) {
     return NextResponse.next();
   }
 
-  const { pathname } = request.nextUrl;
+  const queryLocale = request.nextUrl.searchParams.get("locale");
+  const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
 
-  if (pathname.startsWith("/api/")) {
-    return NextResponse.json(
-      { error: "Online booking is not available yet." },
-      { status: 403 },
+  let locale = defaultLocale;
+  if (queryLocale && isSupportedLocale(queryLocale)) {
+    locale = queryLocale;
+  } else if (cookieLocale && isSupportedLocale(cookieLocale)) {
+    locale = cookieLocale;
+  } else {
+    locale = detectLocaleFromAcceptLanguage(
+      request.headers.get("accept-language"),
     );
   }
 
-  return NextResponse.redirect(new URL("/contact", request.url));
+  const response = NextResponse.next();
+  const shouldSetCookie =
+    !cookieLocale ||
+    cookieLocale !== locale ||
+    (queryLocale && isSupportedLocale(queryLocale));
+
+  if (shouldSetCookie) {
+    response.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: LOCALE_MAX_AGE,
+      sameSite: "lax",
+    });
+  }
+
+  response.headers.set("x-shines-locale", locale);
+  return response;
 }
 
 export const config = {
   matcher: [
-    "/book",
-    "/booking/:path*",
-    "/api/appointments/:path*",
-    "/api/bookings/:path*",
-    "/api/booking/:path*",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4|ico)$).*)",
   ],
 };

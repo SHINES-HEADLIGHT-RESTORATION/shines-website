@@ -2,15 +2,11 @@ import type { Metadata } from "next";
 import { AboutSection } from "@/components/AboutSection";
 import { Header } from "@/components/Header";
 import { SiteFooter } from "@/components/SiteFooter";
-import { locationLabel, site } from "@/lib/site";
+import { localizedPageMetadata } from "@/lib/i18n/page-metadata";
 
-export const metadata: Metadata = {
-  title: `About ${site.name} | Professional Headlight Restoration`,
-  description: `Who we are: OEM-grade headlight restoration in ${locationLabel()} and across Europe. ${site.warranty}. UV-cured before you drive away.`,
-  alternates: {
-    canonical: `${site.url}/about`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return localizedPageMetadata("/about", "aboutTitle", "aboutDescription");
+}
 
 export default function AboutPage() {
   return (

@@ -24,19 +24,27 @@ import { useMobileTravelQuote } from "@/hooks/useMobileTravelQuote";
 import { useBookingFieldValidation } from "@/hooks/useBookingFieldValidation";
 import {
   calculateBookingBreakdown,
-  conditionSeverities,
   getConditionSeverity,
   getHeadlightSize,
   getServiceMethod,
-  headlightQuantities,
-  headlightSizes,
   serviceMethodPriceLabel,
   type ConditionSeverityId,
   type HeadlightQuantity,
   type HeadlightSizeId,
   type ServiceMethodId,
-  serviceMethods,
 } from "@/lib/booking";
+import { useI18n } from "@/components/I18nProvider";
+import {
+  mobileBlockHours,
+  MOBILE_DEFAULT_ONE_WAY_KM,
+} from "@/lib/appointments/mobile-duration";
+import { formatMessage } from "@/lib/i18n/format-message";
+import {
+  getConditionSeverities,
+  getHeadlightQuantities,
+  getHeadlightSizes,
+  getServiceMethods,
+} from "@/lib/i18n/catalog";
 import {
   bookingCountries,
   getBookingCountryLabel,
@@ -44,13 +52,11 @@ import {
   mobileServiceAreaLabel,
   type BookingCountryCode,
 } from "@/lib/booking-countries";
-import { mobileAppointmentNotice } from "@/lib/appointments/duration";
-import { mailInShipToNote } from "@/lib/mail-in-flow";
 import { defaultMobileTravelFee } from "@/lib/mobile-pricing";
 import { formatPrice, formatPriceModifier, site } from "@/lib/site";
 
-function modifierLabel(modifier: number) {
-  return modifier > 0 ? formatPriceModifier(modifier) : "Included";
+function modifierLabel(modifier: number, includedLabel: string) {
+  return modifier > 0 ? formatPriceModifier(modifier) : includedLabel;
 }
 
 function SelectCard({
@@ -60,6 +66,7 @@ function SelectCard({
   description,
   priceLabel,
   popular,
+  popularLabel,
 }: {
   selected: boolean;
   onSelect: () => void;
@@ -67,6 +74,7 @@ function SelectCard({
   description: string;
   priceLabel: string;
   popular?: boolean;
+  popularLabel: string;
 }) {
   return (
     <button
@@ -81,7 +89,7 @@ function SelectCard({
     >
       {popular && (
         <span className="pointer-events-none absolute -top-2.5 left-4 rounded-full bg-action-primary px-2.5 py-0.5 text-[11px] font-semibold text-text-on-dark">
-          Most popular
+          {popularLabel}
         </span>
       )}
       <span className="block text-base font-semibold text-text-primary">{title}</span>
@@ -96,6 +104,13 @@ function SelectCard({
 }
 
 export function BookingSection() {
+  const { messages } = useI18n();
+  const b = messages.booking;
+  const headlightQuantities = getHeadlightQuantities(messages);
+  const headlightSizes = getHeadlightSizes(messages);
+  const conditionSeverities = getConditionSeverities(messages);
+  const serviceMethods = getServiceMethods(messages);
+
   const [quantity, setQuantity] = useState<HeadlightQuantity>("pair");
   const [sizeId, setSizeId] = useState<HeadlightSizeId>("standard");
   const [severityId, setSeverityId] = useState<ConditionSeverityId>("stage-1");
@@ -254,8 +269,7 @@ export function BookingSection() {
 
     if (!bookingResponse.ok) {
       const data = (await bookingResponse.json()) as { error?: string };
-      const message =
-        data.error ?? "That time slot is no longer available. Please choose another.";
+      const message = data.error ?? b.slotError;
       if (isShip) {
         setSubmitError(message);
       } else {
@@ -301,7 +315,7 @@ export function BookingSection() {
         <form className="space-y-10" noValidate onSubmit={handleSubmit}>
           <fieldset className="min-w-0 border-0 p-0">
             <legend className="text-lg font-semibold text-text-primary">
-              1. How many headlights?
+              {b.stepLegends.quantity}
             </legend>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {headlightQuantities.map((option) => (
@@ -319,26 +333,26 @@ export function BookingSection() {
                   }}
                   title={option.label}
                   description={option.description}
-                  priceLabel={`from ${formatPrice(option.basePrice)}`}
+                  priceLabel={formatMessage(b.priceFrom, {
+                    price: formatPrice(option.basePrice),
+                  })}
                   popular={"popular" in option && option.popular}
+                  popularLabel={b.popularLabel}
                 />
               ))}
             </div>
             {quantity === "single" && (
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-body">
-                Mobile visits aren&apos;t available for one light.
+                {b.stepLegends.quantitySingleMobile}
               </p>
             )}
           </fieldset>
 
           <fieldset className="min-w-0 border-0 p-0">
             <legend className="text-lg font-semibold text-text-primary">
-              2. What size are your headlights?
+              {b.stepLegends.size}
             </legend>
-            <p className="mt-2 text-sm text-text-body">
-              Choose based on your car. Larger or more complex lights take more
-              time and materials.
-            </p>
+            <p className="mt-2 text-sm text-text-body">{b.stepLegends.sizeHint}</p>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {headlightSizes.map((size) => (
                 <SelectCard
@@ -347,7 +361,8 @@ export function BookingSection() {
                   onSelect={() => setSizeId(size.id)}
                   title={size.label}
                   description={size.description}
-                  priceLabel={modifierLabel(size.modifier)}
+                  priceLabel={modifierLabel(size.modifier, messages.common.included)}
+                  popularLabel={b.popularLabel}
                 />
               ))}
             </div>
@@ -355,11 +370,9 @@ export function BookingSection() {
 
           <fieldset className="min-w-0 border-0 p-0">
             <legend className="text-lg font-semibold text-text-primary">
-              3. How bad do they look?
+              {b.stepLegends.condition}
             </legend>
-            <p className="mt-2 text-sm text-text-body">
-              Be honest. Deeper damage needs more sanding and takes longer.
-            </p>
+            <p className="mt-2 text-sm text-text-body">{b.stepLegends.conditionHint}</p>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {conditionSeverities.map((stage) => (
                 <SelectCard
@@ -368,7 +381,8 @@ export function BookingSection() {
                   onSelect={() => setSeverityId(stage.id)}
                   title={stage.label}
                   description={stage.description}
-                  priceLabel={modifierLabel(stage.modifier)}
+                  priceLabel={modifierLabel(stage.modifier, messages.common.included)}
+                  popularLabel={b.popularLabel}
                 />
               ))}
             </div>
@@ -376,7 +390,7 @@ export function BookingSection() {
 
           <fieldset className="min-w-0 border-0 p-0">
             <legend className="text-lg font-semibold text-text-primary">
-              4. How would you like to get service?
+              {b.stepLegends.service}
             </legend>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {serviceMethods.map((method) => (
@@ -399,6 +413,7 @@ export function BookingSection() {
                   title={method.label}
                   description={method.description}
                   priceLabel={serviceMethodPriceLabel(method.id)}
+                  popularLabel={b.popularLabel}
                 />
               ))}
             </div>
@@ -422,22 +437,22 @@ export function BookingSection() {
           </fieldset>
 
           <fieldset className="min-w-0 max-w-2xl border-0 p-0">
-            <legend className="sr-only">Your details</legend>
+            <legend className="sr-only">{b.steps.details}</legend>
 
             <BookingPageTitle
               title={
                 isMobile
-                  ? "Where should we come?"
+                  ? b.whereTitle.mobile
                   : isShip
-                    ? "Where are you shipping from?"
-                    : "Enter your details"
+                    ? b.whereTitle.ship
+                    : b.whereTitle.default
               }
-              subtitle={needsAddress ? "Enter your name and address:" : undefined}
+              subtitle={needsAddress ? b.whereSubtitle : undefined}
             />
 
             <BookingFieldStack>
               <AppleFloatingField
-                label="First name"
+                label={b.fields.firstName}
                 value={firstName}
                 onChange={(event) => {
                   setFirstName(event.target.value);
@@ -451,7 +466,7 @@ export function BookingSection() {
               {needsAddress ? (
                 <BookingNameRow>
                   <AppleFloatingField
-                    label="Last name"
+                    label={b.fields.lastName}
                     value={lastName}
                     onChange={(event) => {
                       setLastName(event.target.value);
@@ -462,7 +477,7 @@ export function BookingSection() {
                     autoComplete="family-name"
                   />
                   <AppleFloatingField
-                    label="Suffix"
+                    label={b.fields.suffix}
                     value={nameSuffix}
                     onChange={(event) => setNameSuffix(event.target.value)}
                     optional
@@ -471,7 +486,7 @@ export function BookingSection() {
                 </BookingNameRow>
               ) : (
                 <AppleFloatingField
-                  label="Last name"
+                  label={b.fields.lastName}
                   value={lastName}
                   onChange={(event) => {
                     setLastName(event.target.value);
@@ -486,7 +501,7 @@ export function BookingSection() {
               {needsAddress && (
                 <>
                   <AppleFloatingField
-                    label="Street and number"
+                    label={b.fields.street}
                     value={street}
                     onChange={(event) => {
                       setStreet(event.target.value);
@@ -497,7 +512,7 @@ export function BookingSection() {
                     autoComplete="street-address"
                   />
                   <AppleFloatingField
-                    label="Apartment, suite, access code"
+                    label={b.fields.apartment}
                     value={addressLine2}
                     onChange={(event) => setAddressLine2(event.target.value)}
                     optional
@@ -516,7 +531,7 @@ export function BookingSection() {
                       autoComplete="postal-code"
                     />
                     <AppleFloatingField
-                      label="City"
+                      label={b.fields.city}
                       value={city}
                       onChange={(event) => {
                         setCity(event.target.value);
@@ -528,7 +543,7 @@ export function BookingSection() {
                     />
                   </BookingPostcodeRow>
                   <AppleFloatingSelect
-                    label="Country / Region"
+                    label={b.fields.country}
                     value={countryCode}
                     onChange={(event) =>
                       setCountryCode(event.target.value as BookingCountryCode)
@@ -541,28 +556,24 @@ export function BookingSection() {
 
                   {isShip && (
                     <p className="text-sm leading-relaxed text-text-body">
-                      We keep your name and return address on file so we can match
-                      your parcel when it arrives and ship your headlights back
-                      securely.
+                      {b.shipAddressNote}
                     </p>
                   )}
 
                   {isMobile && !isMobileServiceCountry(countryCode) && (
                     <p className="text-sm text-text-body">
-                      Mobile visits are available in {mobileServiceAreaLabel()} only
-                      (within {site.mobileTravel.maxServiceRadiusKm} km of our workshop).
-                      For {getBookingCountryLabel(countryCode)}, choose{" "}
-                      <strong className="font-medium text-text-primary">
-                        Ship your headlights
-                      </strong>{" "}
-                      or contact us for a custom quote.
+                      {formatMessage(b.mobileOutOfAreaNote, {
+                        area: mobileServiceAreaLabel(),
+                        radius: site.mobileTravel.maxServiceRadiusKm,
+                        country: getBookingCountryLabel(countryCode),
+                        shipLabel:
+                          serviceMethods.find((m) => m.id === "ship")?.label ?? "",
+                      })}
                     </p>
                   )}
 
                   {isMobile && isMobileServiceCountry(countryCode) && distanceLoading && (
-                    <p className="text-sm text-text-body">
-                      Calculating travel distance…
-                    </p>
+                    <p className="text-sm text-text-body">{b.distanceLoading}</p>
                   )}
                   {isMobile && isMobileServiceCountry(countryCode) && distanceError && (
                     <p className="text-sm text-action-danger">{distanceError}</p>
@@ -578,9 +589,11 @@ export function BookingSection() {
                     !distanceLoading && (
                     <>
                       <p className="text-sm leading-relaxed text-[#1d1d1f]">
-                        {mobileQuote.oneWayKm} km one-way · Travel fee{" "}
-                        {formatPrice(mobileQuote.travelFee)} (incl. BTW).{" "}
-                        {mobileQuote.breakdownLabel}
+                        {formatMessage(b.mobileTravelQuote, {
+                          km: mobileQuote.oneWayKm,
+                          fee: formatPrice(mobileQuote.travelFee),
+                          breakdown: mobileQuote.breakdownLabel,
+                        })}
                       </p>
                     </>
                   )}
@@ -590,7 +603,7 @@ export function BookingSection() {
               <BookingCheckbox
                 checked={needsVatInvoice}
                 onChange={setNeedsVatInvoice}
-                label="This is a business address"
+                label={b.fields.businessAddress}
               />
 
               {needsVatInvoice && (
@@ -606,7 +619,7 @@ export function BookingSection() {
                     error={showError("companyName")}
                   />
                   <AppleFloatingField
-                    label="VAT number"
+                    label={b.fields.vatNumber}
                     value={vatNumber}
                     onChange={(event) => {
                       setVatNumber(event.target.value);
@@ -617,7 +630,7 @@ export function BookingSection() {
                   />
                   {serviceId === "visit" && (
                     <AppleFloatingTextarea
-                      label="Billing address"
+                      label={b.fields.billingAddress}
                       value={billingAddress}
                       onChange={(event) => setBillingAddress(event.target.value)}
                       optional
@@ -646,7 +659,7 @@ export function BookingSection() {
                 autoComplete="email"
               />
               <AppleFloatingField
-                label="Mobile phone number"
+                label={b.fields.phone}
                 type="tel"
                 value={phone}
                 onChange={(event) => {
@@ -660,12 +673,14 @@ export function BookingSection() {
             </BookingFormSection>
 
             <BookingFormSection
-              title={isShip ? "About your booking" : "About your appointment"}
+              title={
+                isShip ? b.aboutSection.ship : b.aboutSection.default
+              }
               divider={false}
             >
               {isShip && (
                 <p className="text-sm leading-relaxed text-text-body">
-                  {mailInShipToNote}
+                  {messages.mailInFlow.shipToNote}
                 </p>
               )}
               <AppleFloatingField
@@ -680,12 +695,12 @@ export function BookingSection() {
               />
               {isMobile && !mobileAddressReady && (
                 <p className="text-sm text-text-body">
-                  Enter your full address above to see available appointment times.
+                  {b.mobileAddressRequired}
                 </p>
               )}
               {isMobile && mobileAddressReady && distanceLoading && (
                 <p className="text-sm text-text-body">
-                  Calculating travel distance before showing times…
+                  {b.distanceLoadingSlots}
                 </p>
               )}
               {serviceId !== "ship" && mobileSlotsReady && (
@@ -703,11 +718,14 @@ export function BookingSection() {
               )}
               {serviceId === "mobile" && mobileSlotsReady && (
                 <p className="text-sm leading-relaxed text-text-body">
-                  {mobileAppointmentNotice(mobileOneWayKm)}
+                  {formatMessage(messages.appointments.mobileNoticeTemplate, {
+                    hours: mobileBlockHours(mobileOneWayKm),
+                    km: mobileOneWayKm ?? MOBILE_DEFAULT_ONE_WAY_KM,
+                  })}
                 </p>
               )}
               <AppleFloatingTextarea
-                label="Notes"
+                label={b.fields.notes}
                 value={notes}
                 onChange={(event) => setNotes(event.target.value)}
                 optional
@@ -718,7 +736,7 @@ export function BookingSection() {
               type="submit"
               className="mt-6 inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-action-primary text-base font-medium text-text-on-dark transition-opacity hover:opacity-90"
             >
-              Confirm booking & pay later
+              {b.confirmBooking}
             </button>
 
             {submitError && (
@@ -729,8 +747,7 @@ export function BookingSection() {
 
             {submitted && !confirmedMailIn && (
               <p className="mt-4 text-sm text-text-body">
-                Your email app should open with your booking details. If it
-                doesn&apos;t, email us at{" "}
+                {b.submitEmailHint}{" "}
                 <a
                   href={`mailto:${site.email}`}
                   className="text-action-primary underline underline-offset-4"
@@ -746,18 +763,20 @@ export function BookingSection() {
 
         <aside className="rounded-2xl border border-text-primary/10 bg-surface p-6 lg:sticky lg:top-20">
           <p className="text-sm font-semibold uppercase tracking-wide text-text-body">
-            Your booking
+            {b.summaryTitle}
           </p>
           <p className="mt-4 text-4xl font-semibold text-text-primary">
             {formatPrice(breakdown.total)}
           </p>
           <p className="mt-1 text-sm text-text-body">
-            Incl. BTW · {site.warranty.toLowerCase()}
+            {formatMessage(b.summaryVat, {
+              warranty: site.warranty.toLowerCase(),
+            })}
           </p>
 
           <dl className="mt-6 space-y-3 border-t border-text-primary/10 pt-6 text-sm text-[#1d1d1f]">
             <div className="flex justify-between gap-4">
-              <dt className="font-semibold">Base</dt>
+              <dt className="font-semibold">{b.priceLabels.base}</dt>
               <dd className="font-semibold text-[#6E6E73]">
                 {formatPrice(breakdown.base)}
               </dd>
@@ -790,14 +809,14 @@ export function BookingSection() {
             )}
             {breakdown.travelFee > 0 && (
               <div className="flex justify-between gap-4">
-                <dt className="font-semibold">Travel</dt>
+                <dt className="font-semibold">{b.priceLabels.travel}</dt>
                 <dd className="font-semibold text-[#6E6E73]">
                   {formatPriceModifier(breakdown.travelFee)}
                 </dd>
               </div>
             )}
             <div className="flex justify-between gap-4 border-t border-text-primary/10 pt-3">
-              <dt className="font-semibold text-[#0B0B0E]">Total</dt>
+              <dt className="font-semibold text-[#0B0B0E]">{b.priceLabels.total}</dt>
               <dd className="font-semibold text-[#0B0B0E]">
                 {formatPrice(breakdown.total)}
               </dd>
@@ -805,35 +824,39 @@ export function BookingSection() {
           </dl>
 
           {serviceId === "ship" && (
-            <p className="mt-4 text-sm text-text-body">
-              Return shipping is quoted separately before we send your
-              headlights back.
-            </p>
+            <p className="mt-4 text-sm text-text-body">{b.returnShippingNote}</p>
           )}
 
           {serviceId === "mobile" && manualNotice && (
-            <p className="mt-4 text-sm text-text-body">
-              Travel fee excluded from total — confirmed manually within 24 hours.
-              Mobile service fee ({formatPrice(breakdown.serviceFee)}) is included.
-            </p>
+            <p className="mt-4 text-sm text-text-body">{b.travelFeeNote}</p>
           )}
 
           <ul className="mt-6 space-y-2 text-sm leading-relaxed text-[#1d1d1f]">
             <li>
-              <span className="font-semibold text-[#0B0B0E]">Size:</span>{" "}
+              <span className="font-semibold text-[#0B0B0E]">
+                {b.summaryLabels.size}:
+              </span>{" "}
               {selectedSize.label}
             </li>
             <li>
-              <span className="font-semibold text-[#0B0B0E]">Condition:</span>{" "}
+              <span className="font-semibold text-[#0B0B0E]">
+                {b.summaryLabels.condition}:
+              </span>{" "}
               {selectedSeverity.shortLabel}
             </li>
             <li>
-              <span className="font-semibold text-[#0B0B0E]">Service:</span>{" "}
+              <span className="font-semibold text-[#0B0B0E]">
+                {b.summaryLabels.service}:
+              </span>{" "}
               {selectedService.label}
             </li>
             <li>
-              <span className="font-semibold text-[#0B0B0E]">Quantity:</span>{" "}
-              {quantity === "pair" ? "Both headlights" : "One headlight"}
+              <span className="font-semibold text-[#0B0B0E]">
+                {b.summaryLabels.quantity}:
+              </span>{" "}
+              {quantity === "pair"
+                ? b.summaryLabels.pair
+                : b.summaryLabels.single}
             </li>
           </ul>
         </aside>

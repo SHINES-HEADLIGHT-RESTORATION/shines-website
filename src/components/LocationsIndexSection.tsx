@@ -1,9 +1,14 @@
+import Link from "next/link";
 import { AppleLinkListPage } from "@/components/AppleLinkListPage";
-import { belgiumProvinces, cityLocationPath } from "@/lib/belgium-locations";
+import { belgiumProvinces, cityLocationPath, locationsPagePath } from "@/lib/belgium-locations";
+import { europeHubPath } from "@/lib/europe-countries";
+import { getRequestMessages } from "@/lib/i18n/server";
 
-export const locationsPagePath = "/locations" as const;
+export { locationsPagePath };
 
-export function LocationsIndexSection() {
+export async function LocationsIndexSection() {
+  const { messages: m } = await getRequestMessages();
+
   const sections = belgiumProvinces.map((province) => ({
     title: province.nameNl,
     items: province.cities.map((city) => ({
@@ -13,10 +18,20 @@ export function LocationsIndexSection() {
   }));
 
   return (
-    <AppleLinkListPage
-      title="Service locations in Belgium"
-      description="Professional headlight restoration across Belgium. Select your city to learn more and book online. Mail-in service is available across Europe."
-      sections={sections}
-    />
+    <div>
+      <AppleLinkListPage
+        title={m.locations.belgiumTitle}
+        description={m.locations.belgiumDescription}
+        sections={sections}
+      />
+      <p className="px-section-even pb-16 text-sm text-text-body">
+        <Link
+          href={europeHubPath}
+          className="font-medium text-action-primary underline underline-offset-4"
+        >
+          {m.locations.europeLink}
+        </Link>
+      </p>
+    </div>
   );
 }

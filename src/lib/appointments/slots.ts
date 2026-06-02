@@ -134,7 +134,7 @@ export function getDatesWithAvailability(
 }
 
 export function formatSlotLabel(slot: string | undefined): string {
-  if (!slot) return "—";
+  if (!slot) return "-";
   const date = parse(slot, SLOT_KEY, new Date());
   return `${format(date, "EEE d MMM yyyy")} · ${format(date, TIME_KEY)}`;
 }

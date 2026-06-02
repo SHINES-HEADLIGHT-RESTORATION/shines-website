@@ -1,4 +1,4 @@
-import { getMobileDurationMinutes } from "@/lib/appointments/duration";
+import { getMobileDurationMinutes } from "@/lib/appointments/mobile-duration";
 import { formatPrice, site } from "@/lib/site";
 import { hasWorkshopOriginConfig } from "@/lib/workshop-origin";
 
@@ -66,7 +66,7 @@ export function evaluateMobileTravel(oneWayKm: number): MobileTravelEvaluation {
     return {
       status: "manual",
       oneWayKm,
-      message: `${oneWayKm} km one-way — we'll confirm your travel fee within 24 hours. At this distance, mail-in is often better value.`,
+      message: `${oneWayKm} km one-way, we'll confirm your travel fee within 24 hours. At this distance, mail-in is often better value.`,
     };
   }
 

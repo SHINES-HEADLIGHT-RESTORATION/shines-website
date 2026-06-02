@@ -69,6 +69,30 @@ export const regionGroups: RegionGroup[] = [
         locale: "en-GB",
         href: "/?locale=en-GB",
       },
+      {
+        id: "es",
+        label: "España",
+        locale: "es-ES",
+        href: "/?locale=es-ES",
+      },
+      {
+        id: "it",
+        label: "Italia",
+        locale: "it-IT",
+        href: "/?locale=it-IT",
+      },
+      {
+        id: "pt",
+        label: "Portugal",
+        locale: "pt-PT",
+        href: "/?locale=pt-PT",
+      },
+      {
+        id: "pl",
+        label: "Polska",
+        locale: "pl-PL",
+        href: "/?locale=pl-PL",
+      },
     ],
   },
   {

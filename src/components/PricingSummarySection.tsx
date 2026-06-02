@@ -4,11 +4,10 @@ import {
   SectionShell,
   TextLink,
 } from "@/components/SectionShell";
+import { formatMessage } from "@/lib/i18n/format-message";
+import { getRequestMessages } from "@/lib/i18n/server";
 import {
-  pricingComparisonIntro,
   pricingFromLabel,
-  pricingModifiers,
-  pricingSummary,
   pricingTiers,
   pricingValueComparison,
 } from "@/lib/pricing";
@@ -39,16 +38,18 @@ function ComparisonMark({ included }: { included: boolean }) {
   );
 }
 
-export function PricingSummarySection() {
+export async function PricingSummarySection() {
+  const { messages } = await getRequestMessages();
+  const pr = messages.pricing;
+  const loc = locationLabel();
+
   return (
     <SectionShell evenPadding>
-      <SectionHeading>
-        Restoration that lasts. Not a quick buff.
-      </SectionHeading>
+      <SectionHeading>{pr.title}</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
-        {pricingSummary} {pricingFromLabel()}.{" "}
+        {pr.summary} {pricingFromLabel()}.{" "}
         <BookNowTextLink className="inline-flex">
-          Book now
+          {pr.bookLink}
           <span aria-hidden="true">&rsaquo;</span>
         </BookNowTextLink>
       </p>
@@ -58,10 +59,10 @@ export function PricingSummarySection() {
           id="value-comparison"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          Why choose SHINES
+          {pr.comparisonTitle}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-body">
-          {pricingComparisonIntro}
+          {pr.comparisonIntro}
         </p>
 
         <div className="mt-8 overflow-x-auto">
@@ -69,14 +70,20 @@ export function PricingSummarySection() {
             <thead>
               <tr className="border-b border-text-primary/10">
                 <th className="py-4 pr-6 font-normal text-text-body" scope="col" />
-                <th className="px-4 py-4 text-center font-semibold text-[#0B0B0E]" scope="col">
-                  SHINES
+                <th
+                  className="px-4 py-4 text-center font-semibold text-[#0B0B0E]"
+                  scope="col"
+                >
+                  {pr.tableHeadShines}
                   <span className="mt-1 block text-xs font-normal text-text-body">
                     {formatPrice(site.pricing.pair.from)} pair
                   </span>
                 </th>
-                <th className="px-4 py-4 text-center font-semibold text-[#0B0B0E]" scope="col">
-                  DIY kit
+                <th
+                  className="px-4 py-4 text-center font-semibold text-[#0B0B0E]"
+                  scope="col"
+                >
+                  {pr.tableHeadDiy}
                   <span className="mt-1 block text-xs font-normal text-text-body">
                     €15–€40
                   </span>
@@ -84,36 +91,38 @@ export function PricingSummarySection() {
               </tr>
             </thead>
             <tbody>
-              {pricingValueComparison.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-text-primary/10 last:border-0"
-                >
-                  <td className="py-4 pr-6 text-text-primary">{row.label}</td>
-                  <td className="px-4 py-4 text-center">
-                    {"comingSoon" in row && row.comingSoon ? (
-                      <span className="text-xs font-medium text-text-body">
-                        Soon
-                      </span>
-                    ) : (
-                      <ComparisonMark included={row.shines} />
-                    )}
-                  </td>
-                  <td className="px-4 py-4 text-center">
-                    <ComparisonMark included={row.diy} />
-                  </td>
-                </tr>
-              ))}
+              {pr.valueRows.map((row, index) => {
+                const meta = pricingValueComparison[index];
+                if (!meta) return null;
+                return (
+                  <tr
+                    key={row.label}
+                    className="border-b border-text-primary/10 last:border-0"
+                  >
+                    <td className="py-4 pr-6 text-text-primary">{row.label}</td>
+                    <td className="px-4 py-4 text-center">
+                      {"comingSoon" in meta && meta.comingSoon ? (
+                        <span className="text-xs font-medium text-text-body">
+                          {pr.comingSoon}
+                        </span>
+                      ) : (
+                        <ComparisonMark included={meta.shines} />
+                      )}
+                    </td>
+                    <td className="px-4 py-4 text-center">
+                      <ComparisonMark included={meta.diy} />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
 
         <p className="mt-6 text-sm leading-relaxed text-text-body">
-          New OEM headlight assemblies often cost €300–€800 or more per side.
-          Professional restoration delivers comparable clarity for a fraction of
-          the price when housings are still sound.{" "}
+          {pr.comparisonClosing}{" "}
           <TextLink href={processPagePath} className="inline-flex">
-            Read our full process
+            {messages.common.seeProcess}
             <span aria-hidden="true">&rsaquo;</span>
           </TextLink>
         </p>
@@ -124,39 +133,41 @@ export function PricingSummarySection() {
           id="starting-prices"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          Starting prices
+          {pr.tiersTitle}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-body">
-          Final price depends on size, condition, and how you reach us. The booking
-          page updates instantly as you choose.
+          {pr.summary}
         </p>
 
         <ul className="mt-8 divide-y divide-text-primary/10 border-y border-text-primary/10">
-          {pricingTiers.map((tier) => (
-            <li
-              key={tier.id}
-              className="flex flex-col gap-2 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
-            >
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-text-body">
-                    {tier.label}
+          {pricingTiers.map((tier, index) => {
+            const copy = pr.tiers[index]!;
+            return (
+              <li
+                key={tier.id}
+                className="flex flex-col gap-2 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-text-body">
+                      {copy.label}
+                    </p>
+                    {"popular" in tier && tier.popular && (
+                      <span className="rounded-full bg-action-primary px-2.5 py-0.5 text-xs font-semibold text-text-on-dark">
+                        {messages.booking.popularLabel}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm leading-relaxed text-text-body">
+                    {copy.description} {copy.includes}
                   </p>
-                  {"popular" in tier && tier.popular && (
-                    <span className="rounded-full bg-action-primary px-2.5 py-0.5 text-xs font-semibold text-text-on-dark">
-                      Most popular
-                    </span>
-                  )}
                 </div>
-                <p className="mt-1 text-sm leading-relaxed text-text-body">
-                  {tier.description} {tier.includes}
+                <p className="shrink-0 text-xl font-semibold tracking-tight text-text-primary">
+                  from {formatPrice(tier.from)}
                 </p>
-              </div>
-              <p className="shrink-0 text-xl font-semibold tracking-tight text-text-primary">
-                from {formatPrice(tier.from)}
-              </p>
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       </section>
 
@@ -165,11 +176,11 @@ export function PricingSummarySection() {
           id="price-factors"
           className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl"
         >
-          What shapes your price
+          {pr.modifiersTitle}
         </h2>
         <ul className="mt-6 space-y-4">
-          {pricingModifiers.map((item) => (
-            <li key={item.id} className="text-sm leading-relaxed text-text-body">
+          {pr.modifiers.map((item) => (
+            <li key={item.label} className="text-sm leading-relaxed text-text-body">
               <span className="font-semibold text-[#0B0B0E]">{item.label}.</span>{" "}
               {item.detail}
             </li>
@@ -179,14 +190,15 @@ export function PricingSummarySection() {
 
       <section className="mt-16 rounded-2xl border border-text-primary/10 bg-surface p-6 md:mt-20 md:p-8">
         <h2 className="text-xl font-semibold tracking-tight text-text-primary md:text-2xl">
-          Ready to book?
+          {pr.footerCta}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-body">
-          Choose your options online. Price updates instantly. Visit our garage
-          in {locationLabel()}, choose mobile service, or ship across Europe.{" "}
-          {site.turnaround.local} locally · {site.warranty.toLowerCase()}.{" "}
+          {messages.bookCta.body} {loc}. {site.turnaround.local} locally ·{" "}
+          {site.warranty.toLowerCase()}.{" "}
           <BookNowTextLink className="inline-flex">
-            Book now from {formatPrice(site.pricing.pair.from)}
+            {formatMessage(messages.common.bookFromTemplate, {
+              price: formatPrice(site.pricing.pair.from),
+            })}
             <span aria-hidden="true">&rsaquo;</span>
           </BookNowTextLink>
         </p>

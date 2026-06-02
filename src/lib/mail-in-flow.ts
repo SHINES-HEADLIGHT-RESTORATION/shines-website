@@ -35,13 +35,13 @@ export const mailInNotes = [
 export const visitDropOffNote = `Drop off at our garage in ${locationLabel()}. ${site.turnaround.local}. ${site.contact.parkingNote}`;
 
 export const mailInShipToNote =
-  "Write your booking reference on the outside of the box. Use tracked and insured shipping — we don't start work until your parcel arrives. If we never receive it, nothing is sent back.";
+  "Write your booking reference on the outside of the box. Use tracked and insured shipping. We don't start work until your parcel arrives. If we never receive it, nothing is sent back.";
 
 export const mailInBookingSteps = [
-  "Book online — we save your booking and show your reference and ship-to address.",
+  "Book online. We save your booking and show your reference and ship-to address.",
   "Pack your headlights securely and ship at your local carrier (cheapest for you).",
   "Add your tracking number on your booking page (optional but recommended).",
-  "We email when your parcel arrives. When restoration is done, pay return shipping once on your booking page — then we ship back.",
+  "We email when your parcel arrives. When restoration is done, pay return shipping once on your booking page, then we ship back.",
 ] as const;
 
 export function workshopShipToLines(): string[] {

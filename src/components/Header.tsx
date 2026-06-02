@@ -3,24 +3,25 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BookNowHeaderLink } from "@/components/BookNowCta";
+import { useI18n } from "@/components/I18nProvider";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
 import { Logo } from "./Logo";
-
 import { newsPagePath } from "@/lib/news";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: processPagePath, label: "Process" },
-  { href: pricingPagePath, label: "Pricing" },
-  { href: newsPagePath, label: "News" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-
 export function Header() {
+  const { messages } = useI18n();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/", label: messages.nav.home },
+    { href: processPagePath, label: messages.nav.process },
+    { href: pricingPagePath, label: messages.nav.pricing },
+    { href: newsPagePath, label: messages.nav.news },
+    { href: "/about", label: messages.nav.about },
+    { href: "/contact", label: messages.nav.contact },
+  ];
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -42,12 +43,12 @@ export function Header() {
         </Link>
 
         <nav
-          className="hidden items-center justify-center gap-5 lg:gap-6 md:flex"
+          className="hidden items-center justify-center gap-4 lg:gap-5 md:flex"
           aria-label="Main navigation"
         >
           {navLinks.map((link) => (
             <Link
-              key={link.label}
+              key={link.href}
               href={link.href}
               className="text-sm font-normal text-text-on-dark/90 transition-colors hover:text-text-on-dark"
             >
@@ -58,7 +59,7 @@ export function Header() {
 
         <div className="flex items-center justify-end gap-2 sm:gap-3">
           <BookNowHeaderLink className="hidden h-[28px] items-center rounded-full bg-action-primary px-[10px] text-sm font-normal text-text-on-dark transition-opacity hover:opacity-90 sm:inline-flex">
-            Book Now
+            {messages.nav.bookNow}
           </BookNowHeaderLink>
 
           <button
@@ -66,10 +67,12 @@ export function Header() {
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-text-on-dark transition-colors hover:bg-white/10 md:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? messages.common.closeMenu : messages.common.openMenu}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <span className="sr-only">{menuOpen ? "Close" : "Menu"}</span>
+            <span className="sr-only">
+              {menuOpen ? messages.common.closeMenu : messages.common.menu}
+            </span>
             <svg
               width="18"
               height="18"
@@ -101,7 +104,7 @@ export function Header() {
         >
           <ul className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <li key={link.label}>
+              <li key={link.href}>
                 <Link
                   href={link.href}
                   className="flex min-h-10 items-center rounded-lg px-2 text-sm font-normal text-text-on-dark transition-colors hover:bg-white/5"
@@ -117,7 +120,7 @@ export function Header() {
                   className="inline-flex h-[28px] w-full items-center justify-center rounded-full bg-action-primary px-[10px] text-sm font-normal text-text-on-dark"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Book Now
+                  {messages.nav.bookNow}
                 </BookNowHeaderLink>
               </li>
             )}
