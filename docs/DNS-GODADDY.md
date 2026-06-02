@@ -1,36 +1,41 @@
-# GoDaddy DNS for shines.be → Vercel
+# DNS for shines.be → Vercel
 
-**Status:** Domains are added in Vercel. DNS at GoDaddy is **not configured yet** — the site will not load on `shines.be` until you complete this (5 minutes).
+**Current setup (June 2026):** Nameservers point to **Vercel DNS** — not GoDaddy DNS.
 
-## Steps at GoDaddy
+| Nameserver | Status |
+|------------|--------|
+| `ns1.vercel-dns.com` | Active |
+| `ns2.vercel-dns.com` | Active |
 
-1. Log in at [godaddy.com](https://www.godaddy.com) → **My Products**.
-2. Open **shines.be** → **DNS** (or **Manage DNS**).
-3. **Delete or edit** any existing `A` records for `@` and `www` that point elsewhere.
-4. Add these records:
+GoDaddy is still the **registrar** (where you bought the domain). DNS is managed in **Vercel**, not GoDaddy’s DNS panel.
 
-| Type | Name | Value | TTL |
-|------|------|-------|-----|
-| **A** | `@` | `76.76.21.21` | 600 (or default) |
-| **A** | `www` | `76.76.21.21` | 600 (or default) |
+## If `shines.be` shows GoDaddy “Launching Soon” but `www` works
 
-5. Save. Propagation usually takes **5–60 minutes** (sometimes up to 24h).
-6. Vercel will email you when the domain is verified and SSL is active.
+1. **Nameservers must be Vercel** (see above). At GoDaddy → Domain → **Nameservers** → Custom → `ns1.vercel-dns.com` + `ns2.vercel-dns.com`.
+2. **Remove GoDaddy Website / Coming Soon** — My Products → shines.be → disconnect any GoDaddy website or forwarding on the root domain.
+3. **Clear browser cache** or open an **incognito** window and visit `https://shines.be` (use HTTPS, not HTTP).
+4. Wait up to 1 hour for DNS cache to expire on your ISP.
 
-## Verify
+## Verify in Vercel
 
-- Vercel dashboard → **shines** project → **Settings → Domains** → both should show **Valid Configuration**.
-- Open `https://shines.be` in your browser.
+- Dashboard → **islamxyz/shines** → **Settings → Domains**
+- Both `shines.be` and `www.shines.be` should show **Valid Configuration**
 
-## Live URLs (before DNS)
+## Live URLs
 
-Until DNS propagates, the site is live at:
+- https://shines.be
+- https://www.shines.be
 
-- https://shines-islamxyz.vercel.app
-- https://shines-three.vercel.app
+## Old GoDaddy DNS records (ignore if using Vercel nameservers)
 
-## Email DNS (separate — do not remove website records)
+If nameservers are Vercel, editing A/CNAME records in GoDaddy DNS **has no effect**. Manage DNS at:
 
-When you set up **Resend** or **Cloudflare Email Routing**, you will add **additional** TXT/CNAME/MX records. Do not delete the Vercel `A` records above.
+- Vercel → **Domains** → **shines.be** → DNS Records
+
+Or CLI: `npx vercel dns ls shines.be`
+
+## Email DNS (add in Vercel when ready)
+
+When you set up Google Workspace or Resend, add MX/TXT/CNAME records in **Vercel DNS** (same place), not GoDaddy.
 
 See [LAUNCH.md](./LAUNCH.md) Phase 3 for email setup.
