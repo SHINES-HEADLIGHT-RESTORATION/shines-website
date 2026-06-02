@@ -34,7 +34,7 @@ Secrets and customer data stay in Vercel Environment Variables and your database
 3. Set `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`, `WORKSHOP_ADDRESS`, and Resend keys (`RESEND_API_KEY`, `RESEND_FROM=SHINES <info@shines.be>`).
 4. Deploy. Booking stays on unless you set `NEXT_PUBLIC_BOOKING_ENABLED=false`.
 
-**Note:** Bookings are stored in `data/bookings.json` locally. Vercel serverless has a read-only filesystem, so production persistence needs a database (e.g. Neon via Vercel Marketplace) when you take live bookings on Vercel.
+**Note:** With `POSTGRES_URL` from [Neon on Vercel](docs/NEON.md), bookings persist in Postgres. Without it, local dev uses `data/bookings.json`; Vercel production **requires** Neon.
 
 ## Admin
 
