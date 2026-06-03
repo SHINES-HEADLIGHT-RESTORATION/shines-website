@@ -1,18 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { BookNowHeroLink } from "@/components/BookNowCta";
 import { useI18n } from "@/components/I18nProvider";
-
-const HERO_VIDEO_SRC = "/videos/fordmustangdarknightligthdifference.mp4";
-const HERO_POSTER_SRC = "/images/hero-poster.webp";
 
 export function Hero() {
   const { messages } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoPlaying, setVideoPlaying] = useState(false);
-  const [useStaticPoster, setUseStaticPoster] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -23,52 +18,14 @@ export function Hero() {
     ).matches;
 
     if (prefersReducedMotion) {
-      setUseStaticPoster(true);
+      video.pause();
+      video.removeAttribute("autoplay");
       return;
     }
 
-    const failToPoster = () => setUseStaticPoster(true);
-
-    video.addEventListener("error", failToPoster);
-
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    video.preload = isMobile ? "metadata" : "auto";
-
-    const timeout = window.setTimeout(
-      () => {
-        if (video.paused && video.readyState < 2) {
-          failToPoster();
-        }
-      },
-      isMobile ? 5000 : 10000,
-    );
-
-    const onPlaying = () => {
-      window.clearTimeout(timeout);
-      setVideoPlaying(true);
-      setUseStaticPoster(false);
-    };
-
-    video.addEventListener("playing", onPlaying);
-
-    const tryPlay = () => {
-      video.play().catch(() => {
-        window.clearTimeout(timeout);
-        failToPoster();
-      });
-    };
-
-    if (video.readyState >= 2) {
-      tryPlay();
-    } else {
-      video.addEventListener("canplay", tryPlay, { once: true });
-    }
-
-    return () => {
-      window.clearTimeout(timeout);
-      video.removeEventListener("error", failToPoster);
-      video.removeEventListener("playing", onPlaying);
-    };
+    video.play().catch(() => {
+      /* Autoplay blocked; poster remains visible */
+    });
   }, []);
 
   return (
@@ -77,31 +34,24 @@ export function Hero() {
       className="relative h-svh overflow-hidden bg-canvas-dark"
     >
       <div className="absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${HERO_POSTER_SRC})` }}
-        />
-
-        {!useStaticPoster ? (
-          <video
-            ref={videoRef}
-            className={`absolute inset-0 h-full w-full object-cover object-center motion-reduce:hidden transition-opacity duration-300 ${
-              videoPlaying ? "opacity-100" : "opacity-0"
-            }`}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster={HERO_POSTER_SRC}
-          >
-            <source src={HERO_VIDEO_SRC} type="video/mp4" />
-          </video>
-        ) : null}
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover object-center motion-reduce:hidden"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source
+            src="/videos/fordmustangdarknightligthdifference.mp4"
+            type="video/mp4"
+          />
+        </video>
 
         <div
           className="absolute inset-0 hidden bg-cover bg-center motion-reduce:block"
-          style={{ backgroundImage: `url(${HERO_POSTER_SRC})` }}
+          style={{ backgroundImage: "url(/images/mustang.png)" }}
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-canvas-dark/90 via-canvas-dark/25 to-canvas-dark/50" />
