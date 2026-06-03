@@ -17,7 +17,7 @@ export const site = {
     mapsLink:
       "https://www.google.com/maps/place/M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium/@50.9222085,3.2424177,16z",
     hours: [
-      { days: "Monday – Friday", hours: "9:00 – 18:00" },
+      { days: "Monday – Friday", hours: "By appointment" },
       { days: "Saturday", hours: "By appointment" },
       { days: "Sunday", hours: "Closed" },
     ],

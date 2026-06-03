@@ -240,7 +240,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     directionsLabel: "Routebeschrijving",
     hoursTitle: "Openingsuren",
     hoursRows: [
-      { days: "Maandag – vrijdag", hours: "9:00 – 18:00" },
+      { days: "Maandag – vrijdag", hours: "Op afspraak" },
       { days: "Zaterdag", hours: "Op afspraak" },
       { days: "Zondag", hours: "Gesloten" },
     ],

@@ -217,7 +217,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     directionsLabel: "Itinéraire",
     hoursTitle: "Heures d'ouverture",
     hoursRows: [
-      { days: "Lundi – vendredi", hours: "9:00 – 18:00" },
+      { days: "Lundi – vendredi", hours: "Sur rendez-vous" },
       { days: "Samedi", hours: "Sur rendez-vous" },
       { days: "Dimanche", hours: "Fermé" },
     ],

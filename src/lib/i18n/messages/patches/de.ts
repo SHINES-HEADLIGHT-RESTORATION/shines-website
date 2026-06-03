@@ -218,7 +218,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
     directionsLabel: "Wegbeschreibung",
     hoursTitle: "Öffnungszeiten",
     hoursRows: [
-      { days: "Montag – Freitag", hours: "9:00 – 18:00" },
+      { days: "Montag – Freitag", hours: "Nach Vereinbarung" },
       { days: "Samstag", hours: "Nach Vereinbarung" },
       { days: "Sonntag", hours: "Geschlossen" },
     ],

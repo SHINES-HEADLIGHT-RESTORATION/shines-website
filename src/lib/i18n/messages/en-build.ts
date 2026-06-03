@@ -267,7 +267,7 @@ export function buildEnMessages(): SiteMessages {
       directionsLabel: "Get directions",
       hoursTitle: "Opening hours",
       hoursRows: [
-        { days: "Monday – Friday", hours: "9:00 – 18:00" },
+        { days: "Monday – Friday", hours: "By appointment" },
         { days: "Saturday", hours: "By appointment" },
         { days: "Sunday", hours: "Closed" },
       ],
