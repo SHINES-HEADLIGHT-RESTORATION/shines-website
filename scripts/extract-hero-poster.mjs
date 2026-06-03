@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const input = path.join(root, "public/videos/fordmustangdarknightligthdifference.mp4");
+const input = path.join(root, "public/videos/hero-desktop.mp4");
 const output = path.join(root, "public/images/hero-poster.jpg");
 
 execFileSync(

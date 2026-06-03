@@ -10,3 +10,4 @@ tst/
 # Local booking data (may contain customer PII)
 data/bookings.json
 .vercel
+.env*

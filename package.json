@@ -10,7 +10,8 @@
     "lint": "next lint",
     "db:migrate": "node scripts/db-migrate.mjs",
     "favicons": "node scripts/generate-favicons.mjs",
-    "hero-poster": "node scripts/extract-hero-poster.mjs"
+    "hero-poster": "node scripts/extract-hero-poster.mjs",
+    "hero-videos": "node scripts/encode-hero-videos.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
