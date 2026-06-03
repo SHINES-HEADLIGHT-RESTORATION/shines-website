@@ -11,8 +11,9 @@ export const site = {
     street: "M. Devisscherestraat 4",
     postalCode: "8770",
     phone: "+32 498 65 96 63",
+    /** Use maps.google.com?output=embed or /maps/embed — not /maps/place/ (blocked in iframes). */
     mapsEmbedUrl:
-      "https://www.google.com/maps/place/M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium&hl=nl&z=17&output=embed",
+      "https://maps.google.com/maps?q=M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium&hl=nl&z=17&output=embed",
     mapsLink:
       "https://www.google.com/maps/place/M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium/@50.9222085,3.2424177,16z",
     hours: [
