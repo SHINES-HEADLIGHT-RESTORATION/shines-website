@@ -290,3 +290,11 @@ select:focus-visible {
     @apply font-sans;
   }
 }
+
+/* iOS Safari: never show native play overlay on the hero video */
+.hero-video::-webkit-media-controls {
+  display: none !important;
+}
+.hero-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}

@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { BookNowHeroLink } from "@/components/BookNowCta";
 import { useI18n } from "@/components/I18nProvider";
 
-const HERO_POSTER = "/images/mustang.png";
+/** First frame of the hero video — not mustang.png (different scene). */
+const HERO_POSTER = "/images/hero-poster.webp";
 const HERO_VIDEO = "/videos/fordmustangdarknightligthdifference.mp4";
 
 export function Hero() {
@@ -26,28 +27,31 @@ export function Hero() {
       return;
     }
 
-    // iOS Safari requires explicit mute + inline before programmatic play().
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute("webkit-playsinline", "true");
+    video.controls = false;
 
     const onPlaying = () => setVideoPlaying(true);
     video.addEventListener("playing", onPlaying);
 
     const tryPlay = () => {
-      video.play().catch(() => {
-        /* Autoplay blocked (e.g. Low Power Mode) — static poster stays visible */
-      });
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          /* Autoplay blocked — video stays hidden; poster layer remains */
+        });
+      }
     };
 
+    video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      tryPlay();
-    }
+    tryPlay();
 
     return () => {
       video.removeEventListener("playing", onPlaying);
+      video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("canplay", tryPlay);
     };
   }, []);
@@ -65,7 +69,7 @@ export function Hero() {
 
         <video
           ref={videoRef}
-          className={`h-full w-full object-cover object-center motion-reduce:hidden transition-opacity duration-700 ${
+          className={`hero-video absolute inset-0 h-full w-full object-cover object-center motion-reduce:hidden transition-opacity duration-500 ${
             videoPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           autoPlay
@@ -76,7 +80,6 @@ export function Hero() {
           controls={false}
           disablePictureInPicture
           disableRemotePlayback
-          poster={HERO_POSTER}
         >
           <source src={HERO_VIDEO} type="video/mp4" />
         </video>
