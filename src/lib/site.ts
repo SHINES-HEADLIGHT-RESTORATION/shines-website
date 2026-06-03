@@ -3,19 +3,18 @@ export const site = {
   email: "info@shines.be",
   url: "https://shines.be",
   location: {
-    /** Set your garage city for local SEO, e.g. "Antwerp" */
-    city: null as string | null,
+    city: "Ingelmunster",
     country: "Belgium",
   },
-  /** Garage contact details, fill in when your workshop address is confirmed. */
+  /** Garage contact details — override per field via CONTACT_* / MAPS_* env on Vercel. */
   contact: {
-    street: null as string | null,
-    postalCode: null as string | null,
-    phone: null as string | null,
-    /** Google Maps embed URL (Share → Embed a map). */
-    mapsEmbedUrl: null as string | null,
-    /** Google Maps link for directions. */
-    mapsLink: null as string | null,
+    street: "M. Devisscherestraat 4",
+    postalCode: "8770",
+    phone: "+32 498 65 96 63",
+    mapsEmbedUrl:
+      "https://www.google.com/maps/place/M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium&hl=nl&z=17&output=embed",
+    mapsLink:
+      "https://www.google.com/maps/place/M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium/@50.9222085,3.2424177,16z",
     hours: [
       { days: "Monday – Friday", hours: "9:00 – 18:00" },
       { days: "Saturday", hours: "By appointment" },

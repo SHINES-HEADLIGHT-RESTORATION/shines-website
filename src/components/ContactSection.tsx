@@ -8,18 +8,17 @@ import {
 } from "@/components/SectionShell";
 import { useI18n } from "@/components/I18nProvider";
 import { formatMessage } from "@/lib/i18n/format-message";
-import {
-  formatAddressLines,
-  locationLabel,
-  mailtoQuote,
-  site,
-} from "@/lib/site";
+import { mailtoQuote, site } from "@/lib/site";
+import type { ContactSectionData } from "@/lib/site-runtime";
 
-export function ContactSection() {
+type ContactSectionProps = {
+  contactData: ContactSectionData;
+};
+
+export function ContactSection({ contactData }: ContactSectionProps) {
   const { messages } = useI18n();
   const { contact: c } = messages;
-  const addressLines = formatAddressLines();
-  const loc = locationLabel();
+  const { addressLines, locationLabel: loc } = contactData;
 
   return (
     <SectionShell evenPadding>
@@ -44,15 +43,15 @@ export function ContactSection() {
                 </span>
               ))}
             </address>
-            {!site.contact.street && (
+            {!contactData.street && (
               <p className="mt-2 text-xs text-text-body">
                 {formatMessage(c.addressPendingTemplate, { location: loc })}
               </p>
             )}
-            {site.contact.mapsLink && (
+            {contactData.mapsLink && (
               <p className="mt-3">
                 <a
-                  href={site.contact.mapsLink}
+                  href={contactData.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-action-primary hover:underline"
@@ -96,13 +95,13 @@ export function ContactSection() {
                   {site.email}
                 </a>
               </li>
-              {site.contact.phone && (
+              {contactData.phone && (
                 <li>
                   <a
-                    href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
+                    href={`tel:${contactData.phone.replace(/\s/g, "")}`}
                     className="text-action-primary hover:underline"
                   >
-                    {site.contact.phone}
+                    {contactData.phone}
                   </a>
                 </li>
               )}
@@ -128,10 +127,10 @@ export function ContactSection() {
           <h2 id="contact-map" className="sr-only">
             {c.mapSrOnly}
           </h2>
-          {site.contact.mapsEmbedUrl ? (
+          {contactData.mapsEmbedUrl ? (
             <iframe
               title={`${site.name} location map`}
-              src={site.contact.mapsEmbedUrl}
+              src={contactData.mapsEmbedUrl}
               className="h-[320px] w-full rounded-2xl border border-text-primary/10 bg-surface lg:h-full lg:min-h-[420px]"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

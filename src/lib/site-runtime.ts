@@ -49,3 +49,15 @@ export function publicLocationLabel(): string {
   const city = publicContact().city;
   return city ? `${city}, ${site.location.country}` : site.location.country;
 }
+
+/** Server-only contact bundle for the /contact page (env-aware). */
+export function getContactSectionData() {
+  const contact = publicContact();
+  return {
+    ...contact,
+    addressLines: formatPublicAddressLines(),
+    locationLabel: publicLocationLabel(),
+  };
+}
+
+export type ContactSectionData = ReturnType<typeof getContactSectionData>;
