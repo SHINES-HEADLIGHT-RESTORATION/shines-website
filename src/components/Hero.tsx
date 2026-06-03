@@ -1,112 +1,65 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { BookNowHeroLink } from "@/components/BookNowCta";
 import { useI18n } from "@/components/I18nProvider";
-
-const HERO_VIDEO_SRC = "/videos/fordmustangdarknightligthdifference.mp4";
-const HERO_POSTER_SRC = "/images/hero-poster.webp";
-
-function useHeroVideoEnabled(): boolean {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 768px)");
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    const update = () => {
-      setEnabled(desktop.matches && !reducedMotion.matches);
-    };
-
-    update();
-    desktop.addEventListener("change", update);
-    reducedMotion.addEventListener("change", update);
-    return () => {
-      desktop.removeEventListener("change", update);
-      reducedMotion.removeEventListener("change", update);
-    };
-  }, []);
-
-  return enabled;
-}
 
 export function Hero() {
   const { messages } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const videoEnabled = useHeroVideoEnabled();
-  const [videoReady, setVideoReady] = useState(false);
-  const [posterReady, setPosterReady] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = HERO_POSTER_SRC;
-    if (img.complete) {
-      setPosterReady(true);
-      return;
-    }
-    img.onload = () => setPosterReady(true);
-    img.onerror = () => setPosterReady(true);
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !videoEnabled) {
-      setVideoReady(false);
+    if (!video) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      video.pause();
+      video.removeAttribute("autoplay");
       return;
     }
 
-    const onReady = () => setVideoReady(true);
-    video.addEventListener("loadeddata", onReady);
-    video.addEventListener("canplay", onReady);
     video.play().catch(() => {
       /* Autoplay blocked; poster remains visible */
     });
-
-    return () => {
-      video.removeEventListener("loadeddata", onReady);
-      video.removeEventListener("canplay", onReady);
-    };
-  }, [videoEnabled]);
-
-  const showContent = posterReady || videoReady;
+  }, []);
 
   return (
     <section
       id="home"
       className="relative h-svh overflow-hidden bg-canvas-dark"
-      style={{
-        backgroundImage: `url(${HERO_POSTER_SRC})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
       <div className="absolute inset-0" aria-hidden="true">
-        {videoEnabled ? (
-          <video
-            ref={videoRef}
-            className={`absolute inset-0 hidden h-full w-full object-cover object-center motion-reduce:hidden md:block transition-opacity duration-500 ${
-              videoReady ? "opacity-100" : "opacity-0"
-            }`}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-            poster={HERO_POSTER_SRC}
-          >
-            <source src={HERO_VIDEO_SRC} type="video/mp4" />
-          </video>
-        ) : null}
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover object-center motion-reduce:hidden"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source
+            src="/videos/fordmustangdarknightligthdifference.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        <div
+          className="absolute inset-0 hidden bg-cover bg-center motion-reduce:block"
+          style={{ backgroundImage: "url(/images/mustang.png)" }}
+        />
 
         <div className="absolute inset-0 bg-gradient-to-t from-canvas-dark/90 via-canvas-dark/25 to-canvas-dark/50" />
         <div className="absolute inset-0 bg-gradient-to-r from-canvas-dark/75 via-canvas-dark/20 to-transparent" />
       </div>
 
       <div
-        className={`absolute z-10 flex max-w-xl flex-col gap-4 transition-opacity duration-300 lg:max-w-2xl ${
-          showContent ? "opacity-100" : "opacity-0"
-        }`}
+        className="absolute z-10 flex max-w-xl flex-col gap-4 lg:max-w-2xl"
         style={{ bottom: "var(--spacing-gutter)", left: "var(--spacing-gutter)" }}
       >
         <div className="flex flex-col gap-2">

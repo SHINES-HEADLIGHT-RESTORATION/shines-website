@@ -11,13 +11,6 @@ import { SiteFooter } from "@/components/SiteFooter";
 export default function Home() {
   return (
     <>
-      <link
-        rel="preload"
-        as="image"
-        href="/images/hero-poster.webp"
-        type="image/webp"
-        fetchPriority="high"
-      />
       <Header />
       <HeroScrollTransition>
         <main className="bg-surface-section">

@@ -43,6 +43,10 @@ export default async function RootLayout({
   return (
     <html lang={localeToHtmlLang(locale)} className={cn("font-sans", geist.variable)}>
       <head>
+        <link
+          href="https://fonts.cdnfonts.com/css/sf-pro-display"
+          rel="stylesheet"
+        />
         <JsonLd />
       </head>
       <body>
