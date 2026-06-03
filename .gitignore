@@ -11,3 +11,6 @@ tst/
 data/bookings.json
 .vercel
 .env*
+
+# Raw H.264 elementary streams are not web-playable (use npm run hero-videos)
+public/videos/*.h264
