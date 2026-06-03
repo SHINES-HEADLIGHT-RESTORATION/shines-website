@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BookNowHeroLink } from "@/components/BookNowCta";
@@ -36,35 +35,59 @@ export function Hero() {
   const { messages } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoEnabled = useHeroVideoEnabled();
+  const [videoReady, setVideoReady] = useState(false);
+  const [posterReady, setPosterReady] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = HERO_POSTER_SRC;
+    if (img.complete) {
+      setPosterReady(true);
+      return;
+    }
+    img.onload = () => setPosterReady(true);
+    img.onerror = () => setPosterReady(true);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !videoEnabled) return;
+    if (!video || !videoEnabled) {
+      setVideoReady(false);
+      return;
+    }
 
+    const onReady = () => setVideoReady(true);
+    video.addEventListener("loadeddata", onReady);
+    video.addEventListener("canplay", onReady);
     video.play().catch(() => {
       /* Autoplay blocked; poster remains visible */
     });
+
+    return () => {
+      video.removeEventListener("loadeddata", onReady);
+      video.removeEventListener("canplay", onReady);
+    };
   }, [videoEnabled]);
+
+  const showContent = posterReady || videoReady;
 
   return (
     <section
       id="home"
       className="relative h-svh overflow-hidden bg-canvas-dark"
+      style={{
+        backgroundImage: `url(${HERO_POSTER_SRC})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div className="absolute inset-0" aria-hidden="true">
-        <Image
-          src={HERO_POSTER_SRC}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className={`object-cover object-center ${videoEnabled ? "md:opacity-0" : ""}`}
-        />
-
         {videoEnabled ? (
           <video
             ref={videoRef}
-            className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
+            className={`absolute inset-0 hidden h-full w-full object-cover object-center motion-reduce:hidden md:block transition-opacity duration-500 ${
+              videoReady ? "opacity-100" : "opacity-0"
+            }`}
             autoPlay
             muted
             loop
@@ -81,7 +104,9 @@ export function Hero() {
       </div>
 
       <div
-        className="absolute z-10 flex max-w-xl flex-col gap-4 lg:max-w-2xl"
+        className={`absolute z-10 flex max-w-xl flex-col gap-4 transition-opacity duration-300 lg:max-w-2xl ${
+          showContent ? "opacity-100" : "opacity-0"
+        }`}
         style={{ bottom: "var(--spacing-gutter)", left: "var(--spacing-gutter)" }}
       >
         <div className="flex flex-col gap-2">
