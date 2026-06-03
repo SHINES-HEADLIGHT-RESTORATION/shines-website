@@ -18,7 +18,7 @@ export function buildPageMetadata({
   locale = "en-BE",
   index = true,
 }: PageSeoInput): Metadata {
-  const alternates = buildLanguageAlternates(path);
+  const alternates = buildLanguageAlternates(path, locale);
   const url = alternates.canonical;
 
   return {

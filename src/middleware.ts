@@ -7,8 +7,24 @@ import {
   LOCALE_COOKIE,
 } from "@/lib/i18n/config";
 import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
+import { site } from "@/lib/site";
 
 const LOCALE_MAX_AGE = 60 * 60 * 24 * 365;
+const CANONICAL_HOST = new URL(site.url).host;
+
+function redirectToCanonicalHost(request: NextRequest): NextResponse | null {
+  const host = request.headers.get("host")?.split(":")[0]?.toLowerCase();
+  if (!host || host === CANONICAL_HOST) return null;
+
+  if (host === `www.${CANONICAL_HOST}`) {
+    const url = request.nextUrl.clone();
+    url.host = CANONICAL_HOST;
+    url.protocol = "https:";
+    return NextResponse.redirect(url, 308);
+  }
+
+  return null;
+}
 
 const BOOKING_PATHS = [
   "/book",
@@ -25,6 +41,9 @@ function isBookingPath(pathname: string): boolean {
 }
 
 export function middleware(request: NextRequest) {
+  const hostRedirect = redirectToCanonicalHost(request);
+  if (hostRedirect) return hostRedirect;
+
   const { pathname } = request.nextUrl;
 
   if (isBookingPath(pathname) && !isPublicBookingEnabled()) {

@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.shines.be" }],
+        destination: "https://shines.be/:path*",
+        permanent: true,
+      },
+      {
         source: "/admin",
         destination: "/admin/appointments",
         permanent: false,

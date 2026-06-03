@@ -24,12 +24,13 @@ export async function generateMetadata(): Promise<Metadata> {
     description: messages.meta.homeDescription,
   });
   const verification = googleSiteVerification();
+  const withBase: Metadata = { metadataBase: new URL(site.url), ...base };
   return verification
     ? {
-        ...base,
+        ...withBase,
         verification: { google: verification },
       }
-    : base;
+    : withBase;
 }
 
 export default async function RootLayout({
