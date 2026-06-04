@@ -133,6 +133,7 @@ export async function createAppointment(
     vatNumber: input.vatNumber,
     billingAddress: input.billingAddress,
     source: input.source,
+    locale: input.locale,
   };
 
   const idx = indexFields(appointment);

@@ -657,7 +657,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     mobileAddressRequired:
       "Saisissez votre adresse complète ci-dessus pour voir les créneaux disponibles.",
     submitEmailHint:
-      "Votre application e-mail devrait s'ouvrir avec les détails. Sinon, écrivez à",
+      "Nous envoyons votre confirmation par e-mail tout de suite. Questions ? Contactez-nous à",
     summaryTitle: "Votre réservation",
     summaryVat: "TVA incl. · {warranty}",
     summaryLabels: {
@@ -780,7 +780,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       preferredSlot: "Date et heure souhaitées",
     },
     contactAside:
-      "Nous enverrons votre confirmation par e-mail. Votre mobile nous aide à vous joindre pour le rendez-vous et les détails de déplacement.",
+      "Nous envoyons votre confirmation de réservation immédiatement par e-mail. Votre mobile nous aide à vous joindre pour le rendez-vous et les détails de déplacement.",
     aboutSection: {
       ship: "À propos de votre réservation",
       default: "À propos de votre rendez-vous",
@@ -828,6 +828,43 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       cancelConfirm:
         "Annuler cette réservation ? Nous libérerons votre créneau ou n'attendrons plus votre colis.",
       reference: "Votre réservation",
+    },
+    confirmation: {
+      title: "Réservation confirmée",
+      referenceLine: "Référence {reference}",
+      totalLine: "Estimation {total} TVA incl. · {warranty}",
+      stepsVisit: [
+        "Arrivez à l'heure prévue — parking gratuit sur place pour le dépôt.",
+        "Nous inspectons vos phares et confirmons le périmètre avant de commencer.",
+        "Restauration et durcissement UV en général pendant l'attente (environ 30–90 min pour les deux phares).",
+        "Récupérez votre véhicule avec notre garantie de clarté — paiement à l'atelier.",
+      ],
+      stepsMobile: [
+        "Ayez le véhicule prêt et les phares accessibles à l'heure prévue.",
+        "Notre technicien arrive dans le créneau réservé (le déplacement est inclus dans votre devis).",
+        "Nous restaurons et durcissons UV sur place — pas de visite à l'atelier.",
+        "Validez le résultat avec nous ; paiement après la prestation.",
+      ],
+      stepsShip: [
+        "Réservez en ligne. Nous enregistrons votre réservation et affichons votre référence et l'adresse d'expédition.",
+        "Emballez vos phares solidement et expédiez via votre transporteur local (le plus économique pour vous).",
+        "Ajoutez votre numéro de suivi sur votre page de réservation (optionnel mais recommandé).",
+        "Nous vous écrivons à l'arrivée du colis. Une fois la restauration terminée, payez le retour en une étape sur votre page de réservation, puis nous renvoyons vos phares.",
+      ],
+      visitLocationTitle: "Rendez-vous à",
+      shipToTitle: "Expédier à",
+      shipToFallback:
+        "Nous enverrons l'adresse de l'atelier à {email}. Contactez-nous si vous en avez besoin plus tôt.",
+      openBooking: "Ouvrir ma réservation",
+      emailUs: "Nous écrire",
+      footnote:
+        "Conservez votre lien privé ou la référence {reference}. Aucun compte requis.",
+      footnoteShip:
+        "Conservez votre lien privé ou la référence {reference}. Indiquez la référence sur le colis avant expédition. Aucun compte requis.",
+      emailSent:
+        "Nous avons envoyé votre confirmation à l'adresse e-mail indiquée. Vérifiez aussi vos indésirables.",
+      emailPending:
+        "Votre réservation est enregistrée. Pas d'e-mail de confirmation sous quelques minutes ? Ouvrez votre réservation ci-dessous ou contactez-nous.",
     },
     mailIn: {
       confirmationTitle: "Réservation confirmée",

@@ -5,14 +5,14 @@ Master checklist. Full step-by-step instructions: **[docs/LAUNCH.md](../docs/LAU
 ## Launch todos
 
 ### Vercel & GitHub
-- [ ] Import `SHINES-HEADLIGHT-RESTORATION/shines-website` into Vercel (team: islamxyz)
-- [ ] Set all env vars from `.env.example` in Vercel dashboard
-- [ ] Deploy and confirm `*.vercel.app` URL works
-- [ ] Push latest code to GitHub `master` (auto-deploy)
+- [x] Import `SHINES-HEADLIGHT-RESTORATION/shines-website` into Vercel (team: islamxyz)
+- [x] Set core env vars in Vercel (`NEXT_PUBLIC_SITE_URL`, `ADMIN_PASSWORD`, `WORKSHOP_ADDRESS`, `NEXT_PUBLIC_BOOKING_ENABLED`, `RESEND_FROM`)
+- [x] Deploy — live at https://shines-islamxyz.vercel.app
+- [x] Push latest code to GitHub `master` (commit `0240e60`, auto-deployed)
 
 ### Domain (GoDaddy → Vercel)
-- [ ] Add `shines.be` + `www.shines.be` in Vercel Domains
-- [ ] Point GoDaddy DNS A/CNAME records to Vercel
+- [x] Add `shines.be` + `www.shines.be` in Vercel Domains
+- [ ] **YOU:** Point GoDaddy DNS — see [docs/DNS-GODADDY.md](../docs/DNS-GODADDY.md) (`A` → `76.76.21.21` for `@` and `www`)
 - [ ] Confirm HTTPS on `https://shines.be`
 
 ### Email (info@shines.be)
@@ -28,9 +28,12 @@ Master checklist. Full step-by-step instructions: **[docs/LAUNCH.md](../docs/LAU
 - [ ] Set `CONTACT_*`, `MAPS_LINK` env vars in Vercel when address is live
 
 ### Search Console & SEO
-- [ ] Verify domain via `GOOGLE_SITE_VERIFICATION` env var
-- [ ] Submit sitemap: `https://shines.be/sitemap.xml`
-- [ ] Request indexing for homepage, pricing, process, contact, main city page
+- [x] Verify domain in Search Console (domain property `shines.be` — DNS verification, verified owner)
+- [x] Submit sitemap: `https://shines.be/sitemap.xml` (submitted 2026-06-03; Google will process periodically)
+- [ ] Optional: `GOOGLE_SITE_VERIFICATION` env only if you add a **URL-prefix** property (not needed for domain property)
+- [x] Request indexing (daily quota) — **10 URLs** submitted 2026-06-03 (`indexing-progress.log`); quota hit; resume tomorrow from line 10
+- [ ] Continue indexing — **2026-06-04 batch done (10/10)**; next: `tasks/indexing-today.txt` (~2935 left); see [docs/INDEXING-DAILY.md](../docs/INDEXING-DAILY.md)
+- [x] Fix canonical (code): www→apex redirect + self-referencing locale canonicals — **deploy to production** to take effect
 - [ ] Register Bing Webmaster Tools (optional)
 
 ### Payments & booking
@@ -52,8 +55,12 @@ Master checklist. Full step-by-step instructions: **[docs/LAUNCH.md](../docs/LAU
 
 ## Review
 
-**Blockers before “fully live booking”:** Vercel read-only filesystem — bookings need Neon Postgres or disable booking until migrated.
+**Live now:** https://shines-islamxyz.vercel.app (production, latest commit deployed)
 
-**Vercel status:** No `shines` project exists yet on team islamxyz — import from GitHub is the first manual step.
+**Vercel project:** islamxyz/shines — env vars set; booking disabled via `NEXT_PUBLIC_BOOKING_ENABLED=false`.
 
-**Build:** passes locally after launch prep changes.
+**Domain:** `shines.be` added in Vercel — waiting on GoDaddy DNS (`A` → `76.76.21.21`).
+
+**Still manual (needs your accounts):** GoDaddy DNS, Resend API key + domain verify, Google Business Profile, Search Console, email inbox for info@.
+
+**Blockers before live booking:** Neon Postgres or keep booking disabled.

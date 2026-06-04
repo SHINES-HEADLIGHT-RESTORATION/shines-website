@@ -539,7 +539,7 @@ export function buildEnMessages(): SiteMessages {
       mobileAddressRequired:
         "Enter your full address above to see available appointment times.",
       submitEmailHint:
-        "Your email app should open with your booking details. If it doesn't, email us at",
+        "We'll email your confirmation right away. Questions? Contact us at",
       summaryTitle: "Your booking",
       summaryVat: "Incl. BTW · {warranty}",
       summaryLabels: {
@@ -618,7 +618,7 @@ export function buildEnMessages(): SiteMessages {
         preferredSlot: "Preferred date & time",
       },
       contactAside:
-        "We'll send your booking confirmation by email. Your mobile number helps us reach you about your appointment time and travel details.",
+        "We'll email your booking confirmation immediately. Your mobile number helps us reach you about your appointment time and travel details.",
       aboutSection: {
         ship: "About your booking",
         default: "About your appointment",
@@ -666,6 +666,38 @@ export function buildEnMessages(): SiteMessages {
         cancelConfirm:
           "Cancel this booking? We'll release your appointment slot or stop expecting your parcel.",
         reference: "Your booking",
+      },
+      confirmation: {
+        title: "Booking confirmed",
+        referenceLine: "Reference {reference}",
+        totalLine: "Total estimate {total} incl. BTW · {warranty}",
+        stepsVisit: [
+          "Arrive at your scheduled time — free on-site parking for drop-off.",
+          "We inspect your headlights and confirm the final scope before work starts.",
+          "Restoration and UV curing typically while you wait (about 30–90 minutes for both lights).",
+          "Collect your vehicle with our clarity guarantee — pay at the workshop.",
+        ],
+        stepsMobile: [
+          "Have the vehicle ready and headlights accessible at the scheduled time.",
+          "Our technician arrives within the reserved window (travel time is included in your quote).",
+          "We restore and UV-cure on site — no garage visit needed.",
+          "Review the result with us; payment is due after service.",
+        ],
+        stepsShip: [...mailInBookingSteps],
+        visitLocationTitle: "Visit us at",
+        shipToTitle: "Ship to",
+        shipToFallback:
+          "We'll email the workshop address to {email}. Contact us if you need it sooner.",
+        openBooking: "Open my booking",
+        emailUs: "Email us",
+        footnote:
+          "Save your private link or reference {reference}. No account needed.",
+        footnoteShip:
+          "Save your private link or reference {reference}. Write the reference on the outside of your parcel before shipping. No account needed.",
+        emailSent:
+          "We've sent your confirmation to the email address you provided. Check your inbox (and spam folder).",
+        emailPending:
+          "Your booking is saved. If you don't receive a confirmation email within a few minutes, open your booking below or contact us.",
       },
       mailIn: {
         confirmationTitle: "Booking confirmed",

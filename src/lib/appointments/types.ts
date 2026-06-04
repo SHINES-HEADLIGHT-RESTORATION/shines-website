@@ -65,6 +65,8 @@ export type Appointment = {
   returnTracking?: string;
   returnShippedAt?: string;
   source: "online" | "manual";
+  /** BCP-47 locale or message bundle key (en/nl/fr/de) from booking form. */
+  locale?: string;
 };
 
 export type CreateAppointmentInput = {
@@ -93,6 +95,7 @@ export type CreateAppointmentInput = {
   billingAddress?: string;
   source: "online" | "manual";
   status?: AppointmentStatus;
+  locale?: string;
 };
 
 export type UpdateAppointmentPatch = Partial<

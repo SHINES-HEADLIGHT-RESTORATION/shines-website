@@ -678,7 +678,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     mobileAddressRequired:
       "Vul hierboven uw volledige adres in om beschikbare afspraaktijden te zien.",
     submitEmailHint:
-      "Uw e-mailapp zou moeten openen met uw boekingsgegevens. Zo niet, mail ons op",
+      "We sturen uw bevestiging meteen per e-mail. Vragen? Contacteer ons via",
     summaryTitle: "Uw boeking",
     summaryVat: "Incl. BTW · {warranty}",
     summaryLabels: {
@@ -801,7 +801,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       preferredSlot: "Voorkeursdatum & tijd",
     },
     contactAside:
-      "We sturen uw boekingsbevestiging per e-mail. Uw mobiel nummer helpt ons u te bereiken over afspraaktijd en reisdetails.",
+      "We mailen uw boekingsbevestiging onmiddellijk. Uw mobiel nummer helpt ons u te bereiken over afspraaktijd en reisdetails.",
     aboutSection: {
       ship: "Over uw boeking",
       default: "Over uw afspraak",
@@ -849,6 +849,43 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       cancelConfirm:
         "Deze boeking annuleren? We geven uw afspraakslot vrij of verwachten uw pakket niet meer.",
       reference: "Uw boeking",
+    },
+    confirmation: {
+      title: "Boeking bevestigd",
+      referenceLine: "Referentie {reference}",
+      totalLine: "Schatting {total} incl. BTW · {warranty}",
+      stepsVisit: [
+        "Kom op uw geplande tijdstip — gratis parkeren op locatie voor aflevering.",
+        "Wij inspecteren uw koplampen en bevestigen de scope vóór we starten.",
+        "Restauratie en UV-uitharding meestal terwijl u wacht (ongeveer 30–90 minuten voor beide lampen).",
+        "Haal uw voertuig op met onze helderheidsgarantie — betalen in de werkplaats.",
+      ],
+      stepsMobile: [
+        "Zorg dat het voertuig klaarstaat en de koplampen bereikbaar zijn op het geplande tijdstip.",
+        "Onze technieker arriveert binnen het gereserveerde venster (reistijd zit in uw offerte).",
+        "Wij restaureren en UV-uitharden ter plaatse — geen bezoek aan de werkplaats nodig.",
+        "Bekijk het resultaat samen met ons; betaling na de service.",
+      ],
+      stepsShip: [
+        "Boek online. We bewaren uw boeking en tonen referentie en verzendadres.",
+        "Verpak uw koplampen stevig en verstuur via uw lokale vervoerder (goedkoopst voor u).",
+        "Voeg uw trackingnummer toe op uw boekingspagina (optioneel maar aanbevolen).",
+        "We mailen wanneer uw pakket aankomt. Is de restauratie klaar, betaal retourverzending één keer op uw boekingspagina, dan sturen we terug.",
+      ],
+      visitLocationTitle: "Bezoek ons op",
+      shipToTitle: "Verzenden naar",
+      shipToFallback:
+        "We mailen het werkplaatsadres naar {email}. Contacteer ons als u het sneller nodig heeft.",
+      openBooking: "Open mijn boeking",
+      emailUs: "Mail ons",
+      footnote:
+        "Bewaar uw privé-link of referentie {reference}. Geen account nodig.",
+      footnoteShip:
+        "Bewaar uw privé-link of referentie {reference}. Schrijf de referentie duidelijk op de doos vóór verzending. Geen account nodig.",
+      emailSent:
+        "We hebben uw bevestiging gestuurd naar het opgegeven e-mailadres. Controleer ook uw spammap.",
+      emailPending:
+        "Uw boeking is opgeslagen. Geen bevestigingsmail binnen enkele minuten? Open uw boeking hieronder of contacteer ons.",
     },
     mailIn: {
       confirmationTitle: "Boeking bevestigd",

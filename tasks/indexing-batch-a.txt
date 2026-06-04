@@ -1,0 +1,11 @@
+﻿https://shines.be/?locale=en-EU
+https://shines.be/?locale=en-GB
+https://shines.be/?locale=es-ES
+https://shines.be/?locale=fr-BE
+https://shines.be/?locale=fr-FR
+https://shines.be/?locale=fr-LU
+https://shines.be/?locale=it-IT
+https://shines.be/?locale=nl-BE
+https://shines.be/?locale=nl-NL
+https://shines.be/?locale=pl-PL
+https://shines.be/?locale=pt-PT

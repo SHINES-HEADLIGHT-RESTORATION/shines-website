@@ -7,6 +7,15 @@ import {
 } from "@/lib/appointments/store";
 import { isSlotAvailable } from "@/lib/appointments/slots";
 import { site } from "@/lib/site";
+import {
+  isSupportedLocale,
+  messageLocale,
+  type SupportedLocale,
+} from "@/lib/i18n/config";
+import {
+  bookingEmailSent,
+  sendBookingConfirmationEmails,
+} from "@/lib/email/booking-confirmation/send";
 
 type BookRequest = {
   serviceId?: ServiceMethodId;
@@ -29,6 +38,7 @@ type BookRequest = {
   companyName?: string;
   vatNumber?: string;
   billingAddress?: string;
+  locale?: string;
 };
 
 export async function POST(request: Request) {
@@ -173,7 +183,28 @@ export async function POST(request: Request) {
     companyName: body.companyName?.trim() || undefined,
     vatNumber: body.vatNumber?.trim() || undefined,
     billingAddress: body.billingAddress?.trim() || undefined,
+    locale: resolveBookingLocale(body.locale),
   });
 
-  return NextResponse.json({ appointment });
+  const emailResult = await sendBookingConfirmationEmails(appointment);
+
+  const customerEmail = emailResult.customer;
+
+  return NextResponse.json({
+    appointment,
+    emailSent: bookingEmailSent(emailResult),
+    emailError: customerEmail.ok ? undefined : customerEmail.error,
+  });
+}
+
+function resolveBookingLocale(raw?: string): string | undefined {
+  const value = raw?.trim();
+  if (!value) return undefined;
+  if (value === "en" || value === "nl" || value === "fr" || value === "de") {
+    return value;
+  }
+  if (isSupportedLocale(value)) {
+    return messageLocale(value);
+  }
+  return undefined;
 }

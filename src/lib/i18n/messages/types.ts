@@ -361,6 +361,23 @@ export type SiteMessages = {
       cancelConfirm: string;
       reference: string;
     };
+    confirmation: {
+      title: string;
+      referenceLine: string;
+      totalLine: string;
+      stepsVisit: string[];
+      stepsMobile: string[];
+      stepsShip: string[];
+      visitLocationTitle: string;
+      shipToTitle: string;
+      shipToFallback: string;
+      openBooking: string;
+      emailUs: string;
+      footnote: string;
+      footnoteShip: string;
+      emailSent: string;
+      emailPending: string;
+    };
     mailIn: {
       confirmationTitle: string;
       confirmationSteps: string[];

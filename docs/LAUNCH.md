@@ -176,7 +176,7 @@ Google will verify by **postcard**, **phone**, or **email** to the business addr
 
 ### 4.3 Complete the profile (do all of this)
 
-- [ ] Logo (use `shinesLogo.png` from the repo)
+- [ ] Logo (use `tst/root-assets/shinesLogo.png` or `public/images/shines-logo-white.png`)
 - [ ] Cover photo (workshop or before/after headlight)
 - [ ] Business hours (match site: Mon–Fri 9–18, Sat by appointment)
 - [ ] Services: headlight restoration, mobile service, mail-in

@@ -1,0 +1,10 @@
+﻿https://shines.be/contact?locale=es-ES
+https://shines.be/contact?locale=fr-BE
+https://shines.be/contact?locale=fr-FR
+https://shines.be/contact?locale=fr-LU
+https://shines.be/contact?locale=it-IT
+https://shines.be/contact?locale=nl-BE
+https://shines.be/contact?locale=nl-NL
+https://shines.be/contact?locale=pl-PL
+https://shines.be/contact?locale=pt-PT
+https://shines.be/pricing?locale=de-DE

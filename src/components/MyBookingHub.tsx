@@ -4,10 +4,11 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { MailInReturnPay } from "@/components/MailInReturnPay";
 import { MailInShippingForm } from "@/components/MailInShippingForm";
-import { mailInStatusLabel } from "@/lib/mail-in-status";
+import type { MailInStatus } from "@/lib/appointments/types";
 import type { PublicBooking } from "@/lib/bookings/public-booking";
 import { site } from "@/lib/site";
-import { mailInShipToNote } from "@/lib/mail-in-flow";
+import { useI18n } from "@/components/I18nProvider";
+import { getMailInStatusLabel } from "@/lib/i18n/catalog";
 
 function StatusBadge({
   label,
@@ -39,7 +40,10 @@ function StatusBadge({
   );
 }
 
-function mailInTimeline(status: PublicBooking["mailInStatus"]) {
+function mailInTimeline(
+  status: PublicBooking["mailInStatus"],
+  labelFor: (status: MailInStatus) => string,
+) {
   const steps = [
     "awaiting_parcel",
     "in_transit",
@@ -54,13 +58,16 @@ function mailInTimeline(status: PublicBooking["mailInStatus"]) {
 
   return steps.map((step, index) => ({
     step,
-    label: mailInStatusLabel(step),
+    label: labelFor(step),
     active: step === current,
     done: index < currentIndex,
   }));
 }
 
 export function MyBookingHub({ bookingId }: { bookingId: string }) {
+  const { messages } = useI18n();
+  const hub = messages.booking.hub;
+  const mailIn = messages.booking.mailIn;
   const searchParams = useSearchParams();
   const returnPaidBanner = searchParams.get("return_paid") === "1";
   const [booking, setBooking] = useState<PublicBooking | null>(null);
@@ -98,7 +105,7 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
     if (!booking?.canCancel) return;
     if (
       !window.confirm(
-        "Cancel this booking? We'll release your appointment slot or stop expecting your parcel.",
+        hub.cancelConfirm,
       )
     ) {
       return;
@@ -125,7 +132,7 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
   }
 
   if (loading) {
-    return <p className="text-sm text-text-body">Loading your booking…</p>;
+    return <p className="text-sm text-text-body">{hub.loading}</p>;
   }
 
   if (error || !booking) {
@@ -139,10 +146,10 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
     <div className="mx-auto max-w-2xl space-y-8">
       <div className="rounded-2xl border border-text-primary/10 bg-surface p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-wide text-action-primary">
-          My booking
+          {hub.title}
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-text-primary">
-          {booking.reference ?? "Your booking"}
+          {booking.reference ?? hub.reference}
         </h1>
         <p className="mt-2 text-base text-text-body">
           {booking.serviceLabel} · {booking.vehicle}
@@ -155,13 +162,11 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
 
         {booking.isCancelled ? (
           <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-action-danger">
-            This booking was cancelled.
+            {hub.cancelled}
           </p>
         ) : (
           <p className="mt-4 text-sm text-text-body">
-            {booking.serviceId === "ship"
-              ? "No account needed. Bookmark this page to track your parcel and manage your mail-in booking."
-              : "No account needed. Bookmark this page to view or cancel your appointment."}
+            {booking.serviceId === "ship" ? hub.bookmarkShip : hub.bookmarkDefault}
           </p>
         )}
 
@@ -174,7 +179,7 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
       </div>
 
       <div className="rounded-2xl border border-text-primary/10 bg-surface p-6">
-        <h2 className="text-lg font-semibold text-text-primary">Details</h2>
+        <h2 className="text-lg font-semibold text-text-primary">{hub.details}</h2>
         <dl className="mt-4 space-y-2 text-sm text-text-body">
           <div className="flex justify-between gap-4">
             <dt className="font-medium text-text-primary">When</dt>
@@ -210,7 +215,9 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
           <div className="rounded-2xl border border-text-primary/10 bg-surface p-6">
             <h2 className="text-lg font-semibold text-text-primary">Parcel status</h2>
             <ol className="mt-4 space-y-3">
-              {mailInTimeline(booking.mailInStatus).map((step) => (
+              {mailInTimeline(booking.mailInStatus, (s) =>
+                getMailInStatusLabel(messages, s),
+              ).map((step) => (
                 <StatusBadge
                   key={step.step}
                   label={step.label}
@@ -223,7 +230,9 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
 
           {booking.shipToLines.length > 0 && (
             <div className="rounded-2xl border border-text-primary/10 bg-surface-section p-6">
-              <h2 className="text-lg font-semibold text-text-primary">Ship to</h2>
+              <h2 className="text-lg font-semibold text-text-primary">
+                {messages.booking.confirmation.shipToTitle}
+              </h2>
               <p className="mt-2 text-sm leading-relaxed text-text-body">
                 {booking.shipToLines.map((line) => (
                   <span key={line} className="block">
@@ -231,7 +240,7 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
                   </span>
                 ))}
               </p>
-              <p className="mt-3 text-sm text-text-body">{mailInShipToNote}</p>
+              <p className="mt-3 text-sm text-text-body">{messages.mailInFlow.shipToNote}</p>
             </div>
           )}
 
@@ -282,7 +291,7 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
                 disabled={cancelling}
                 className="inline-flex h-[44px] items-center justify-center rounded-xl border border-action-danger px-5 text-sm font-medium text-action-danger transition-colors hover:bg-red-50 disabled:opacity-60"
               >
-                {cancelling ? "Cancelling…" : "Cancel booking"}
+                {cancelling ? "…" : hub.cancel}
               </button>
               {cancelMessage && (
                 <p className="text-sm text-text-body">{cancelMessage}</p>

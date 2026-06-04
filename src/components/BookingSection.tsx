@@ -14,7 +14,7 @@ import {
   BookingPostcodeRow,
 } from "@/components/BookingCheckoutFields";
 import { BookingAppointmentPicker } from "@/components/BookingAppointmentPicker";
-import { MailInBookingConfirmation } from "@/components/MailInBookingConfirmation";
+import { BookingConfirmation } from "@/components/BookingConfirmation";
 import {
   BookingServiceNotes,
   BookingVisitAddress,
@@ -104,7 +104,7 @@ function SelectCard({
 }
 
 export function BookingSection() {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const b = messages.booking;
   const headlightQuantities = getHeadlightQuantities(messages);
   const headlightSizes = getHeadlightSizes(messages);
@@ -134,9 +134,10 @@ export function BookingSection() {
   const [billingAddress, setBillingAddress] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [confirmedMailIn, setConfirmedMailIn] = useState<{
+  const [confirmedBooking, setConfirmedBooking] = useState<{
     id: string;
     reference: string;
+    emailSent: boolean;
   } | null>(null);
   const [mobileQuantityAdjusted, setMobileQuantityAdjusted] = useState(false);
 
@@ -264,6 +265,7 @@ export function BookingSection() {
             ? billingAddress.trim() || undefined
             : undefined,
         bookingTotal: breakdown.total,
+        locale,
       }),
     });
 
@@ -278,21 +280,20 @@ export function BookingSection() {
       return;
     }
 
-    const { appointment } = (await bookingResponse.json()) as {
+    const { appointment, emailSent } = (await bookingResponse.json()) as {
       appointment: { id: string; reference?: string };
+      emailSent?: boolean;
     };
 
     setSubmitted(true);
 
-    if (isShip && appointment.reference) {
-      setConfirmedMailIn({
+    if (appointment.reference) {
+      setConfirmedBooking({
         id: appointment.id,
         reference: appointment.reference,
+        emailSent: emailSent ?? true,
       });
-      return;
     }
-
-    window.location.href = `/booking/${appointment.id}`;
   }
 
   return (
@@ -305,11 +306,13 @@ export function BookingSection() {
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
-        {confirmedMailIn ? (
-          <MailInBookingConfirmation
-            reference={confirmedMailIn.reference}
-            bookingId={confirmedMailIn.id}
+        {confirmedBooking ? (
+          <BookingConfirmation
+            serviceId={serviceId}
+            reference={confirmedBooking.reference}
+            bookingId={confirmedBooking.id}
             total={breakdown.total}
+            emailSent={confirmedBooking.emailSent}
           />
         ) : (
         <form className="space-y-10" noValidate onSubmit={handleSubmit}>
@@ -745,7 +748,7 @@ export function BookingSection() {
               </p>
             )}
 
-            {submitted && !confirmedMailIn && (
+            {submitted && !confirmedBooking && (
               <p className="mt-4 text-sm text-text-body">
                 {b.submitEmailHint}{" "}
                 <a

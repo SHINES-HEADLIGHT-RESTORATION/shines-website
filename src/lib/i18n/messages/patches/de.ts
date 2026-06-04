@@ -648,7 +648,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
     mobileAddressRequired:
       "Geben Sie oben Ihre vollständige Adresse ein, um verfügbare Termine zu sehen.",
     submitEmailHint:
-      "Ihre E-Mail-App sollte mit Buchungsdetails öffnen. Falls nicht, mailen Sie an",
+      "Wir senden Ihre Bestätigung sofort per E-Mail. Fragen? Kontakt unter",
     summaryTitle: "Ihre Buchung",
     summaryVat: "Inkl. MwSt. · {warranty}",
     summaryLabels: {
@@ -759,7 +759,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
       preferredSlot: "Bevorzugtes Datum & Uhrzeit",
     },
     contactAside:
-      "Wir senden Ihre Buchungsbestätigung per E-Mail. Ihre Mobilnummer hilft uns, Sie zum Termin und bei Anfahrtdetails zu erreichen.",
+      "Wir mailen Ihre Buchungsbestätigung sofort. Ihre Mobilnummer hilft uns, Sie zum Termin und bei Anfahrtdetails zu erreichen.",
     aboutSection: {
       ship: "Über Ihre Buchung",
       default: "Über Ihren Termin",
@@ -807,6 +807,43 @@ export const dePatch: DeepPartial<SiteMessages> = {
       cancelConfirm:
         "Diese Buchung stornieren? Wir geben Ihren Termin frei oder erwarten Ihr Paket nicht mehr.",
       reference: "Ihre Buchung",
+    },
+    confirmation: {
+      title: "Buchung bestätigt",
+      referenceLine: "Referenz {reference}",
+      totalLine: "Schätzung {total} inkl. MwSt. · {warranty}",
+      stepsVisit: [
+        "Kommen Sie zur geplanten Zeit — kostenloses Parken vor Ort für die Abgabe.",
+        "Wir prüfen Ihre Scheinwerfer und bestätigen den Umfang vor Arbeitsbeginn.",
+        "Restaurierung und UV-Aushärtung meist während der Wartezeit (ca. 30–90 Min. für beide Lampen).",
+        "Holen Sie Ihr Fahrzeug mit unserer Klarheitsgarantie ab — Zahlung in der Werkstatt.",
+      ],
+      stepsMobile: [
+        "Fahrzeug bereitstellen, Scheinwerfer zum Termin erreichbar.",
+        "Unser Techniker kommt im reservierten Fenster (Fahrt ist in Ihrem Angebot enthalten).",
+        "Restaurierung und UV-Aushärtung vor Ort — kein Werkstattbesuch nötig.",
+        "Ergebnis gemeinsam prüfen; Zahlung nach der Leistung.",
+      ],
+      stepsShip: [
+        "Online buchen. Wir speichern Ihre Buchung und zeigen Referenz und Versandadresse.",
+        "Scheinwerfer sicher verpacken und bei Ihrem lokalen Versanddienstleister einsenden (günstigste Option für Sie).",
+        "Sendungsnummer auf Ihrer Buchungsseite eintragen (optional, empfohlen).",
+        "E-Mail bei Paketeingang. Nach Restaurierung einmal Rückversand auf Ihrer Buchungsseite bezahlen, dann senden wir zurück.",
+      ],
+      visitLocationTitle: "Besuchen Sie uns in",
+      shipToTitle: "Versand an",
+      shipToFallback:
+        "Wir mailen die Werkstattadresse an {email}. Kontaktieren Sie uns, wenn Sie sie früher brauchen.",
+      openBooking: "Meine Buchung öffnen",
+      emailUs: "E-Mail schreiben",
+      footnote:
+        "Bewahren Sie Ihren privaten Link oder die Referenz {reference}. Kein Konto nötig.",
+      footnoteShip:
+        "Bewahren Sie Ihren privaten Link oder die Referenz {reference}. Referenz deutlich auf dem Paket vor Versand. Kein Konto nötig.",
+      emailSent:
+        "Wir haben Ihre Bestätigung an die angegebene E-Mail-Adresse gesendet. Prüfen Sie auch den Spam-Ordner.",
+      emailPending:
+        "Ihre Buchung ist gespeichert. Keine Bestätigungsmail innerhalb weniger Minuten? Öffnen Sie Ihre Buchung unten oder kontaktieren Sie uns.",
     },
     mailIn: {
       confirmationTitle: "Buchung bestätigt",
