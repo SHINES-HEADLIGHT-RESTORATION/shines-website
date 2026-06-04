@@ -8,7 +8,7 @@ import { localeToHtmlLang } from "@/lib/i18n/config";
 import { toClientMessages } from "@/lib/i18n/client-messages";
 import { getRequestMessages } from "@/lib/i18n/server";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { googleSiteVerification } from "@/lib/site-runtime";
+import { bingSiteVerification, googleSiteVerification } from "@/lib/site-runtime";
 import { site } from "@/lib/site";
 import "./globals.css";
 import { Geist } from "next/font/google";
@@ -24,14 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
     title: messages.meta.homeTitle,
     description: messages.meta.homeDescription,
   });
-  const verification = googleSiteVerification();
+  const google = googleSiteVerification();
+  const bing = bingSiteVerification();
   const withBase: Metadata = { metadataBase: new URL(site.url), ...base };
-  return verification
-    ? {
-        ...withBase,
-        verification: { google: verification },
-      }
-    : withBase;
+  if (!google && !bing) return withBase;
+  return {
+    ...withBase,
+    verification: {
+      ...(google ? { google } : {}),
+      ...(bing ? { other: { "msvalidate.01": bing } } : {}),
+    },
+  };
 }
 
 export default async function RootLayout({

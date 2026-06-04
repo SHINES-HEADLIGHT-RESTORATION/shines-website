@@ -35,6 +35,11 @@ export function googleSiteVerification(): string | null {
   return envString("GOOGLE_SITE_VERIFICATION");
 }
 
+/** Bing Webmaster meta tag content (`msvalidate.01`). */
+export function bingSiteVerification(): string | null {
+  return envString("BING_SITE_VERIFICATION");
+}
+
 export function formatPublicAddressLines(): string[] {
   const contact = publicContact();
   const lines: string[] = [];
