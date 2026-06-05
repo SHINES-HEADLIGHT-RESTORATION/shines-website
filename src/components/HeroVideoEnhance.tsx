@@ -32,7 +32,7 @@ export function HeroVideoEnhance() {
 
     const tryPlay = () => {
       video.play().catch(() => {
-        /* Autoplay blocked — poster stays visible */
+        /* Autoplay blocked, poster stays visible */
       });
     };
 

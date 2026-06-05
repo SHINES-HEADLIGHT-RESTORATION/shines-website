@@ -1,0 +1,81 @@
+# Vakgebieden — Google Search Console indexing list
+# Submit via URL-inspectie → Indexering aanvragen (~10/day quota)
+# Deploy first, then wait until live on https://shines.be before submitting.
+
+# --- Day 1 (10 URLs) — submit these first (NL primary + hub in other full locales) ---
+https://shines.be/vakgebieden?locale=nl-BE
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=nl-BE
+https://shines.be/vakgebieden/autoschadebedrijf?locale=nl-BE
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=nl-BE
+https://shines.be/vakgebieden/autorestauratie?locale=nl-BE
+https://shines.be/vakgebieden?locale=fr-BE
+https://shines.be/vakgebieden/autoschadebedrijf?locale=fr-BE
+https://shines.be/vakgebieden?locale=de-DE
+https://shines.be/vakgebieden?locale=en-BE
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=en-BE
+
+# --- Day 2 — remaining NL/FR/DE/EN category pages ---
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=fr-BE
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=fr-BE
+https://shines.be/vakgebieden/autorestauratie?locale=fr-BE
+https://shines.be/vakgebieden?locale=fr-FR
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=de-DE
+https://shines.be/vakgebieden/autoschadebedrijf?locale=de-DE
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=de-DE
+https://shines.be/vakgebieden/autorestauratie?locale=de-DE
+https://shines.be/vakgebieden/autoschadebedrijf?locale=en-BE
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=en-BE
+
+# --- Day 3 — finish EN/FR hubs + en default ---
+https://shines.be/vakgebieden/autorestauratie?locale=en-BE
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=fr-FR
+https://shines.be/vakgebieden/autoschadebedrijf?locale=fr-FR
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=fr-FR
+https://shines.be/vakgebieden/autorestauratie?locale=fr-FR
+https://shines.be/vakgebieden?locale=en
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=en
+https://shines.be/vakgebieden/autoschadebedrijf?locale=en
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=en
+https://shines.be/vakgebieden/autorestauratie?locale=en
+
+# --- Optional — other hreflang locales (English fallback copy) ---
+https://shines.be/vakgebieden?locale=nl-NL
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=nl-NL
+https://shines.be/vakgebieden/autoschadebedrijf?locale=nl-NL
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=nl-NL
+https://shines.be/vakgebieden/autorestauratie?locale=nl-NL
+https://shines.be/vakgebieden?locale=fr-LU
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=fr-LU
+https://shines.be/vakgebieden/autoschadebedrijf?locale=fr-LU
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=fr-LU
+https://shines.be/vakgebieden/autorestauratie?locale=fr-LU
+https://shines.be/vakgebieden?locale=en-GB
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=en-GB
+https://shines.be/vakgebieden/autoschadebedrijf?locale=en-GB
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=en-GB
+https://shines.be/vakgebieden/autorestauratie?locale=en-GB
+https://shines.be/vakgebieden?locale=en-EU
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=en-EU
+https://shines.be/vakgebieden/autoschadebedrijf?locale=en-EU
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=en-EU
+https://shines.be/vakgebieden/autorestauratie?locale=en-EU
+https://shines.be/vakgebieden?locale=es-ES
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=es-ES
+https://shines.be/vakgebieden/autoschadebedrijf?locale=es-ES
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=es-ES
+https://shines.be/vakgebieden/autorestauratie?locale=es-ES
+https://shines.be/vakgebieden?locale=it-IT
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=it-IT
+https://shines.be/vakgebieden/autoschadebedrijf?locale=it-IT
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=it-IT
+https://shines.be/vakgebieden/autorestauratie?locale=it-IT
+https://shines.be/vakgebieden?locale=pt-PT
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=pt-PT
+https://shines.be/vakgebieden/autoschadebedrijf?locale=pt-PT
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=pt-PT
+https://shines.be/vakgebieden/autorestauratie?locale=pt-PT
+https://shines.be/vakgebieden?locale=pl-PL
+https://shines.be/vakgebieden/autoreparatie-en-onderhoud?locale=pl-PL
+https://shines.be/vakgebieden/autoschadebedrijf?locale=pl-PL
+https://shines.be/vakgebieden/autoschoonmaakdienst?locale=pl-PL
+https://shines.be/vakgebieden/autorestauratie?locale=pl-PL

@@ -1,4 +1,4 @@
-# SHINES launch guide — shines.be
+# SHINES launch guide, shines.be
 
 Complete checklist to go live on **Vercel**, connect **GoDaddy** domain, set up **info@shines.be**, claim **Google Business Profile** for local ranking, and submit for **organic + AI search**.
 
@@ -6,11 +6,11 @@ Your GitHub repo: `https://github.com/SHINES-HEADLIGHT-RESTORATION/shines-websit
 
 Your Vercel team: **islamxyz** (team_jZkRRpS2JPoFqkvmBN7St2c0)
 
-> **Current status:** The site builds successfully. There is **no Vercel project named “shines” yet** — only `ivnix` and `shahada`. You need to import the GitHub repo once (Step 1 below).
+> **Current status:** The site builds successfully. There is **no Vercel project named “shines” yet**, only `ivnix` and `shahada`. You need to import the GitHub repo once (Step 1 below).
 
 ---
 
-## Phase 0 — Before you start (15 min)
+## Phase 0, Before you start (15 min)
 
 Gather these:
 
@@ -26,7 +26,7 @@ Gather these:
 
 ---
 
-## Phase 1 — Deploy on Vercel (30 min)
+## Phase 1, Deploy on Vercel (30 min)
 
 ### 1.1 Import the GitHub project
 
@@ -34,7 +34,7 @@ Gather these:
 2. Select team **islamxyz**.
 3. Import **SHINES-HEADLIGHT-RESTORATION/shines-website**.
 4. Framework preset: **Next.js** (auto-detected).
-5. **Do not deploy yet** — add environment variables first (Step 1.2).
+5. **Do not deploy yet**, add environment variables first (Step 1.2).
 
 ### 1.2 Vercel environment variables
 
@@ -76,7 +76,7 @@ Vercel enables this by default on import. Every push to `master` redeploys produ
 
 ---
 
-## Phase 2 — Domain: GoDaddy → Vercel (20 min)
+## Phase 2, Domain: GoDaddy → Vercel (20 min)
 
 ### 2.1 Add domain in Vercel
 
@@ -100,15 +100,15 @@ Vercel enables this by default on import. Every push to `master` redeploys produ
 
 ### 2.3 Set primary domain
 
-In Vercel Domains, set **shines.be** as primary. Redirect `www` → apex (or vice versa — pick one canonical URL; the site uses `https://shines.be`).
+In Vercel Domains, set **shines.be** as primary. Redirect `www` → apex (or vice versa, pick one canonical URL; the site uses `https://shines.be`).
 
 ### 2.4 Verify HTTPS
 
-Open `https://shines.be` — padlock should show a valid certificate (automatic on Vercel).
+Open `https://shines.be`, padlock should show a valid certificate (automatic on Vercel).
 
 ---
 
-## Phase 3 — Email: info@shines.be (45 min)
+## Phase 3, Email: info@shines.be (45 min)
 
 Vercel does **not** host email. You need DNS records for **receiving** and **sending**.
 
@@ -154,7 +154,7 @@ v=DMARC1; p=none; rua=mailto:info@shines.be
 
 ---
 
-## Phase 4 — Google Business Profile (local ranking) (60 min)
+## Phase 4, Google Business Profile (local ranking) (60 min)
 
 This is **separate from the website** but critical for “headlight restoration near me” in Belgium.
 
@@ -171,7 +171,7 @@ This is **separate from the website** but critical for “headlight restoration 
 
 Google will verify by **postcard**, **phone**, or **email** to the business address. This can take 3–14 days.
 
-- Use your **real workshop address** — must match what you put on the website.
+- Use your **real workshop address**, must match what you put on the website.
 - Do not use a virtual office unless you actually receive mail there.
 
 ### 4.3 Complete the profile (do all of this)
@@ -180,7 +180,7 @@ Google will verify by **postcard**, **phone**, or **email** to the business addr
 - [ ] Cover photo (workshop or before/after headlight)
 - [ ] Business hours (match site: Mon–Fri 9–18, Sat by appointment)
 - [ ] Services: headlight restoration, mobile service, mail-in
-- [ ] Short description (same facts as homepage — no keyword stuffing)
+- [ ] Short description (same facts as homepage, no keyword stuffing)
 - [ ] Attributes: parking, appointments, etc.
 - [ ] First 5+ photos (before/after, process, workshop)
 - [ ] Enable messaging if you will reply quickly
@@ -194,7 +194,7 @@ After verification:
 3. Set `CONTACT_STREET`, `CONTACT_POSTAL_CODE`, `CONTACT_CITY`, `CONTACT_PHONE` in Vercel.
 4. Redeploy (automatic on env change, or trigger redeploy).
 
-When you have Google reviews, update `site.stats.rating` and `site.stats.reviewCount` in `src/lib/site.ts` (must match real Google data — do not fake reviews).
+When you have Google reviews, update `site.stats.rating` and `site.stats.reviewCount` in `src/lib/site.ts` (must match real Google data, do not fake reviews).
 
 ### 4.5 NAP consistency
 
@@ -203,11 +203,11 @@ When you have Google reviews, update `site.stats.rating` and `site.stats.reviewC
 - Google Business Profile  
 - shines.be contact page  
 - Facebook / Instagram (when added)  
-- Structured data (JSON-LD — auto from env + site config)
+- Structured data (JSON-LD, auto from env + site config)
 
 ---
 
-## Phase 5 — Google Search Console (organic SEO) (20 min)
+## Phase 5, Google Search Console (organic SEO) (20 min)
 
 1. Go to [search.google.com/search-console](https://search.google.com/search-console).
 2. **Add property** → Domain or URL prefix: `https://shines.be`.
@@ -223,9 +223,9 @@ When you have Google reviews, update `site.stats.rating` and `site.stats.reviewC
 
 The site already exposes:
 
-- `/robots.txt` — allows crawling, blocks `/admin/` and `/api/`
-- `/sitemap.xml` — all public pages, Belgium cities, Europe countries, news
-- `/llms.txt` — AI crawler summary (already in `public/`)
+- `/robots.txt`, allows crawling, blocks `/admin/` and `/api/`
+- `/sitemap.xml`, all public pages, Belgium cities, Europe countries, news
+- `/llms.txt`, AI crawler summary (already in `public/`)
 
 ### Request indexing
 
@@ -239,7 +239,7 @@ For key pages, use **URL Inspection → Request indexing**:
 
 ---
 
-## Phase 6 — Stripe (mail-in return shipping) (optional, 30 min)
+## Phase 6, Stripe (mail-in return shipping) (optional, 30 min)
 
 Only needed when mail-in customers pay return shipping online.
 
@@ -253,7 +253,7 @@ Only needed when mail-in customers pay return shipping online.
 
 ---
 
-## Phase 7 — SEO & AI visibility (ongoing)
+## Phase 7, SEO & AI visibility (ongoing)
 
 The site is already built for search:
 
@@ -270,11 +270,11 @@ The site is already built for search:
 ### Your ongoing SEO tasks
 
 1. **Publish news articles** monthly (oxidation, DIY vs pro, seasonal tips).
-2. **Get Google reviews** — ask happy customers after each job.
+2. **Get Google reviews**, ask happy customers after each job.
 3. **Add social links** in `src/lib/site.ts` → `social` when accounts are live.
-4. **Internal linking** — link city pages from news posts where relevant.
-5. **Bing Webmaster Tools** — [bing.com/webmasters](https://www.bing.com/webmasters) (imports from Search Console).
-6. **Do not** buy backlinks, fake reviews, or keyword-stuff — Google spam policies apply.
+4. **Internal linking**, link city pages from news posts where relevant.
+5. **Bing Webmaster Tools**, [bing.com/webmasters](https://www.bing.com/webmasters) (imports from Search Console).
+6. **Do not** buy backlinks, fake reviews, or keyword-stuff, Google spam policies apply.
 
 ### AI search (ChatGPT, Perplexity, Google AI Overviews)
 
@@ -284,7 +284,7 @@ The site is already built for search:
 
 ---
 
-## Phase 8 — Go-live checklist
+## Phase 8, Go-live checklist
 
 Run through this on production:
 
@@ -305,7 +305,7 @@ Run through this on production:
 
 ---
 
-## Phase 9 — After launch (database for bookings)
+## Phase 9, After launch (database for bookings)
 
 When you are ready for live online booking on Vercel:
 
@@ -314,11 +314,11 @@ When you are ready for live online booking on Vercel:
 3. Remove `NEXT_PUBLIC_BOOKING_ENABLED=false` if you set it.
 4. Test full booking flow on production.
 
-Until then, customers can book via **email** (`info@shines.be`) and phone — the site already supports mailto CTAs everywhere.
+Until then, customers can book via **email** (`info@shines.be`) and phone, the site already supports mailto CTAs everywhere.
 
 ---
 
-## Quick reference — who does what
+## Quick reference, who does what
 
 | Task | Where |
 |------|-------|

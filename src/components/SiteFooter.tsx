@@ -6,6 +6,7 @@ import { FooterRegionLink } from "@/components/FooterRegionLink";
 import { useI18n } from "@/components/I18nProvider";
 import { formatMessage } from "@/lib/i18n/format-message";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
+import { fieldCategoriesHubPath } from "@/lib/field-categories";
 import { europeHubPath } from "@/lib/europe-countries";
 import { site, allSocialPlatforms } from "@/lib/site";
 
@@ -59,6 +60,7 @@ export function SiteFooter() {
     { label: f.legal.warranty, href: "/pricing" },
     { label: f.legal.locations, href: "/locations" },
     { label: f.legal.europe, href: europeHubPath },
+    { label: f.legal.fields, href: fieldCategoriesHubPath },
   ];
 
   return (

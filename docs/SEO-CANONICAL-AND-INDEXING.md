@@ -17,7 +17,7 @@ curl -sI https://www.shines.be/ | findstr /i "HTTP location"
 # Expect: 308 or 301 and Location: https://shines.be/
 ```
 
-## Google Indexing API — not for SHINES pages
+## Google Indexing API, not for SHINES pages
 
 The [Indexing API](https://developers.google.com/search/apis/indexing-api/v3/using-api) only accepts URLs whose pages contain:
 

@@ -30,7 +30,7 @@ import {
 const dateLocales = { en: enGB, nl, fr, de } as const;
 
 function formatSlotForBundle(slot: string | undefined, bundle: MessageBundleKey): string {
-  if (!slot) return "—";
+  if (!slot) return "-";
   const date = parse(slot.slice(0, 19), SLOT_KEY, new Date());
   return format(date, "EEE d MMM yyyy · HH:mm", {
     locale: dateLocales[bundle] ?? enGB,
@@ -44,7 +44,7 @@ function formatAddress(appointment: Appointment): string {
     [appointment.postalCode, appointment.city].filter(Boolean).join(" "),
     appointment.countryCode,
   ].filter(Boolean);
-  return parts.join(", ") || "—";
+  return parts.join(", ") || "-";
 }
 
 function firstName(fullName: string): string {
@@ -70,13 +70,13 @@ export function buildBookingConfirmationEmail(options: {
   const quantityLabel =
     quantities.find((q) => q.id === appointment.quantity)?.label ??
     appointment.quantity ??
-    "—";
+    "-";
   const sizeLabel =
-    sizes.find((s) => s.id === appointment.sizeId)?.label ?? appointment.sizeId ?? "—";
+    sizes.find((s) => s.id === appointment.sizeId)?.label ?? appointment.sizeId ?? "-";
   const conditionLabel =
     conditions.find((c) => c.id === appointment.severityId)?.shortLabel ??
     appointment.severityId ??
-    "—";
+    "-";
   const serviceLabel =
     services.find((s) => s.id === appointment.serviceId)?.label ?? appointment.serviceId;
 

@@ -1,4 +1,5 @@
 import type { NewsArticle } from "@/lib/news/types";
+import type { FieldCategoryMessages } from "@/lib/field-category-content";
 
 export type FaqItem = {
   question: string;
@@ -60,6 +61,8 @@ export type SiteMessages = {
     termsDescription: string;
     cityTitleTemplate: string;
     cityDescriptionTemplate: string;
+    fieldsHubTitle: string;
+    fieldsHubDescription: string;
   };
   nav: {
     home: string;
@@ -219,9 +222,11 @@ export type SiteMessages = {
       warranty: string;
       locations: string;
       europe: string;
+      fields: string;
     };
     changeRegionLabel: string;
   };
+  fields: FieldCategoryMessages;
   europe: {
     hubTitle: string;
     hubDescription: string;

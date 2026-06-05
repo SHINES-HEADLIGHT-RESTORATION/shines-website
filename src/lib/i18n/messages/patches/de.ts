@@ -1,5 +1,7 @@
 import { locationsPagePath } from "@/lib/belgium-locations";
 import { europeHubPath } from "@/lib/europe-countries";
+import { fieldCategoriesHubPath } from "@/lib/field-categories";
+import { buildFieldCategoryMessagesDe } from "@/lib/field-category-content-de";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
 import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
@@ -63,6 +65,9 @@ export const dePatch: DeepPartial<SiteMessages> = {
     cityTitleTemplate: `Scheinwerfer-Restaurierung {city} | ${site.name}`,
     cityDescriptionTemplate:
       "Professionelle Scheinwerfer-Restaurierung in {city}, {province}. Online ab {price} buchen. UV-ausgehärtet vor der Abfahrt.",
+    fieldsHubTitle: "Fachgebiete | Scheinwerfer-Restaurierung und Optik",
+    fieldsHubDescription:
+      "Was SHINES in Ingelmunster macht: Wartung und Prüfungsbereitschaft, kosmetischer Smart Repair, professionelles Linsen-Detailing und vollständige optische Restaurierung, abgestimmt auf unsere Werkstatt-Expertise.",
   },
   nav: {
     home: "Start",
@@ -546,6 +551,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
           { label: `Werkstatt in ${loc}`, href: "/contact" },
           { label: "Belgien Städte", href: locationsPagePath },
           { label: "Europa", href: europeHubPath },
+          { label: "Fachgebiete", href: fieldCategoriesHubPath },
           { label: "Mobile-Service", href: "/book" },
           { label: "Post (Europa)", href: "/book" },
           { label: site.email, href: mailtoQuote() },
@@ -567,6 +573,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
       warranty: "Garantie",
       locations: "Standorte",
       europe: "Europa",
+      fields: "Fachgebiete",
     },
     changeRegionLabel: "Land oder Region ändern",
   },
@@ -581,6 +588,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
     belgiumGarage: `Werkstattservice in ${loc}`,
     viewPricing: "Preise ansehen",
   },
+  fields: buildFieldCategoryMessagesDe(),
   locations: {
     belgiumTitle: "Standorte in Belgien",
     belgiumDescription:
@@ -813,15 +821,15 @@ export const dePatch: DeepPartial<SiteMessages> = {
       referenceLine: "Referenz {reference}",
       totalLine: "Schätzung {total} inkl. MwSt. · {warranty}",
       stepsVisit: [
-        "Kommen Sie zur geplanten Zeit — kostenloses Parken vor Ort für die Abgabe.",
+        "Kommen Sie zur geplanten Zeit, kostenloses Parken vor Ort für die Abgabe.",
         "Wir prüfen Ihre Scheinwerfer und bestätigen den Umfang vor Arbeitsbeginn.",
         "Restaurierung und UV-Aushärtung meist während der Wartezeit (ca. 30–90 Min. für beide Lampen).",
-        "Holen Sie Ihr Fahrzeug mit unserer Klarheitsgarantie ab — Zahlung in der Werkstatt.",
+        "Holen Sie Ihr Fahrzeug mit unserer Klarheitsgarantie ab, Zahlung in der Werkstatt.",
       ],
       stepsMobile: [
         "Fahrzeug bereitstellen, Scheinwerfer zum Termin erreichbar.",
         "Unser Techniker kommt im reservierten Fenster (Fahrt ist in Ihrem Angebot enthalten).",
-        "Restaurierung und UV-Aushärtung vor Ort — kein Werkstattbesuch nötig.",
+        "Restaurierung und UV-Aushärtung vor Ort, kein Werkstattbesuch nötig.",
         "Ergebnis gemeinsam prüfen; Zahlung nach der Leistung.",
       ],
       stepsShip: [

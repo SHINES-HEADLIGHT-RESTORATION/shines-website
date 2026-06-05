@@ -5,7 +5,7 @@ function envString(key: string): string | null {
   return value ? value : null;
 }
 
-/** Public contact email — override via SITE_EMAIL in Vercel without code changes. */
+/** Public contact email, override via SITE_EMAIL in Vercel without code changes. */
 export function publicEmail(): string {
   return envString("SITE_EMAIL") ?? site.email;
 }
@@ -19,7 +19,7 @@ export type PublicContact = {
   mapsEmbedUrl: string | null;
 };
 
-/** Workshop contact fields — override via Vercel env when your address goes live. */
+/** Workshop contact fields, override via Vercel env when your address goes live. */
 export function publicContact(): PublicContact {
   return {
     street: envString("CONTACT_STREET") ?? site.contact.street,

@@ -1,6 +1,8 @@
 import { processPagePath } from "@/lib/process";
 import { locationsPagePath } from "@/lib/belgium-locations";
 import { europeHubPath } from "@/lib/europe-countries";
+import { fieldCategoriesHubPath } from "@/lib/field-categories";
+import { buildFieldCategoryMessagesNl } from "@/lib/field-category-content-nl";
 import { pricingPagePath } from "@/lib/pricing";
 import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
 import type { DeepPartial } from "../merge";
@@ -85,6 +87,9 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     cityTitleTemplate: `Koplamprestauratie {city} | ${site.name}`,
     cityDescriptionTemplate:
       "Professionele koplamprestauratie in {city}, {province}. Boek online vanaf {price}. UV-gehard vóór u vertrekt.",
+    fieldsHubTitle: "Vakgebieden | Koplamprestauratie & optisch herstel",
+    fieldsHubDescription:
+      "Wat SHINES doet in Ingelmunster: onderhoud en keuringsgereedheid, cosmetisch smart repair, professionele lens-detailing en volledige optische restauratie, afgestemd op onze werkplaats-expertise.",
   },
   nav: {
     home: "Home",
@@ -573,6 +578,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
           { label: `Garage in ${loc}`, href: "/contact" },
           { label: "Belgische steden", href: locationsPagePath },
           { label: "Europa", href: europeHubPath },
+          { label: "Vakgebieden", href: fieldCategoriesHubPath },
           { label: "Mobiele service", href: "/book" },
           { label: "Post (Europa)", href: "/book" },
           { label: site.email, href: mailtoQuote() },
@@ -597,6 +603,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       warranty: "Garantie",
       locations: "Locaties",
       europe: "Europa",
+      fields: "Vakgebieden",
     },
     changeRegionLabel: "Land of regio wijzigen",
   },
@@ -611,6 +618,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     belgiumGarage: `Garageservice in ${loc}`,
     viewPricing: "Bekijk prijzen",
   },
+  fields: buildFieldCategoryMessagesNl(),
   locations: {
     belgiumTitle: "Servicelocaties in België",
     belgiumDescription:
@@ -855,15 +863,15 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       referenceLine: "Referentie {reference}",
       totalLine: "Schatting {total} incl. BTW · {warranty}",
       stepsVisit: [
-        "Kom op uw geplande tijdstip — gratis parkeren op locatie voor aflevering.",
+        "Kom op uw geplande tijdstip, gratis parkeren op locatie voor aflevering.",
         "Wij inspecteren uw koplampen en bevestigen de scope vóór we starten.",
         "Restauratie en UV-uitharding meestal terwijl u wacht (ongeveer 30–90 minuten voor beide lampen).",
-        "Haal uw voertuig op met onze helderheidsgarantie — betalen in de werkplaats.",
+        "Haal uw voertuig op met onze helderheidsgarantie, betalen in de werkplaats.",
       ],
       stepsMobile: [
         "Zorg dat het voertuig klaarstaat en de koplampen bereikbaar zijn op het geplande tijdstip.",
         "Onze technieker arriveert binnen het gereserveerde venster (reistijd zit in uw offerte).",
-        "Wij restaureren en UV-uitharden ter plaatse — geen bezoek aan de werkplaats nodig.",
+        "Wij restaureren en UV-uitharden ter plaatse, geen bezoek aan de werkplaats nodig.",
         "Bekijk het resultaat samen met ons; betaling na de service.",
       ],
       stepsShip: [

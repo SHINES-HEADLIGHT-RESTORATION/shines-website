@@ -1,6 +1,6 @@
 # DNS for shines.be → Vercel
 
-**Current setup (June 2026):** Nameservers point to **Vercel DNS** — not GoDaddy DNS.
+**Current setup (June 2026):** Nameservers point to **Vercel DNS**, not GoDaddy DNS.
 
 | Nameserver | Status |
 |------------|--------|
@@ -12,7 +12,7 @@ GoDaddy is still the **registrar** (where you bought the domain). DNS is managed
 ## If `shines.be` shows GoDaddy “Launching Soon” but `www` works
 
 1. **Nameservers must be Vercel** (see above). At GoDaddy → Domain → **Nameservers** → Custom → `ns1.vercel-dns.com` + `ns2.vercel-dns.com`.
-2. **Remove GoDaddy Website / Coming Soon** — My Products → shines.be → disconnect any GoDaddy website or forwarding on the root domain.
+2. **Remove GoDaddy Website / Coming Soon**, My Products → shines.be → disconnect any GoDaddy website or forwarding on the root domain.
 3. **Clear browser cache** or open an **incognito** window and visit `https://shines.be` (use HTTPS, not HTTP).
 4. Wait up to 1 hour for DNS cache to expire on your ISP.
 

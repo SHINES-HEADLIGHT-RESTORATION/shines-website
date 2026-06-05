@@ -1,5 +1,7 @@
 import { locationsPagePath } from "@/lib/belgium-locations";
 import { europeHubPath } from "@/lib/europe-countries";
+import { fieldCategoriesHubPath } from "@/lib/field-categories";
+import { buildFieldCategoryMessagesFr } from "@/lib/field-category-content-fr";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
 import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
@@ -62,6 +64,9 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     cityTitleTemplate: `Restauration de phares {city} | ${site.name}`,
     cityDescriptionTemplate:
       "Restauration professionnelle de phares à {city}, {province}. Réservez en ligne dès {price}. Polymérisation UV avant votre départ.",
+    fieldsHubTitle: "Domaines d'expertise | Restauration de phares et optiques",
+    fieldsHubDescription:
+      "Ce que fait SHINES à Ingelmunster : entretien et préparation au contrôle, smart repair esthétique, detailing professionnel des lentilles et restauration optique complète, aligné sur notre expertise d'atelier.",
   },
   nav: {
     home: "Accueil",
@@ -555,6 +560,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
           { label: `Atelier à ${loc}`, href: "/contact" },
           { label: "Villes en Belgique", href: locationsPagePath },
           { label: "Europe", href: europeHubPath },
+          { label: "Domaines d'expertise", href: fieldCategoriesHubPath },
           { label: "Service mobile", href: "/book" },
           { label: "Envoi postal (Europe)", href: "/book" },
           { label: site.email, href: mailtoQuote() },
@@ -576,6 +582,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       warranty: "Garantie",
       locations: "Zones desservies",
       europe: "Europe",
+      fields: "Domaines d'expertise",
     },
     changeRegionLabel: "Changer de pays ou région",
   },
@@ -590,6 +597,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     belgiumGarage: `Atelier à ${loc}`,
     viewPricing: "Voir les tarifs",
   },
+  fields: buildFieldCategoryMessagesFr(),
   locations: {
     belgiumTitle: "Zones desservies en Belgique",
     belgiumDescription:
@@ -834,15 +842,15 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       referenceLine: "Référence {reference}",
       totalLine: "Estimation {total} TVA incl. · {warranty}",
       stepsVisit: [
-        "Arrivez à l'heure prévue — parking gratuit sur place pour le dépôt.",
+        "Arrivez à l'heure prévue, parking gratuit sur place pour le dépôt.",
         "Nous inspectons vos phares et confirmons le périmètre avant de commencer.",
         "Restauration et durcissement UV en général pendant l'attente (environ 30–90 min pour les deux phares).",
-        "Récupérez votre véhicule avec notre garantie de clarté — paiement à l'atelier.",
+        "Récupérez votre véhicule avec notre garantie de clarté, paiement à l'atelier.",
       ],
       stepsMobile: [
         "Ayez le véhicule prêt et les phares accessibles à l'heure prévue.",
         "Notre technicien arrive dans le créneau réservé (le déplacement est inclus dans votre devis).",
-        "Nous restaurons et durcissons UV sur place — pas de visite à l'atelier.",
+        "Nous restaurons et durcissons UV sur place, pas de visite à l'atelier.",
         "Validez le résultat avec nous ; paiement après la prestation.",
       ],
       stepsShip: [

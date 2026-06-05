@@ -2,6 +2,7 @@ import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
 import { locationsPagePath } from "@/lib/belgium-locations";
 import { europeHubPath } from "@/lib/europe-countries";
+import { fieldCategoriesHubPath } from "@/lib/field-categories";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
 
@@ -59,6 +60,7 @@ const baseFooterColumns: FooterColumn[] = [
       { label: `Garage in ${locationLabel()}`, href: "/contact" },
       { label: "Belgium cities", href: locationsPagePath },
       { label: "Europe", href: europeHubPath },
+      { label: "Specialist fields", href: fieldCategoriesHubPath },
       { label: "Mobile service", href: "/book" },
       { label: "Mail-in (Europe)", href: "/book" },
       { label: site.email, href: mailtoQuote(), external: true },

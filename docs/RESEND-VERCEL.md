@@ -1,4 +1,4 @@
-# Resend on Vercel — one secret to add
+# Resend on Vercel, one secret to add
 
 The site sends mail-in emails via Resend. **`RESEND_FROM` is set in `vercel.json`** so you do not need to add it in the dashboard (unless you want to override it).
 

@@ -1,13 +1,13 @@
-# Google Search Console — daily indexing batch
+# Google Search Console: daily indexing batch
 
 ## Reality check
 
 | Item | Detail |
 |------|--------|
-| Sitemap | `https://shines.be/sitemap.xml` — **already submitted**; Google discovers all 2,954 locale URLs from here + hreflang |
+| Sitemap | `https://shines.be/sitemap.xml`, **already submitted**; Google discovers all 2,954 locale URLs from here + hreflang |
 | Manual limit | ~**10** “Indexering aanvragen” per day (quota message: *Quotum overschreden*) |
 | Full manual queue | ~**2945** URLs left → **~295 days** at 10/day if you do everything |
-| Indexing API | **Not valid** for this site (JobPosting/BroadcastEvent only) — see [SEO-CANONICAL-AND-INDEXING.md](./SEO-CANONICAL-AND-INDEXING.md) |
+| Indexing API | **Not valid** for this site (JobPosting/BroadcastEvent only), see [SEO-CANONICAL-AND-INDEXING.md](./SEO-CANONICAL-AND-INDEXING.md) |
 
 Manual requests are a **nudge** for important URLs. They are **not** required for every locale variant.
 
@@ -20,7 +20,7 @@ Order: finish homepage locales → **contact** → **pricing** → **process** �
 ## Each day (~10 minutes)
 
 1. Open [Search Console](https://search.google.com/search-console) → property **shines.be**.
-2. Open **`tasks/indexing-today.txt`** (regenerate after each session — see below).
+2. Open **`tasks/indexing-today.txt`** (regenerate after each session, see below).
 3. For each URL: **URL-inspectie** → paste URL → **Indexering aanvragen**.
 4. Append results to **`tasks/indexing-progress.log`**:
    - `YYYY-MM-DD SUCCESS <url>`

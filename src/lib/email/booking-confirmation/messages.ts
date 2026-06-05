@@ -44,11 +44,11 @@ const en: BookingConfirmationEmailCopy = {
   greeting: "Hi {name},",
   lead: {
     visit:
-      "Thank you for choosing SHINES. Your garage visit is confirmed — your slot is reserved and there's nothing to pay online today.",
+      "Thank you for choosing SHINES. Your garage visit is confirmed, your slot is reserved and there's nothing to pay online today.",
     mobile:
-      "Thank you for choosing SHINES. Your mobile appointment is confirmed — we've reserved the time in our schedule and will come to your address.",
+      "Thank you for choosing SHINES. Your mobile appointment is confirmed, we've reserved the time in our schedule and will come to your address.",
     ship:
-      "Thank you for choosing SHINES. Your mail-in booking is live — pack and ship when it suits you; we'll handle the rest with full intake documentation.",
+      "Thank you for choosing SHINES. Your mail-in booking is live, pack and ship when it suits you; we'll handle the rest with full intake documentation.",
   },
   referenceLabel: "Booking reference",
   detailsTitle: "Your booking at a glance",
@@ -68,15 +68,15 @@ const en: BookingConfirmationEmailCopy = {
   stepsTitle: "What happens next",
   steps: {
     visit: [
-      "Arrive at the time below — free on-site parking for drop-off.",
+      "Arrive at the time below, free on-site parking for drop-off.",
       "We inspect your headlights and confirm the final scope before work starts.",
       "Restoration and UV curing typically while you wait (about 30–90 minutes for both lights).",
-      "Collect your vehicle with our clarity guarantee — pay at the workshop.",
+      "Collect your vehicle with our clarity guarantee, pay at the workshop.",
     ],
     mobile: [
       "Have the vehicle ready and headlights accessible at the scheduled time.",
       "Our technician arrives within the reserved window (travel time is included in your quote).",
-      "We restore and UV-cure on site — no garage visit needed.",
+      "We restore and UV-cure on site, no garage visit needed.",
       "Review the result with us; payment is due after service.",
     ],
     ship: [
@@ -88,7 +88,7 @@ const en: BookingConfirmationEmailCopy = {
   },
   cta: "Open my booking",
   reassurance:
-    "Save this email and your private booking link. No account required — your reference and email are all you need to return.",
+    "Save this email and your private booking link. No account required, your reference and email are all you need to return.",
   footer: "Questions? Reply to this email or contact us at info@shines.be.",
   shipToTitle: "Ship to our workshop",
   internalSubject: "New online booking · {reference} · {service}",
@@ -108,11 +108,11 @@ const nl: BookingConfirmationEmailCopy = {
   greeting: "Hallo {name},",
   lead: {
     visit:
-      "Bedankt dat u voor SHINES koos. Uw werkplaatsbezoek is bevestigd — uw slot is gereserveerd en u betaalt vandaag niets online.",
+      "Bedankt dat u voor SHINES koos. Uw werkplaatsbezoek is bevestigd, uw slot is gereserveerd en u betaalt vandaag niets online.",
     mobile:
-      "Bedankt dat u voor SHINES koos. Uw mobiele afspraak is bevestigd — het tijdslot staat vast en wij komen naar uw adres.",
+      "Bedankt dat u voor SHINES koos. Uw mobiele afspraak is bevestigd, het tijdslot staat vast en wij komen naar uw adres.",
     ship:
-      "Bedankt dat u voor SHINES koos. Uw postboeking is actief — verpak en verstuur wanneer het u uitkomt; wij nemen het over met volledige intake-documentatie.",
+      "Bedankt dat u voor SHINES koos. Uw postboeking is actief, verpak en verstuur wanneer het u uitkomt; wij nemen het over met volledige intake-documentatie.",
   },
   referenceLabel: "Boekingsreferentie",
   detailsTitle: "Uw boeking in één oogopslag",
@@ -132,15 +132,15 @@ const nl: BookingConfirmationEmailCopy = {
   stepsTitle: "Wat gebeurt er nu",
   steps: {
     visit: [
-      "Kom op het onderstaande tijdstip — gratis parkeren op locatie voor aflevering.",
+      "Kom op het onderstaande tijdstip, gratis parkeren op locatie voor aflevering.",
       "Wij inspecteren uw koplampen en bevestigen de scope vóór we starten.",
       "Restauratie en UV-uitharding meestal terwijl u wacht (ongeveer 30–90 minuten voor beide lampen).",
-      "Haal uw voertuig op met onze helderheidsgarantie — betalen in de werkplaats.",
+      "Haal uw voertuig op met onze helderheidsgarantie, betalen in de werkplaats.",
     ],
     mobile: [
       "Zorg dat het voertuig klaarstaat en de koplampen bereikbaar zijn op het geplande tijdstip.",
       "Onze technieker arriveert binnen het gereserveerde venster (reistijd zit in uw offerte).",
-      "Wij restaureren en UV-uitharden ter plaatse — geen bezoek aan de werkplaats nodig.",
+      "Wij restaureren en UV-uitharden ter plaatse, geen bezoek aan de werkplaats nodig.",
       "Bekijk het resultaat samen met ons; betaling na de service.",
     ],
     ship: [
@@ -152,7 +152,7 @@ const nl: BookingConfirmationEmailCopy = {
   },
   cta: "Open mijn boeking",
   reassurance:
-    "Bewaar deze e-mail en uw privé-link. Geen account nodig — referentie en e-mailadres volstaan om terug te keren.",
+    "Bewaar deze e-mail en uw privé-link. Geen account nodig, referentie en e-mailadres volstaan om terug te keren.",
   footer: "Vragen? Antwoord op deze mail of contacteer ons via info@shines.be.",
   shipToTitle: "Verzenden naar onze werkplaats",
   internalSubject: "Nieuwe online boeking · {reference} · {service}",
@@ -172,11 +172,11 @@ const fr: BookingConfirmationEmailCopy = {
   greeting: "Bonjour {name},",
   lead: {
     visit:
-      "Merci d'avoir choisi SHINES. Votre visite à l'atelier est confirmée — le créneau est réservé et aucun paiement en ligne n'est requis aujourd'hui.",
+      "Merci d'avoir choisi SHINES. Votre visite à l'atelier est confirmée, le créneau est réservé et aucun paiement en ligne n'est requis aujourd'hui.",
     mobile:
-      "Merci d'avoir choisi SHINES. Votre rendez-vous mobile est confirmé — le créneau est bloqué et nous nous déplaçons à votre adresse.",
+      "Merci d'avoir choisi SHINES. Votre rendez-vous mobile est confirmé, le créneau est bloqué et nous nous déplaçons à votre adresse.",
     ship:
-      "Merci d'avoir choisi SHINES. Votre réservation par envoi est active — expédiez quand vous le souhaitez ; nous gérons la suite avec une intake documentée.",
+      "Merci d'avoir choisi SHINES. Votre réservation par envoi est active, expédiez quand vous le souhaitez ; nous gérons la suite avec une intake documentée.",
   },
   referenceLabel: "Référence de réservation",
   detailsTitle: "Votre réservation en un coup d'œil",
@@ -196,15 +196,15 @@ const fr: BookingConfirmationEmailCopy = {
   stepsTitle: "Et ensuite",
   steps: {
     visit: [
-      "Arrivez à l'heure indiquée — parking gratuit sur place pour le dépôt.",
+      "Arrivez à l'heure indiquée, parking gratuit sur place pour le dépôt.",
       "Nous inspectons vos phares et confirmons le périmètre avant de commencer.",
       "Restauration et durcissement UV en général pendant l'attente (environ 30–90 min pour les deux phares).",
-      "Récupérez votre véhicule avec notre garantie de clarté — paiement à l'atelier.",
+      "Récupérez votre véhicule avec notre garantie de clarté, paiement à l'atelier.",
     ],
     mobile: [
       "Ayez le véhicule prêt et les phares accessibles à l'heure prévue.",
       "Notre technicien arrive dans le créneau réservé (le déplacement est inclus dans votre devis).",
-      "Nous restaurons et durcissons UV sur place — pas de visite à l'atelier.",
+      "Nous restaurons et durcissons UV sur place, pas de visite à l'atelier.",
       "Validez le résultat avec nous ; paiement après la prestation.",
     ],
     ship: [
@@ -216,7 +216,7 @@ const fr: BookingConfirmationEmailCopy = {
   },
   cta: "Ouvrir ma réservation",
   reassurance:
-    "Conservez cet e-mail et votre lien privé. Pas de compte requis — référence et e-mail suffisent pour revenir.",
+    "Conservez cet e-mail et votre lien privé. Pas de compte requis, référence et e-mail suffisent pour revenir.",
   footer: "Des questions ? Répondez à cet e-mail ou contactez-nous à info@shines.be.",
   shipToTitle: "Expédier vers notre atelier",
   internalSubject: "Nouvelle réservation en ligne · {reference} · {service}",
@@ -236,11 +236,11 @@ const de: BookingConfirmationEmailCopy = {
   greeting: "Hallo {name},",
   lead: {
     visit:
-      "Danke, dass Sie SHINES gewählt haben. Ihr Werkstattbesuch ist bestätigt — Ihr Slot ist reserviert, heute ist keine Online-Zahlung nötig.",
+      "Danke, dass Sie SHINES gewählt haben. Ihr Werkstattbesuch ist bestätigt, Ihr Slot ist reserviert, heute ist keine Online-Zahlung nötig.",
     mobile:
-      "Danke, dass Sie SHINES gewählt haben. Ihr mobiler Termin ist bestätigt — das Zeitfenster ist fest und wir kommen zu Ihrer Adresse.",
+      "Danke, dass Sie SHINES gewählt haben. Ihr mobiler Termin ist bestätigt, das Zeitfenster ist fest und wir kommen zu Ihrer Adresse.",
     ship:
-      "Danke, dass Sie SHINES gewählt haben. Ihre Postbuchung ist aktiv — verpacken und versenden Sie, wenn es passt; wir übernehmen mit vollständiger Eingangsdokumentation.",
+      "Danke, dass Sie SHINES gewählt haben. Ihre Postbuchung ist aktiv, verpacken und versenden Sie, wenn es passt; wir übernehmen mit vollständiger Eingangsdokumentation.",
   },
   referenceLabel: "Buchungsreferenz",
   detailsTitle: "Ihre Buchung auf einen Blick",
@@ -260,15 +260,15 @@ const de: BookingConfirmationEmailCopy = {
   stepsTitle: "Wie es weitergeht",
   steps: {
     visit: [
-      "Kommen Sie zur angegebenen Zeit — kostenloses Parken vor Ort für die Abgabe.",
+      "Kommen Sie zur angegebenen Zeit, kostenloses Parken vor Ort für die Abgabe.",
       "Wir prüfen Ihre Scheinwerfer und bestätigen den Umfang vor Arbeitsbeginn.",
       "Restaurierung und UV-Aushärtung meist während der Wartezeit (ca. 30–90 Min. für beide Lampen).",
-      "Holen Sie Ihr Fahrzeug mit unserer Klarheitsgarantie ab — Zahlung in der Werkstatt.",
+      "Holen Sie Ihr Fahrzeug mit unserer Klarheitsgarantie ab, Zahlung in der Werkstatt.",
     ],
     mobile: [
       "Fahrzeug bereitstellen, Scheinwerfer zum Termin erreichbar.",
       "Unser Techniker kommt im reservierten Fenster (Fahrt ist in Ihrem Angebot enthalten).",
-      "Restaurierung und UV-Aushärtung vor Ort — kein Werkstattbesuch nötig.",
+      "Restaurierung und UV-Aushärtung vor Ort, kein Werkstattbesuch nötig.",
       "Ergebnis gemeinsam prüfen; Zahlung nach der Leistung.",
     ],
     ship: [
@@ -280,7 +280,7 @@ const de: BookingConfirmationEmailCopy = {
   },
   cta: "Meine Buchung öffnen",
   reassurance:
-    "Bewahren Sie diese E-Mail und Ihren privaten Link auf. Kein Konto nötig — Referenz und E-Mail genügen.",
+    "Bewahren Sie diese E-Mail und Ihren privaten Link auf. Kein Konto nötig, Referenz und E-Mail genügen.",
   footer: "Fragen? Antworten Sie auf diese E-Mail oder schreiben Sie an info@shines.be.",
   shipToTitle: "Versand an unsere Werkstatt",
   internalSubject: "Neue Online-Buchung · {reference} · {service}",

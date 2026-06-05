@@ -48,6 +48,7 @@ import {
   processSummary,
 } from "@/lib/process";
 import { regionGroups } from "@/lib/regions";
+import { buildFieldCategoryMessages } from "@/lib/field-category-content";
 import { formatPrice, locationLabel, site } from "@/lib/site";
 
 export function buildEnMessages(): SiteMessages {
@@ -112,6 +113,8 @@ export function buildEnMessages(): SiteMessages {
       cityTitleTemplate: `Headlight Restoration {city} | ${site.name}`,
       cityDescriptionTemplate:
         "Professional headlight restoration in {city}, {province}. Book online from {price}. UV-cured before you drive away.",
+      fieldsHubTitle: "Specialist fields | Headlight restoration services",
+      fieldsHubDescription: `What SHINES does in ${loc}: maintenance and inspection-ready repair, cosmetic smart repair, professional lens detailing, and full optical restoration. Aligned with our workshop expertise.`,
     },
     nav: {
       home: "Home",
@@ -463,6 +466,7 @@ export function buildEnMessages(): SiteMessages {
         warranty: footerLegalLinks[2]!.label,
         locations: footerLegalLinks[3]!.label,
         europe: "Europe",
+        fields: "Specialist fields",
       },
       changeRegionLabel: "Change country or region",
     },
@@ -477,6 +481,7 @@ export function buildEnMessages(): SiteMessages {
       belgiumGarage: `Garage service in ${loc}`,
       viewPricing: "View pricing",
     },
+    fields: buildFieldCategoryMessages(),
     locations: {
       belgiumTitle: "Service locations in Belgium",
       belgiumDescription:
@@ -672,15 +677,15 @@ export function buildEnMessages(): SiteMessages {
         referenceLine: "Reference {reference}",
         totalLine: "Total estimate {total} incl. BTW · {warranty}",
         stepsVisit: [
-          "Arrive at your scheduled time — free on-site parking for drop-off.",
+          "Arrive at your scheduled time, free on-site parking for drop-off.",
           "We inspect your headlights and confirm the final scope before work starts.",
           "Restoration and UV curing typically while you wait (about 30–90 minutes for both lights).",
-          "Collect your vehicle with our clarity guarantee — pay at the workshop.",
+          "Collect your vehicle with our clarity guarantee, pay at the workshop.",
         ],
         stepsMobile: [
           "Have the vehicle ready and headlights accessible at the scheduled time.",
           "Our technician arrives within the reserved window (travel time is included in your quote).",
-          "We restore and UV-cure on site — no garage visit needed.",
+          "We restore and UV-cure on site, no garage visit needed.",
           "Review the result with us; payment is due after service.",
         ],
         stepsShip: [...mailInBookingSteps],

@@ -43,11 +43,11 @@ Bookings will persist in Postgres. Admin `/admin` and customer `/book` use the s
 
 1. Submit a test booking on `/book`.
 2. Open `/admin` → appointment should appear.
-3. Redeploy or wait — booking should still be there (proves Postgres, not ephemeral files).
+3. Redeploy or wait, booking should still be there (proves Postgres, not ephemeral files).
 
 ## Schema
 
-- `appointments` — booking rows (full JSON in `data` column)
-- `availability_config` — admin calendar settings (single row `default`)
+- `appointments`, booking rows (full JSON in `data` column)
+- `availability_config`, admin calendar settings (single row `default`)
 
 SQL source: `src/lib/db/schema.sql`

@@ -2,7 +2,7 @@
 
 ## Site setup
 
-- **Property:** `https://shines.be/` (imported from Google Search Console — no separate meta-tag verification needed when GSC import succeeds).
+- **Property:** `https://shines.be/` (imported from Google Search Console: no separate meta-tag verification needed when GSC import succeeds).
 - **Dashboard:** [Bing Webmaster Tools](https://www.bing.com/webmasters)
 
 ## Sitemap

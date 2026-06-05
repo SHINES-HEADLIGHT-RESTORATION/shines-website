@@ -6,6 +6,11 @@ import {
   europeCountryPath,
   europeHubPath,
 } from "@/lib/europe-countries";
+import {
+  fieldCategories,
+  fieldCategoriesHubPath,
+  fieldCategoryPath,
+} from "@/lib/field-categories";
 import { getAllNewsArticles, newsArticlePath, newsPagePath } from "@/lib/news";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
@@ -43,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: newsPagePath, priority: 0.9, freq: "weekly" },
     { path: locationsPagePath, priority: 0.85, freq: "monthly" },
     { path: europeHubPath, priority: 0.9, freq: "monthly" },
+    { path: fieldCategoriesHubPath, priority: 0.88, freq: "monthly" },
     { path: chooseCountryRegionPath, priority: 0.5, freq: "monthly" },
   ];
 
@@ -55,6 +61,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ),
     ...europeCountries.map(({ slug }) =>
       entry(europeCountryPath(slug), 0.75, "monthly", now),
+    ),
+    ...fieldCategories.map(({ slug }) =>
+      entry(fieldCategoryPath(slug), 0.82, "monthly", now),
     ),
     ...getAllNewsArticles().map((article) =>
       entry(newsArticlePath(article), 0.75, "monthly", new Date(article.publishedAt)),

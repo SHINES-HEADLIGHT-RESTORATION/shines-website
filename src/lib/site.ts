@@ -6,12 +6,12 @@ export const site = {
     city: "Ingelmunster",
     country: "Belgium",
   },
-  /** Garage contact details — override per field via CONTACT_* / MAPS_* env on Vercel. */
+  /** Garage contact details, override per field via CONTACT_* / MAPS_* env on Vercel. */
   contact: {
     street: "M. Devisscherestraat 4",
     postalCode: "8770",
     phone: "+32 498 65 96 63",
-    /** Use maps.google.com?output=embed or /maps/embed — not /maps/place/ (blocked in iframes). */
+    /** Use maps.google.com?output=embed or /maps/embed, not /maps/place/ (blocked in iframes). */
     mapsEmbedUrl:
       "https://maps.google.com/maps?q=M.+Devisscherestraat+4,+8770+Ingelmunster,+Belgium&hl=nl&z=17&output=embed",
     mapsLink:

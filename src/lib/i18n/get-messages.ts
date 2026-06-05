@@ -15,7 +15,7 @@ const lazyBundles: Record<
   de: () => import("@/lib/i18n/messages/de").then((m) => m.de),
 };
 
-/** Sync English only — for sitemap / generateStaticParams at build time. */
+/** Sync English only, for sitemap / generateStaticParams at build time. */
 export function getMessages(locale: SupportedLocale): SiteMessages {
   const key = messageLocale(locale);
   if (key === "en") return en;

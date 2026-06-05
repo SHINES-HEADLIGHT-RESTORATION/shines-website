@@ -1,13 +1,13 @@
 # Priority order for Search Console "Indexering aanvragen" (manual or script)
 # Full queue: indexing-urls.txt (2954 hreflang URLs from sitemap)
 
-# Tier 1 — core pages (all 14 locales each)
+# Tier 1, core pages (all 14 locales each)
 # Homepage variants: lines 1-14 in indexing-urls.txt
 # /contact, /book, /about: lines 57-70, 29-42, 15-28
 # /pricing: lines 2941-2954
 # /headlight-restoration-process: lines 491-504
 
-# Tier 2 — hubs
+# Tier 2, hubs
 # /news, /locations, /europe, /choose-country-region
 
-# Tier 3 — all location + europe country + news article URLs (remainder)
+# Tier 3, all location + europe country + news article URLs (remainder)
