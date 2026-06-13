@@ -32,9 +32,28 @@ Master checklist. Full step-by-step instructions: **[docs/LAUNCH.md](../docs/LAU
 - [x] Submit sitemap: `https://shines.be/sitemap.xml` (submitted 2026-06-03; Google will process periodically)
 - [ ] Optional: `GOOGLE_SITE_VERIFICATION` env only if you add a **URL-prefix** property (not needed for domain property)
 - [x] Request indexing (daily quota), **10 URLs** submitted 2026-06-03 (`indexing-progress.log`); quota hit; resume tomorrow from line 10
-- [ ] Continue indexing, **2026-06-05: 1/10** (fr-BE ok; quota at fr-FR); retry from `tasks/indexing-today.txt`; see [docs/INDEXING-DAILY.md](../docs/INDEXING-DAILY.md)
+- [ ] Continue indexing — **2026-06-07 batch done (10/10)**; next: `tasks/indexing-today.txt` (~2924 left); see [docs/INDEXING-DAILY.md](../docs/INDEXING-DAILY.md)
 - [x] Fix canonical (code): www→apex redirect + self-referencing locale canonicals, **deploy to production** to take effect
 - [ ] Register Bing Webmaster Tools (optional)
+
+### SEO indexing fix — GSC 265 not indexed, 4 reasons (2026-06-13)
+Evidence (live HTTP tests):
+- **Page with redirect (62):** `www.`/`http://` host variants → 308 to apex. **Correct behavior, not a code bug.** Lever: don't link to www/http.
+- **Duplicate without user-selected canonical (1):** caused by inconsistent canonicals below.
+- **Discovered – currently not indexed (201):** new-site crawl budget + 14 near-duplicate `?locale=` URLs per page + canonical confusion. Improves with consistent canonicals + fewer dup URLs + time/authority. Not an instant fix.
+- **Crawled – currently not indexed (1):** quality/time.
+
+Real defects (fixable in code):
+- Canonicals inconsistent: contact/europe/vakgebieden/about/pricing/process/news bare URLs canonical → `?locale=en-BE` (≠ sitemap `<loc>`); `/book` has **no canonical** → falls back to homepage; locations pages are correctly self-canonical.
+- Sitemap `<loc>` = 216 bare paths, but most pages aren't self-canonical to bare → sitemap URLs declared non-canonical.
+
+Plan (centralized, minimal):
+- [ ] `src/lib/seo/alternates.ts`: canonical = **bare absolute path** (no `?locale=`), normalize home to `https://shines.be` (match sitemap). Keep hreflang languages.
+- [ ] `src/app/book/page.tsx`: add self-canonical `/book`.
+- [ ] Confirm hardcoded-canonical pages (locations, choose-country-region) stay consistent.
+- [ ] `npm run build`; verify canonicals locally.
+- [ ] Commit only edited files; deploy to production.
+- [ ] Re-test live (every sitemap URL self-canonical to bare); in GSC use **Validate fix**; continue daily indexing.
 
 ### Payments & booking
 - [ ] Stripe keys + webhook (if mail-in return shipping is live)
