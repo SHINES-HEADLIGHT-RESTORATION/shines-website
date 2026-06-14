@@ -19,11 +19,10 @@ export function BookCtaSection() {
         <div className="mb-8 overflow-hidden rounded-[22%] shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
           <Image
             src="/images/shineslogowithbackground.svg"
-            alt=""
+            alt="SHINES"
             width={64}
             height={64}
             className="h-16 w-16"
-            aria-hidden
           />
         </div>
         <SectionHeading>{c.title}</SectionHeading>

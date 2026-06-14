@@ -58,7 +58,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     next: "Volgende",
   },
   meta: {
-    homeTitle: `Koplamprestauratie ${loc} | ${site.name} | België & Europa`,
+    homeTitle: `Koplamprestauratie ${loc} | ${site.name}`,
     homeDescription: `Professionele koplamprestauratie in ${loc}. Herstel matte, vergeelde koplampen vanaf ${pairFrom}. Lokale garage of postservice in heel Europa.`,
     aboutTitle: `Over ${site.name} | Professionele koplamprestauratie`,
     aboutDescription: `${site.name} herstelt matte, vergeelde koplampen met een OEM UV-hardcoat en uitharding in de werkplaats in ${loc}. Postservice in heel Europa.`,

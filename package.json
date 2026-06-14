@@ -11,6 +11,7 @@
     "db:migrate": "node scripts/db-migrate.mjs",
     "favicons": "node scripts/generate-favicons.mjs",
     "hero-poster": "node scripts/extract-hero-poster.mjs",
+    "indexnow": "node scripts/indexnow-submit.mjs",
     "hero-videos": "node scripts/encode-hero-videos.mjs"
   },
   "dependencies": {

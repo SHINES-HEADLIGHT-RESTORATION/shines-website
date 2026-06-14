@@ -38,16 +38,18 @@ export function SectionCards({
 export function SectionHeading({
   children,
   className = "text-text-primary",
+  as: Tag = "h2",
 }: {
   children: ReactNode;
   className?: string;
+  as?: "h1" | "h2";
 }) {
   return (
-    <h2
+    <Tag
       className={`text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-[1.08] tracking-tight ${className}`}
     >
       {children}
-    </h2>
+    </Tag>
   );
 }
 

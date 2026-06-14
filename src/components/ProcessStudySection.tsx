@@ -17,7 +17,7 @@ export async function ProcessStudySection() {
       <p className="text-xs font-semibold uppercase tracking-wide text-brand">
         {p.label}
       </p>
-      <SectionHeading className="mt-2">{p.title}</SectionHeading>
+      <SectionHeading as="h1" className="mt-2">{p.title}</SectionHeading>
 
       <p className="mt-4 max-w-3xl text-base leading-relaxed text-text-body">
         {p.summary}

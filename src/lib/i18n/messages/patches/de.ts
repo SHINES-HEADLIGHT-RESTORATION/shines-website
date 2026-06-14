@@ -37,7 +37,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
     next: "Weiter",
   },
   meta: {
-    homeTitle: `Scheinwerfer-Restaurierung ${loc} | ${site.name} | Belgien & Europa`,
+    homeTitle: `Scheinwerfer-Restaurierung ${loc} | ${site.name}`,
     homeDescription: `Professionelle Scheinwerfer-Restaurierung in ${loc}. Trübe, vergilbte Scheinwerfer ab ${pairFrom}. Werkstatt vor Ort oder Postservice in ganz Europa.`,
     aboutTitle: `Über ${site.name} | Professionelle Scheinwerfer-Restaurierung`,
     aboutDescription: `${site.name} stellt trübe, vergilbte Scheinwerfer wieder her mit OEM-UV-Hardcoat und Werkstatt-Aushärtung in ${loc}. Postservice in ganz Europa.`,

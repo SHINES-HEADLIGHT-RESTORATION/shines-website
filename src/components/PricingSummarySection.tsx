@@ -45,7 +45,7 @@ export async function PricingSummarySection() {
 
   return (
     <SectionShell evenPadding>
-      <SectionHeading>{pr.title}</SectionHeading>
+      <SectionHeading as="h1">{pr.title}</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
         {pr.summary} {pricingFromLabel()}.{" "}
         <BookNowTextLink className="inline-flex">

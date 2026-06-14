@@ -15,7 +15,7 @@ export default function TermsPage() {
       <Header />
       <main className="bg-surface-section pt-[54px]">
         <SectionShell evenPadding>
-          <SectionHeading>Terms of Use</SectionHeading>
+          <SectionHeading as="h1">Terms of Use</SectionHeading>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-body">
             Prices on {site.url.replace("https://", "")} are starting prices.
             Final pricing is confirmed on the booking page before payment. We

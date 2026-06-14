@@ -36,7 +36,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     next: "Suivant",
   },
   meta: {
-    homeTitle: `Restauration de phares ${loc} | ${site.name} | Belgique et Europe`,
+    homeTitle: `Restauration de phares ${loc} | ${site.name}`,
     homeDescription: `Restauration professionnelle de phares à ${loc}. Phares troubles ou jaunis dès ${pairFrom}. Atelier local ou envoi postal dans toute l'Europe.`,
     aboutTitle: `À propos de ${site.name} | Restauration professionnelle de phares`,
     aboutDescription: `${site.name} restaure les phares troubles et jaunis avec un vernis UV de qualité OEM et polymérisation en atelier à ${loc}. Service postal dans toute l'Europe.`,

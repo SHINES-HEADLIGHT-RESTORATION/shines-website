@@ -15,7 +15,7 @@ export function AboutSection() {
 
   return (
     <SectionShell evenPadding>
-      <SectionHeading>{a.title}</SectionHeading>
+      <SectionHeading as="h1">{a.title}</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
         {a.intro}
       </p>

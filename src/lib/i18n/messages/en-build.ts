@@ -85,7 +85,7 @@ export function buildEnMessages(): SiteMessages {
       next: "Next",
     },
     meta: {
-      homeTitle: `Headlight Restoration ${loc} | ${site.name} | Belgium & Europe`,
+      homeTitle: `Headlight Restoration ${loc} | ${site.name}`,
       homeDescription: `Professional headlight restoration in ${loc}. Restore foggy, yellowed headlights from ${pairFrom}. Local garage or mail-in service across Europe.`,
       aboutTitle: `About ${site.name} | Professional Headlight Restoration`,
       aboutDescription: `${site.name} restores foggy, yellowed headlights with an OEM-grade UV hard coat and in-shop curing in ${loc}. Mail-in service across Europe.`,

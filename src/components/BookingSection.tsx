@@ -298,7 +298,7 @@ export function BookingSection() {
 
   return (
     <SectionShell evenPadding>
-      <SectionHeading>Book your restoration</SectionHeading>
+      <SectionHeading as="h1">Book your restoration</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
         Pick your headlight size, how bad the damage looks, and how you want
         service. Your price updates instantly. All prices incl. BTW unless a

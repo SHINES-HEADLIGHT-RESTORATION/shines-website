@@ -22,7 +22,7 @@ export function ContactSection({ contactData }: ContactSectionProps) {
 
   return (
     <SectionShell evenPadding>
-      <SectionHeading>{c.title}</SectionHeading>
+      <SectionHeading as="h1">{c.title}</SectionHeading>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-text-body">
         {c.intro}
       </p>

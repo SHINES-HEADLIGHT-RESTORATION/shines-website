@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       <Header />
       <main className="bg-surface-section pt-[54px]">
         <SectionShell evenPadding>
-          <SectionHeading>Privacy Policy</SectionHeading>
+          <SectionHeading as="h1">Privacy Policy</SectionHeading>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-body">
             We use booking and contact details only to confirm your appointment,
             perform restoration work, and follow up on service. We do not sell
