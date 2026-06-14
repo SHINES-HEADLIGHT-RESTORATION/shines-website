@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { I18nProvider } from "@/components/I18nProvider";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 import { JsonLd } from "@/components/JsonLd";
 import { LocaleFromQuery } from "@/components/LocaleFromQuery";
 import { localeToHtmlLang } from "@/lib/i18n/config";
@@ -55,6 +56,7 @@ export default async function RootLayout({
       </head>
       <body>
         <GoogleAnalytics />
+        <MicrosoftClarity />
         <I18nProvider locale={locale} messages={toClientMessages(messages)}>
           <Suspense fallback={null}>
             <LocaleFromQuery />
