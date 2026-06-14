@@ -100,15 +100,19 @@ export const site = {
     mailIn: "3–5 business days plus shipping",
   },
   warranty: "1-year clarity guarantee",
+  /** Google Business Profile / Maps listing — used in sameAs for entity clarity. */
+  googleBusinessProfile: "https://share.google/KYeGevHeVdUkOEq4W" as
+    | string
+    | null,
   /** Set profile URLs when each account is live. */
   social: {
     facebook: null as string | null,
-    instagram: null as string | null,
-    tiktok: null as string | null,
+    instagram: "https://www.instagram.com/shines.online/" as string | null,
+    tiktok: "https://www.tiktok.com/@shines_restoration" as string | null,
     youtube: null as string | null,
-    twitter: null as string | null,
+    twitter: "https://x.com/Shines_online" as string | null,
     threads: null as string | null,
-    snapchat: null as string | null,
+    snapchat: "https://www.snapchat.com/@shines_online" as string | null,
   },
   testimonial: null as {
     quote: string;

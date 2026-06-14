@@ -19,9 +19,13 @@ export async function JsonLd() {
     email: publicEmail(),
     ...(contact.phone && { telephone: contact.phone }),
     ...(openingHours.length > 0 && { openingHoursSpecification: openingHours }),
-    ...(activeSocialLinks().length > 0 && {
-      sameAs: activeSocialLinks().map((link) => link.href),
-    }),
+    ...(() => {
+      const sameAs = [
+        ...activeSocialLinks().map((link) => link.href),
+        ...(site.googleBusinessProfile ? [site.googleBusinessProfile] : []),
+      ];
+      return sameAs.length > 0 ? { sameAs } : {};
+    })(),
     description:
       "Professional headlight restoration in Belgium with mail-in service across Europe.",
     areaServed: [
