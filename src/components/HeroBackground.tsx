@@ -1,6 +1,7 @@
 import {
   HERO_POSTER,
   HERO_VIDEO_DESKTOP,
+  HERO_VIDEO_MOBILE,
 } from "@/lib/hero-media";
 
 /**
@@ -30,11 +31,21 @@ export function HeroBackground() {
         playsInline
         preload="auto"
         poster={HERO_POSTER}
-        src={HERO_VIDEO_DESKTOP}
         controls={false}
         disablePictureInPicture
         disableRemotePlayback
-      />
+      >
+        <source
+          src={HERO_VIDEO_MOBILE}
+          type="video/mp4"
+          media="(max-width: 767px)"
+        />
+        <source
+          src={HERO_VIDEO_DESKTOP}
+          type="video/mp4"
+          media="(min-width: 768px)"
+        />
+      </video>
 
       <div className="absolute inset-0 bg-gradient-to-t from-canvas-dark/90 via-canvas-dark/25 to-canvas-dark/50" />
       <div className="absolute inset-0 bg-gradient-to-r from-canvas-dark/75 via-canvas-dark/20 to-transparent" />

@@ -30,6 +30,12 @@
     "tailwind-merge": "^3.6.0",
     "tw-animate-css": "^1.4.0"
   },
+  "browserslist": [
+    "chrome >= 90",
+    "firefox >= 90",
+    "safari >= 14",
+    "ios >= 14"
+  ],
   "devDependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@tailwindcss/postcss": "^4.1.8",

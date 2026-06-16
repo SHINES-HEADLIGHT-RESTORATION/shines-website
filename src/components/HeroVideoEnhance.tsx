@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { HERO_VIDEO_DESKTOP, HERO_VIDEO_MOBILE } from "@/lib/hero-media";
-
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function pickSrc() {
-  return window.matchMedia("(max-width: 767px)").matches
-    ? HERO_VIDEO_MOBILE
-    : HERO_VIDEO_DESKTOP;
 }
 
 /**
@@ -23,12 +15,6 @@ export function HeroVideoEnhance() {
     if (!video || prefersReducedMotion()) {
       video?.pause();
       return;
-    }
-
-    const src = pickSrc();
-    if (!video.src.includes(src.split("?")[0]!)) {
-      video.src = src;
-      video.load();
     }
 
     video.muted = true;

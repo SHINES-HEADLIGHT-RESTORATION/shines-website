@@ -13,6 +13,7 @@ import { bingSiteVerification, googleSiteVerification } from "@/lib/site-runtime
 import { site } from "@/lib/site";
 import "./globals.css";
 import { Geist } from "next/font/google";
+import { sfProDisplay } from "@/lib/fonts/sf-pro-display";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -46,12 +47,11 @@ export default async function RootLayout({
   const { locale, messages } = await getRequestMessages();
 
   return (
-    <html lang={localeToHtmlLang(locale)} className={cn("font-sans", geist.variable)}>
+    <html
+      lang={localeToHtmlLang(locale)}
+      className={cn("font-sans", geist.variable, sfProDisplay.variable)}
+    >
       <head>
-        <link
-          href="https://fonts.cdnfonts.com/css/sf-pro-display"
-          rel="stylesheet"
-        />
         <JsonLd />
       </head>
       <body>

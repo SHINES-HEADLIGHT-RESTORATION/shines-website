@@ -94,6 +94,7 @@ export function AppleCard({
             alt={item.image.alt}
             width={640}
             height={360}
+            sizes="(max-width: 640px) 90vw, 370px"
             style={
               item.image.position === "near-center"
                 ? {
