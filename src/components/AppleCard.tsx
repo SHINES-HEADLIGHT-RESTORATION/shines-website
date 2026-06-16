@@ -92,8 +92,8 @@ export function AppleCard({
           <Image
             src={item.image.src}
             alt={item.image.alt}
-            width={640}
-            height={360}
+            width={480}
+            height={270}
             sizes="(max-width: 640px) 90vw, 370px"
             style={
               item.image.position === "near-center"

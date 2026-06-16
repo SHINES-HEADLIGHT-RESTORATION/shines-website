@@ -22,7 +22,8 @@ execFileSync(
   [
     "-y", "-i", input,
     "-ss", "0.5", "-vframes", "1",
-    "-c:v", "libwebp", "-quality", "85",
+    "-vf", "scale=1280:-2:flags=lanczos",
+    "-c:v", "libwebp", "-quality", "75",
     output,
   ],
   { stdio: "inherit" },

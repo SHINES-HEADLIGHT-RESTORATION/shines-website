@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 /**
- * Autoplay + fade-in. Never gate play() on canplay — that caused 15s stalls.
+ * Autoplay + fade poster away once video plays. Video stays visible underneath
+ * so LCP is captured on the poster, not when playback starts.
  */
 export function HeroVideoEnhance() {
   useEffect(() => {
@@ -21,24 +23,23 @@ export function HeroVideoEnhance() {
     video.playsInline = true;
     video.setAttribute("webkit-playsinline", "true");
 
-    let revealed = false;
-    const reveal = () => {
-      if (revealed) return;
-      revealed = true;
-      video.classList.replace("opacity-0", "opacity-100");
+    let faded = false;
+    const fadePoster = () => {
+      if (faded) return;
+      faded = true;
       poster?.classList.add("opacity-0");
     };
 
     const play = () => {
-      void video.play().then(reveal).catch(() => {
+      void video.play().then(fadePoster).catch(() => {
         /* Static poster stays visible */
       });
     };
 
-    video.addEventListener("playing", reveal, { once: true });
+    video.addEventListener("playing", fadePoster, { once: true });
 
     if (!video.paused) {
-      reveal();
+      fadePoster();
     } else {
       play();
       video.addEventListener("loadeddata", play, { once: true });

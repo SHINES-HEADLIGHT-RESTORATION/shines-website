@@ -12,7 +12,8 @@
     "favicons": "node scripts/generate-favicons.mjs",
     "hero-poster": "node scripts/extract-hero-poster.mjs",
     "indexnow": "node scripts/indexnow-submit.mjs",
-    "hero-videos": "node scripts/encode-hero-videos.mjs"
+    "hero-videos": "node scripts/encode-hero-videos.mjs",
+    "fonts:woff2": "node scripts/convert-fonts-woff2.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

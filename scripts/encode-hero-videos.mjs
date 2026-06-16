@@ -36,7 +36,7 @@ const mp4Outputs = [
       "-y", "-i", input, "-an",
       "-vf", "scale=-2:720:flags=lanczos,fps=30",
       "-c:v", "libx264", "-profile:v", "main", "-pix_fmt", "yuv420p",
-      "-crf", "22", "-maxrate", "2000k", "-bufsize", "4000k",
+      "-crf", "24", "-maxrate", "1500k", "-bufsize", "3000k",
       "-tune", "film", "-movflags", "+faststart",
       ...GOP_ARGS,
     ],
