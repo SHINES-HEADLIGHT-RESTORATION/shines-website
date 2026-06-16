@@ -246,9 +246,11 @@ export type SiteMessages = {
   };
   regions: {
     pageTitle: string;
-    pageIntro: string;
+    currentMarketLabel: string;
+    searchPlaceholder: string;
+    noResults: string;
     breadcrumb: string;
-    groups: { title: string }[];
+    groups: { id: string; title: string }[];
   };
   news: {
     indexTitle: string;

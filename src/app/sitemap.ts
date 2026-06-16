@@ -49,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: locationsPagePath, priority: 0.85, freq: "monthly" },
     { path: europeHubPath, priority: 0.9, freq: "monthly" },
     { path: fieldCategoriesHubPath, priority: 0.88, freq: "monthly" },
-    { path: chooseCountryRegionPath, priority: 0.5, freq: "monthly" },
+    { path: chooseCountryRegionPath, priority: 0.65, freq: "monthly" },
   ];
 
   return [

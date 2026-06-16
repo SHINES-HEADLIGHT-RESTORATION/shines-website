@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
 import { ChooseCountryRegionSection } from "@/components/ChooseCountryRegionSection";
-import { SiteFooter } from "@/components/SiteFooter";
 import { localizedPageMetadata } from "@/lib/i18n/page-metadata";
 import { chooseCountryRegionPath } from "@/lib/regions";
 
@@ -10,17 +8,15 @@ export async function generateMetadata(): Promise<Metadata> {
     chooseCountryRegionPath,
     "regionTitle",
     "regionDescription",
+    { index: true },
   );
 }
 
+/** Porsche-style market picker — centered logo, no main site header. */
 export default function ChooseCountryRegionPage() {
   return (
-    <>
-      <Header />
-      <main className="bg-surface-section pt-[54px]">
-        <ChooseCountryRegionSection />
-      </main>
-      <SiteFooter />
-    </>
+    <main className="min-h-screen bg-surface-section">
+      <ChooseCountryRegionSection />
+    </main>
   );
 }

@@ -75,8 +75,8 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     locationsTitle: `Locaties in België | ${site.name}`,
     locationsDescription:
       "Professionele koplamprestauratie in heel België. Kies uw stad. Postservice beschikbaar in heel Europa.",
-    regionTitle: `Kies land of regio | ${site.name}`,
-    regionDescription: `Selecteer uw land of regio voor ${site.name} koplamprestauratie en taalvoorkeuren.`,
+    regionTitle: `Kies uw markt of regio | ${site.name}`,
+    regionDescription: `Kies uw land en taal voor professionele koplamprestauratie bij ${site.name}. Service in België en heel Europa — Nederlands, Frans, Duits en Engels.`,
     bookingLookupTitle: `Zoek uw boeking | ${site.name}`,
     bookingLookupDescription: `Zoek uw ${site.name}-boeking met referentie en e-mail. Geen account nodig.`,
     myBookingTitle: `Mijn boeking | ${site.name}`,
@@ -629,11 +629,15 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     cityPricingCta: "Bekijk prijzen",
   },
   regions: {
-    pageTitle: "Kies uw land of regio",
-    pageIntro:
-      "Selecteer een land of regio voor uw taal. Volledige site-inhoud is beschikbaar in het Engels, Nederlands, Frans en Duits.",
+    pageTitle: "Kies uw markt of regio",
+    currentMarketLabel: "U ziet momenteel content voor",
+    searchPlaceholder: "Zoek uw markt of regio",
+    noResults: "Geen markten gevonden voor uw zoekopdracht.",
     breadcrumb: "Land of regio",
-    groups: [{ title: "België" }, { title: "Europa" }, { title: "Andere regio's" }],
+    groups: [
+      { id: "europe", title: "Europa" },
+      { id: "other", title: "Andere regio's" },
+    ],
   },
   news: {
     indexTitle: "Nieuws",

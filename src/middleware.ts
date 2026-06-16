@@ -7,6 +7,7 @@ import {
   LOCALE_COOKIE,
 } from "@/lib/i18n/config";
 import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
+import { localeFromMarketPath } from "@/lib/market-paths";
 import { site } from "@/lib/site";
 
 const LOCALE_MAX_AGE = 60 * 60 * 24 * 365;
@@ -45,6 +46,20 @@ export function middleware(request: NextRequest) {
   if (hostRedirect) return hostRedirect;
 
   const { pathname } = request.nextUrl;
+
+  const marketLocale = localeFromMarketPath(pathname);
+  if (marketLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "";
+    const response = NextResponse.redirect(url);
+    response.cookies.set(LOCALE_COOKIE, marketLocale, {
+      path: "/",
+      maxAge: LOCALE_MAX_AGE,
+      sameSite: "lax",
+    });
+    return response;
+  }
 
   if (isBookingPath(pathname) && !isPublicBookingEnabled()) {
     if (pathname.startsWith("/api/")) {

@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { BookNowHeaderLink } from "@/components/BookNowCta";
 import { useI18n } from "@/components/I18nProvider";
 import { isPublicBookingEnabled } from "@/lib/booking-access";
+import { HeaderMarketLink } from "@/components/HeaderMarketLink";
 import { Logo } from "./Logo";
 import { newsPagePath } from "@/lib/news";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
+import { chooseCountryRegionPath } from "@/lib/regions";
 
 export function Header() {
   const { messages } = useI18n();
@@ -58,6 +60,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center justify-end gap-2 sm:gap-3">
+          <HeaderMarketLink />
+
           <BookNowHeaderLink className="hidden h-[28px] items-center rounded-full bg-action-primary px-[10px] text-sm font-normal text-text-on-dark transition-opacity hover:opacity-90 sm:inline-flex">
             {messages.nav.bookNow}
           </BookNowHeaderLink>
@@ -124,6 +128,28 @@ export function Header() {
                 </BookNowHeaderLink>
               </li>
             )}
+            <li className="pt-2 border-t border-white/10 mt-2">
+              <Link
+                href={chooseCountryRegionPath}
+                className="flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm font-normal text-text-on-dark transition-colors hover:bg-white/5"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M3 12H21" />
+                  <path d="M12 3C14.5 6.5 14.5 17.5 12 21C9.5 17.5 9.5 6.5 12 3Z" />
+                </svg>
+                {messages.footer.changeRegionLabel}
+              </Link>
+            </li>
           </ul>
         </nav>
       )}

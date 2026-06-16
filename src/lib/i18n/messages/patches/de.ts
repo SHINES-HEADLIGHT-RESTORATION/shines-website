@@ -53,8 +53,8 @@ export const dePatch: DeepPartial<SiteMessages> = {
     newsDescription: `Ratgeber, Updates und Expertenrat zur Scheinwerfer-Restaurierung in ${loc} und in ganz Europa. Gelbe Scheinwerfer, UV-Beschichtung, Prüftipps und ${site.name} Service-News.`,
     locationsTitle: `Standorte in Belgien | ${site.name}`,
     locationsDescription: `Professionelle Scheinwerfer-Restaurierung in ganz Belgien. Stadt wählen. Postservice in ganz Europa verfügbar.`,
-    regionTitle: `Land oder Region wählen | ${site.name}`,
-    regionDescription: `Wählen Sie Ihr Land oder Ihre Region für ${site.name} Scheinwerfer-Restaurierung und Spracheinstellungen.`,
+    regionTitle: `Markt oder Region wählen | ${site.name}`,
+    regionDescription: `Wählen Sie Land und Sprache für ${site.name} Scheinwerfer-Aufbereitung. Service in Belgien und Europa — Deutsch, Niederländisch, Französisch und Englisch.`,
     bookingLookupTitle: `Buchung finden | ${site.name}`,
     bookingLookupDescription: `${site.name}-Buchung mit Referenz und E-Mail nachschlagen. Kein Konto erforderlich.`,
     myBookingTitle: `Meine Buchung | ${site.name}`,
@@ -599,11 +599,15 @@ export const dePatch: DeepPartial<SiteMessages> = {
     cityPricingCta: "Preise ansehen",
   },
   regions: {
-    pageTitle: "Land oder Region wählen",
-    pageIntro:
-      "Wählen Sie Land oder Region für Ihre Sprache. Die Website ist vollständig auf Englisch, Niederländisch, Französisch und Deutsch verfügbar.",
+    pageTitle: "Markt oder Region auswählen",
+    currentMarketLabel: "Sie sehen derzeit Inhalte für",
+    searchPlaceholder: "Markt oder Region suchen",
+    noResults: "Keine Märkte entsprechen Ihrer Suche.",
     breadcrumb: "Land oder Region",
-    groups: [{ title: "Belgien" }, { title: "Europa" }, { title: "Andere Regionen" }],
+    groups: [
+      { id: "europe", title: "Europa" },
+      { id: "other", title: "Andere Regionen" },
+    ],
   },
   news: {
     indexTitle: "News",

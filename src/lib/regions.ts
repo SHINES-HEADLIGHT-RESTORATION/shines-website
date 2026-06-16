@@ -1,129 +1,195 @@
-export type SiteRegion = {
+import { isLocaleOfferedInPicker, type SupportedLocale } from "@/lib/i18n/config";
+import { MARKET_PATH_TO_LOCALE } from "@/lib/market-paths";
+
+export type Market = {
   id: string;
-  label: string;
-  locale: string;
-  href: string;
+  country: string;
+  language: string;
+  locale: SupportedLocale;
+  /** ISO 3166-1 alpha-2 for flagcdn, or "other" for generic globe. */
+  flag: string;
+  path: keyof typeof MARKET_PATH_TO_LOCALE | string;
 };
 
-export type RegionGroup = {
+export type MarketGroup = {
+  id: string;
   title: string;
-  regions: SiteRegion[];
+  markets: Market[];
 };
 
 export const chooseCountryRegionPath = "/choose-country-region" as const;
 
-export const regionGroups: RegionGroup[] = [
+export const marketGroups: MarketGroup[] = [
   {
-    title: "Belgium",
-    regions: [
+    id: "europe",
+    title: "Europe",
+    markets: [
       {
         id: "be-nl",
-        label: "België",
+        country: "Belgium",
+        language: "Nederlands",
         locale: "nl-BE",
-        href: "/?locale=nl-BE",
+        flag: "be",
+        path: "/belgium/nl",
       },
       {
         id: "be-fr",
-        label: "Belgique",
+        country: "Belgium",
+        language: "Français",
         locale: "fr-BE",
-        href: "/?locale=fr-BE",
+        flag: "be",
+        path: "/belgium/fr",
       },
       {
         id: "be-en",
-        label: "Belgium (English)",
+        country: "Belgium",
+        language: "English",
         locale: "en-BE",
-        href: "/?locale=en-BE",
+        flag: "be",
+        path: "/belgium/en",
       },
-    ],
-  },
-  {
-    title: "Europe",
-    regions: [
       {
         id: "nl",
-        label: "Nederland",
+        country: "Netherlands",
+        language: "Nederlands",
         locale: "nl-NL",
-        href: "/?locale=nl-NL",
+        flag: "nl",
+        path: "/netherlands/nl",
       },
       {
         id: "fr",
-        label: "France",
+        country: "France",
+        language: "Français",
         locale: "fr-FR",
-        href: "/?locale=fr-FR",
+        flag: "fr",
+        path: "/france/fr",
       },
       {
         id: "de",
-        label: "Deutschland",
+        country: "Germany",
+        language: "Deutsch",
         locale: "de-DE",
-        href: "/?locale=de-DE",
+        flag: "de",
+        path: "/germany/de",
       },
       {
         id: "lu",
-        label: "Luxembourg",
+        country: "Luxembourg",
+        language: "Français",
         locale: "fr-LU",
-        href: "/?locale=fr-LU",
+        flag: "lu",
+        path: "/luxembourg/fr",
       },
       {
         id: "uk",
-        label: "United Kingdom",
+        country: "Great Britain",
+        language: "English",
         locale: "en-GB",
-        href: "/?locale=en-GB",
+        flag: "gb",
+        path: "/united-kingdom/en",
       },
       {
         id: "es",
-        label: "España",
+        country: "Spain",
+        language: "Español",
         locale: "es-ES",
-        href: "/?locale=es-ES",
+        flag: "es",
+        path: "/spain/es",
       },
       {
         id: "it",
-        label: "Italia",
+        country: "Italy",
+        language: "Italiano",
         locale: "it-IT",
-        href: "/?locale=it-IT",
+        flag: "it",
+        path: "/italy/it",
       },
       {
         id: "pt",
-        label: "Portugal",
+        country: "Portugal",
+        language: "Português",
         locale: "pt-PT",
-        href: "/?locale=pt-PT",
+        flag: "pt",
+        path: "/portugal/pt",
       },
       {
         id: "pl",
-        label: "Polska",
+        country: "Poland",
+        language: "Polski",
         locale: "pl-PL",
-        href: "/?locale=pl-PL",
+        flag: "pl",
+        path: "/poland/pl",
       },
     ],
   },
   {
+    id: "other",
     title: "Other regions",
-    regions: [
+    markets: [
       {
         id: "en-eu",
-        label: "Europe (English)",
+        country: "Europe",
+        language: "English",
         locale: "en-EU",
-        href: "/?locale=en-EU",
+        flag: "eu",
+        path: "/europe/en",
       },
       {
         id: "en",
-        label: "Other countries (English)",
+        country: "Other countries",
+        language: "English",
         locale: "en",
-        href: "/?locale=en",
+        flag: "other",
+        path: "/international/en",
       },
     ],
   },
 ];
 
-export const defaultRegion: SiteRegion = regionGroups[0].regions[2];
+export const allMarkets = marketGroups.flatMap((group) => group.markets);
 
-export function getRegionByLocale(locale: string): SiteRegion | undefined {
-  for (const group of regionGroups) {
-    const match = group.regions.find((region) => region.locale === locale);
-    if (match) return match;
-  }
-  return undefined;
+/** @deprecated Use marketGroups */
+export const regionGroups = marketGroups.map((group) => ({
+  title: group.title,
+  regions: group.markets.map((market) => ({
+    id: market.id,
+    label: `${market.country} (${market.language})`,
+    locale: market.locale,
+    href: market.path,
+  })),
+}));
+
+export const defaultRegion = allMarkets.find((m) => m.locale === "en-BE")!;
+
+export function getMarketByLocale(locale: string): Market | undefined {
+  return allMarkets.find((market) => market.locale === locale);
+}
+
+export function getMarketCountryName(locale: string): string {
+  return getMarketByLocale(locale)?.country ?? defaultRegion.country;
+}
+
+export function getRegionByLocale(locale: string): Market | undefined {
+  return getMarketByLocale(locale);
 }
 
 export function getRegionLabel(locale: string): string {
-  return getRegionByLocale(locale)?.label ?? defaultRegion.label;
+  const market = getMarketByLocale(locale);
+  if (!market) return defaultRegion.country;
+  return market.country;
+}
+
+export function offeredMarketGroups(): MarketGroup[] {
+  return marketGroups
+    .map((group) => ({
+      ...group,
+      markets: group.markets.filter((market) =>
+        isLocaleOfferedInPicker(market.locale),
+      ),
+    }))
+    .filter((group) => group.markets.length > 0);
+}
+
+export function marketSearchText(market: Market): string {
+  return `${market.country} ${market.language}`.toLowerCase();
 }

@@ -52,8 +52,8 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     newsDescription: `Guides, actualités et conseils sur la restauration de phares à ${loc} et en Europe. Phares jaunes, vernis UV, contrôle technique et nouveautés ${site.name}.`,
     locationsTitle: `Zones desservies en Belgique | ${site.name}`,
     locationsDescription: `Restauration professionnelle de phares dans toute la Belgique. Choisissez votre ville. Envoi postal disponible en Europe.`,
-    regionTitle: `Choisir un pays ou une région | ${site.name}`,
-    regionDescription: `Sélectionnez votre pays ou région pour le contenu et la langue ${site.name}.`,
+    regionTitle: `Choisissez votre marché ou région | ${site.name}`,
+    regionDescription: `Choisissez votre pays et votre langue pour la restauration de phares ${site.name}. Service en Belgique et en Europe — français, néerlandais, allemand et anglais.`,
     bookingLookupTitle: `Retrouver votre réservation | ${site.name}`,
     bookingLookupDescription: `Retrouvez votre réservation ${site.name} avec votre référence et votre e-mail. Aucun compte requis.`,
     myBookingTitle: `Ma réservation | ${site.name}`,
@@ -608,11 +608,15 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     cityPricingCta: "Voir les tarifs",
   },
   regions: {
-    pageTitle: "Choisissez votre pays ou région",
-    pageIntro:
-      "Choisissez un pays ou une région pour définir votre langue. Le site est entièrement disponible en anglais, néerlandais, français et allemand.",
+    pageTitle: "Choisissez votre marché ou région",
+    currentMarketLabel: "Vous consultez actuellement le contenu pour",
+    searchPlaceholder: "Rechercher un marché ou une région",
+    noResults: "Aucun marché ne correspond à votre recherche.",
     breadcrumb: "Pays ou région",
-    groups: [{ title: "Belgique" }, { title: "Europe" }, { title: "Autres régions" }],
+    groups: [
+      { id: "europe", title: "Europe" },
+      { id: "other", title: "Autres régions" },
+    ],
   },
   news: {
     indexTitle: "Actualités",

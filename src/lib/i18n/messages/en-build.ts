@@ -47,7 +47,7 @@ import {
   processStandards,
   processSummary,
 } from "@/lib/process";
-import { regionGroups } from "@/lib/regions";
+import { marketGroups } from "@/lib/regions";
 import { buildFieldCategoryMessages } from "@/lib/field-category-content";
 import { formatPrice, locationLabel, site } from "@/lib/site";
 
@@ -101,8 +101,8 @@ export function buildEnMessages(): SiteMessages {
       newsDescription: `Guides, updates, and expert advice on headlight restoration in ${loc} and across Europe. Yellow headlights, UV coating, inspection tips, and ${site.name} service news.`,
       locationsTitle: `Belgium Service Locations | ${site.name}`,
       locationsDescription: `Professional headlight restoration across Belgium. Choose your city. Mail-in service available across Europe.`,
-      regionTitle: `Choose Country or Region | ${site.name}`,
-      regionDescription: `Select your country or region for ${site.name} headlight restoration content and language preferences.`,
+      regionTitle: `Select Your Market or Region | ${site.name}`,
+      regionDescription: `Choose your country and language for ${site.name} professional headlight restoration. Service in Belgium and across Europe — English, Dutch, French, and German.`,
       bookingLookupTitle: `Find Your Booking | ${site.name}`,
       bookingLookupDescription: `Look up your ${site.name} booking with your reference and email. No account needed.`,
       myBookingTitle: `My Booking | ${site.name}`,
@@ -492,11 +492,15 @@ export function buildEnMessages(): SiteMessages {
       cityPricingCta: "View pricing",
     },
     regions: {
-      pageTitle: "Choose your country or region",
-      pageIntro:
-        "Select a country or region to set your language. Full site copy is available in English, Dutch, French, and German.",
+      pageTitle: "Select your market or region",
+      currentMarketLabel: "You are currently seeing content for",
+      searchPlaceholder: "Search for your market or region",
+      noResults: "No markets match your search.",
       breadcrumb: "Country or region",
-      groups: regionGroups.map((group) => ({ title: group.title })),
+      groups: marketGroups.map((group) => ({
+        id: group.id,
+        title: group.title,
+      })),
     },
     news: {
       indexTitle: "News",
