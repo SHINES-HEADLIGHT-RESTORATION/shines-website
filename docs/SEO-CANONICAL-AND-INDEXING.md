@@ -43,7 +43,7 @@ SHINES is a service/marketing site (headlight restoration), not job listings or 
 | Method | Purpose |
 |--------|---------|
 | **Sitemap** (`https://shines.be/sitemap.xml`) | Discovery of all pages + hreflang (already submitted in Search Console) |
-| **URL Inspection** | ~10 manual “Indexering aanvragen” per day (see `tasks/indexing-progress.log`) |
+| **URL Inspection** | ~10 manual “Indexering aanvragen” per day (see `tst/tasks/indexing-progress.log`) |
 | **IndexNow** (Bing/Yandex only) | Instant push of canonical URLs — run `npm run indexnow` after a deploy |
 | **Canonical + www redirect** | Stops “duplicate without user-selected canonical” for www vs apex |
 | **Google Business Profile** | Local “near me” visibility |

@@ -1,21 +1,25 @@
 import {
   HERO_POSTER,
   HERO_VIDEO_DESKTOP,
-  HERO_VIDEO_MOBILE,
 } from "@/lib/hero-media";
 
 /**
- * Server-rendered hero video so the browser starts fetching before React hydrates.
- * Opacity/fade is handled by HeroVideoEnhance (client) after canplay.
+ * Porsche layout: WebP poster + progressive MP4.
+ * Client picks mobile/desktop src; fades in once playback starts.
  */
 export function HeroBackground() {
   return (
     <div className="absolute inset-0" aria-hidden="true">
-      <div
-        id="hero-poster-layer"
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-300"
-        style={{ backgroundImage: `url(${HERO_POSTER})` }}
-      />
+      <picture className="absolute inset-0 block">
+        <img
+          id="hero-poster"
+          src={HERO_POSTER}
+          alt=""
+          className="h-full w-full object-cover object-center transition-opacity duration-300"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
 
       <video
         id="hero-video"
@@ -24,19 +28,13 @@ export function HeroBackground() {
         muted
         loop
         playsInline
-        poster={HERO_POSTER}
         preload="auto"
+        poster={HERO_POSTER}
+        src={HERO_VIDEO_DESKTOP}
         controls={false}
         disablePictureInPicture
         disableRemotePlayback
-      >
-        <source
-          src={HERO_VIDEO_MOBILE}
-          media="(max-width: 767px)"
-          type="video/mp4"
-        />
-        <source src={HERO_VIDEO_DESKTOP} type="video/mp4" />
-      </video>
+      />
 
       <div className="absolute inset-0 bg-gradient-to-t from-canvas-dark/90 via-canvas-dark/25 to-canvas-dark/50" />
       <div className="absolute inset-0 bg-gradient-to-r from-canvas-dark/75 via-canvas-dark/20 to-transparent" />

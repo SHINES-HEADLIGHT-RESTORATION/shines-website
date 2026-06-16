@@ -7,10 +7,11 @@ out
 tsconfig.tsbuildinfo
 tst/
 
+# Local dev caches / reports (not deployed)
+.firecrawl/
+.lighthouse*.json
+
 # Local booking data (may contain customer PII)
 data/bookings.json
 .vercel
 .env*
-
-# Raw H.264 elementary streams are not web-playable (use npm run hero-videos)
-public/videos/*.h264

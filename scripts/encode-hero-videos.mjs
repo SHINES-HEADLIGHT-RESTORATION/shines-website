@@ -8,76 +8,57 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ffmpeg = ffmpegPath.path;
 const videosDir = path.join(root, "public/videos");
 
-const sources = [
-  path.join(videosDir, "fordmustangdarknightligthdifference.mp4"),
-  path.join(videosDir, "fordmustangdarknightligthdifference.h264"),
-].filter((p) => fs.existsSync(p));
-
-const input = sources[0];
-if (!input) {
-  console.error("No hero source found in public/videos/");
+const input = path.join(
+  root,
+  "tst/sources/fordmustangdarknightligthdifference_update.mp4",
+);
+if (!fs.existsSync(input)) {
+  console.error(
+    "Missing source: tst/sources/fordmustangdarknightligthdifference_update.mp4",
+  );
   process.exit(1);
 }
 
-const outputs = [
+console.log(`Source: ${path.basename(input)}\n`);
+
+/** 2s closed GOP — faststart MP4 streams via range requests. */
+const GOP_ARGS = [
+  "-force_key_frames", "expr:gte(t,n_forced*2)",
+  "-g", "60", "-keyint_min", "60", "-sc_threshold", "0",
+  "-bf", "0",
+  "-vsync", "cfr",
+];
+
+const mp4Outputs = [
   {
     file: "hero-mobile.mp4",
     args: [
-      "-y",
-      "-i",
-      input,
-      "-an",
-      "-vf",
-      "scale=-2:720:flags=lanczos,fps=30",
-      "-c:v",
-      "libx264",
-      "-profile:v",
-      "main",
-      "-pix_fmt",
-      "yuv420p",
-      "-crf",
-      "28",
-      "-maxrate",
-      "1100k",
-      "-bufsize",
-      "2200k",
-      "-movflags",
-      "+faststart",
+      "-y", "-i", input, "-an",
+      "-vf", "scale=-2:720:flags=lanczos,fps=30",
+      "-c:v", "libx264", "-profile:v", "main", "-pix_fmt", "yuv420p",
+      "-crf", "22", "-maxrate", "2000k", "-bufsize", "4000k",
+      "-tune", "film", "-movflags", "+faststart",
+      ...GOP_ARGS,
     ],
   },
   {
     file: "hero-desktop.mp4",
     args: [
-      "-y",
-      "-i",
-      input,
-      "-an",
-      "-vf",
-      "scale=-2:1080:flags=lanczos,fps=30",
-      "-c:v",
-      "libx264",
-      "-profile:v",
-      "high",
-      "-pix_fmt",
-      "yuv420p",
-      "-crf",
-      "24",
-      "-maxrate",
-      "3200k",
-      "-bufsize",
-      "6400k",
-      "-movflags",
-      "+faststart",
+      "-y", "-i", input, "-an",
+      "-vf", "scale=-2:1080:flags=lanczos,fps=30",
+      "-c:v", "libx264", "-profile:v", "high", "-pix_fmt", "yuv420p",
+      "-crf", "20", "-maxrate", "4000k", "-bufsize", "8000k",
+      "-tune", "film", "-movflags", "+faststart",
+      ...GOP_ARGS,
     ],
   },
 ];
 
-for (const { file, args } of outputs) {
+for (const { file, args } of mp4Outputs) {
   const out = path.join(videosDir, file);
   console.log(`Encoding ${file}…`);
   execFileSync(ffmpeg, [...args, out], { stdio: "inherit" });
-  const mb = (fs.statSync(out).size / (1024 * 1024)).toFixed(2);
-  console.log(`  → ${file} (${mb} MB)\n`);
+  console.log(`  → ${file} (${(fs.statSync(out).size / (1024 * 1024)).toFixed(2)} MB)\n`);
 }
 
-console.log("Done. Use hero-mobile.mp4 + hero-desktop.mp4 on the site.");
+console.log("Done. Bump HERO_ASSET_VERSION in src/lib/hero-media.ts after re-encode.");

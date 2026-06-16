@@ -13,16 +13,16 @@ Manual requests are a **nudge** for important URLs. They are **not** required fo
 
 ## Recommended strategy: **priority queue first**
 
-Use **`tasks/indexing-priority-queue.txt`** (not the raw sitemap order).
+Use **`tst/tasks/indexing-priority-queue.txt`** (not the raw sitemap order).
 
 Order: finish homepage locales → **contact** → **pricing** → **process** → **book** → **about** → locations / Europe / news (bulk).
 
 ## Each day (~10 minutes)
 
 1. Open [Search Console](https://search.google.com/search-console) → property **shines.be**.
-2. Open **`tasks/indexing-today.txt`** (regenerate after each session, see below).
+2. Open **`tst/tasks/indexing-today.txt`** (regenerate after each session, see below).
 3. For each URL: **URL-inspectie** → paste URL → **Indexering aanvragen**.
-4. Append results to **`tasks/indexing-progress.log`**:
+4. Append results to **`tst/tasks/indexing-progress.log`**:
    - `YYYY-MM-DD SUCCESS <url>`
    - `YYYY-MM-DD FAIL <url> <reason>`
 5. If quota hits: add `YYYY-MM-DD QUOTA_HIT stopped at <url>` and stop until tomorrow.
@@ -32,7 +32,7 @@ Order: finish homepage locales → **contact** → **pricing** → **process** �
 From repo root:
 
 ```powershell
-$root = "tasks"
+$root = "tst/tasks"
 $done = @("https://shines.be/")
 Get-Content "$root/indexing-progress.log" | ForEach-Object {
   if ($_ -match 'SUCCESS (https://\S+)') { $script:done += $Matches[1] }
@@ -53,8 +53,8 @@ In GSC: **Instellingen → Crawlen** → preferred host should match **https://s
 
 | File | Purpose |
 |------|---------|
-| `tasks/indexing-urls.txt` | Full 2,954 URLs from sitemap |
-| `tasks/indexing-priority-queue.txt` | Smart order for manual requests |
-| `tasks/indexing-today.txt` | Next 10 URLs for today |
-| `tasks/indexing-session-remaining.txt` | All not yet SUCCESS |
-| `tasks/indexing-progress.log` | Audit log |
+| `tst/tasks/indexing-urls.txt` | Full 2,954 URLs from sitemap |
+| `tst/tasks/indexing-priority-queue.txt` | Smart order for manual requests |
+| `tst/tasks/indexing-today.txt` | Next 10 URLs for today |
+| `tst/tasks/indexing-session-remaining.txt` | All not yet SUCCESS |
+| `tst/tasks/indexing-progress.log` | Audit log |

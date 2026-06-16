@@ -1,48 +1,62 @@
 "use client";
 
 import { useEffect } from "react";
+import { HERO_VIDEO_DESKTOP, HERO_VIDEO_MOBILE } from "@/lib/hero-media";
 
-/** Fades in hero video on canplay and hides the poster layer (iOS-safe, no native play UI). */
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function pickSrc() {
+  return window.matchMedia("(max-width: 767px)").matches
+    ? HERO_VIDEO_MOBILE
+    : HERO_VIDEO_DESKTOP;
+}
+
+/**
+ * Autoplay + fade-in. Never gate play() on canplay — that caused 15s stalls.
+ */
 export function HeroVideoEnhance() {
   useEffect(() => {
     const video = document.getElementById("hero-video") as HTMLVideoElement | null;
-    const posterLayer = document.getElementById("hero-poster-layer");
-    if (!video) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
-      video.pause();
+    const poster = document.getElementById("hero-poster");
+    if (!video || prefersReducedMotion()) {
+      video?.pause();
       return;
     }
 
+    const src = pickSrc();
+    if (!video.src.includes(src.split("?")[0]!)) {
+      video.src = src;
+      video.load();
+    }
+
     video.muted = true;
-    video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute("webkit-playsinline", "true");
-    video.controls = false;
 
-    const showVideo = () => {
-      video.classList.remove("opacity-0");
-      video.classList.add("opacity-100");
-      posterLayer?.classList.add("opacity-0");
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      video.classList.replace("opacity-0", "opacity-100");
+      poster?.classList.add("opacity-0");
     };
 
-    const tryPlay = () => {
-      video.play().catch(() => {
-        /* Autoplay blocked, poster stays visible */
+    const play = () => {
+      void video.play().then(reveal).catch(() => {
+        /* Static poster stays visible */
       });
     };
 
-    video.addEventListener("canplay", showVideo, { once: true });
-    video.addEventListener("loadeddata", tryPlay, { once: true });
-    tryPlay();
+    video.addEventListener("playing", reveal, { once: true });
 
-    return () => {
-      video.removeEventListener("canplay", showVideo);
-    };
+    if (!video.paused) {
+      reveal();
+    } else {
+      play();
+      video.addEventListener("loadeddata", play, { once: true });
+    }
   }, []);
 
   return null;
