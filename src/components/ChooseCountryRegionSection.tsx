@@ -12,10 +12,14 @@ import {
   type Market,
 } from "@/lib/regions";
 
+function marketSwitchHref(locale: Market["locale"]): string {
+  return `/?locale=${encodeURIComponent(locale)}`;
+}
+
 function MarketLink({ market }: { market: Market }) {
   return (
     <Link
-      href={market.path}
+      href={marketSwitchHref(market.locale)}
       aria-label={`${market.country}, ${market.language}`}
       className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-x-4 rounded-lg px-2 py-1.5 no-underline transition-colors duration-300 hover:bg-black/[0.04]"
     >
@@ -150,6 +154,3 @@ export function ChooseCountryRegionSection() {
     </div>
   );
 }
-
-export { LOCALE_COOKIE } from "@/lib/i18n/config";
-export { chooseCountryRegionPath } from "@/lib/regions";

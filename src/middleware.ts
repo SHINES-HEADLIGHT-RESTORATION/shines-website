@@ -51,7 +51,7 @@ export function middleware(request: NextRequest) {
   if (marketLocale) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
-    url.search = "";
+    url.search = `?locale=${encodeURIComponent(marketLocale)}`;
     const response = NextResponse.redirect(url);
     response.cookies.set(LOCALE_COOKIE, marketLocale, {
       path: "/",
