@@ -5,6 +5,8 @@ import {
   defaultLocale,
   isSupportedLocale,
   LOCALE_COOKIE,
+  messageLocale,
+  type SupportedLocale,
 } from "@/lib/i18n/config";
 import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
 import { localeFromMarketPath } from "@/lib/market-paths";
@@ -82,7 +84,7 @@ export function middleware(request: NextRequest) {
   const queryLocale = request.nextUrl.searchParams.get("locale");
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
 
-  let locale = defaultLocale;
+  let locale: SupportedLocale = defaultLocale;
   if (queryLocale && isSupportedLocale(queryLocale)) {
     locale = queryLocale;
   } else if (cookieLocale && isSupportedLocale(cookieLocale)) {
@@ -91,6 +93,36 @@ export function middleware(request: NextRequest) {
     locale = detectLocaleFromAcceptLanguage(
       request.headers.get("accept-language"),
     );
+  }
+
+  // English locales consolidate to bare URLs; translated locales keep ?locale= in the address bar.
+  if (queryLocale && isSupportedLocale(queryLocale) && messageLocale(queryLocale) === "en") {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("locale");
+    const redirect = NextResponse.redirect(url);
+    redirect.cookies.set(LOCALE_COOKIE, queryLocale, {
+      path: "/",
+      maxAge: LOCALE_MAX_AGE,
+      sameSite: "lax",
+    });
+    return redirect;
+  }
+
+  if (
+    !queryLocale &&
+    cookieLocale &&
+    isSupportedLocale(cookieLocale) &&
+    messageLocale(cookieLocale) !== "en"
+  ) {
+    const url = request.nextUrl.clone();
+    url.searchParams.set("locale", cookieLocale);
+    const redirect = NextResponse.redirect(url);
+    redirect.cookies.set(LOCALE_COOKIE, cookieLocale, {
+      path: "/",
+      maxAge: LOCALE_MAX_AGE,
+      sameSite: "lax",
+    });
+    return redirect;
   }
 
   const response = NextResponse.next();
