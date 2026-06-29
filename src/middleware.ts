@@ -4,8 +4,8 @@ import { isPublicBookingEnabled } from "@/lib/booking-access";
 import {
   defaultLocale,
   isSupportedLocale,
+  localeKeepsQueryInUrl,
   LOCALE_COOKIE,
-  messageLocale,
   type SupportedLocale,
 } from "@/lib/i18n/config";
 import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
@@ -95,8 +95,12 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // English locales consolidate to bare URLs; translated locales keep ?locale= in the address bar.
-  if (queryLocale && isSupportedLocale(queryLocale) && messageLocale(queryLocale) === "en") {
+  // Untranslated es/it/pt/pl locales consolidate to bare URLs; picker locales keep ?locale=.
+  if (
+    queryLocale &&
+    isSupportedLocale(queryLocale) &&
+    !localeKeepsQueryInUrl(queryLocale)
+  ) {
     const url = request.nextUrl.clone();
     url.searchParams.delete("locale");
     const redirect = NextResponse.redirect(url);
@@ -112,7 +116,7 @@ export function middleware(request: NextRequest) {
     !queryLocale &&
     cookieLocale &&
     isSupportedLocale(cookieLocale) &&
-    messageLocale(cookieLocale) !== "en"
+    localeKeepsQueryInUrl(cookieLocale)
   ) {
     const url = request.nextUrl.clone();
     url.searchParams.set("locale", cookieLocale);

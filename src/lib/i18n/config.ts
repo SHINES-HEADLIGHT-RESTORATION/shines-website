@@ -57,3 +57,9 @@ export function isLocaleOfferedInPicker(locale: string): locale is SupportedLoca
   if (bundle !== "en") return true;
   return locale === "en" || locale === "en-EU" || locale.startsWith("en-");
 }
+
+/** English market picker locales keep ?locale= in the URL (same UX as nl-BE/fr-BE). */
+export function localeKeepsQueryInUrl(locale: SupportedLocale): boolean {
+  if (messageLocale(locale) !== "en") return true;
+  return locale === "en" || locale === "en-EU" || locale.startsWith("en-");
+}

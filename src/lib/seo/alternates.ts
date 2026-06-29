@@ -1,4 +1,5 @@
 import {
+  localeKeepsQueryInUrl,
   localeToHreflang,
   messageLocale,
   supportedLocales,
@@ -25,10 +26,10 @@ export function localeUrl(path: string, locale: SupportedLocale): string {
   return url.toString();
 }
 
-/** Path + query for router.replace — keeps ?locale= for translated languages. */
+/** Path + query for router.replace — keeps ?locale= for picker locales. */
 export function localePathWithQuery(path: string, locale: SupportedLocale): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  if (messageLocale(locale) === "en") return normalized;
+  if (!localeKeepsQueryInUrl(locale)) return normalized;
   const url = new URL(normalized, "https://placeholder.local");
   url.searchParams.set("locale", locale);
   return `${url.pathname}${url.search}`;
