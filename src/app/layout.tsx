@@ -4,6 +4,7 @@ import { I18nProvider } from "@/components/I18nProvider";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 import { JsonLd } from "@/components/JsonLd";
+import { SeoAlternateLinks } from "@/components/SeoAlternateLinks";
 import { LocaleFromQuery } from "@/components/LocaleFromQuery";
 import { localeToHtmlLang } from "@/lib/i18n/config";
 import { toClientMessages } from "@/lib/i18n/client-messages";
@@ -52,6 +53,7 @@ export default async function RootLayout({
       className={cn("font-sans", geist.variable, sfProDisplay.variable)}
     >
       <head>
+        <SeoAlternateLinks />
         <JsonLd />
       </head>
       <body>

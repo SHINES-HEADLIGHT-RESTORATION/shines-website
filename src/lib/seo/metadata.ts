@@ -24,7 +24,6 @@ export function buildPageMetadata({
   return {
     title,
     description,
-    alternates,
     robots: index
       ? { index: true, follow: true }
       : { index: false, follow: true },

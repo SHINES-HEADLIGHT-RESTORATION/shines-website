@@ -108,6 +108,7 @@ export function middleware(request: NextRequest) {
   }
 
   response.headers.set("x-shines-locale", locale);
+  response.headers.set("x-shines-path", pathname);
   return response;
 }
 

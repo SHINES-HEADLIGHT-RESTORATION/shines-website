@@ -12,6 +12,7 @@
     "favicons": "node scripts/generate-favicons.mjs",
     "hero-poster": "node scripts/extract-hero-poster.mjs",
     "indexnow": "node scripts/indexnow-submit.mjs",
+    "gsc:queue": "node scripts/gsc-indexing-queue.mjs",
     "hero-videos": "node scripts/encode-hero-videos.mjs",
     "fonts:woff2": "node scripts/convert-fonts-woff2.mjs"
   },

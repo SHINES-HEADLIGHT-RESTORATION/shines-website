@@ -23,6 +23,7 @@ export async function JsonLd() {
       const sameAs = [
         ...activeSocialLinks().map((link) => link.href),
         ...(site.googleBusinessProfile ? [site.googleBusinessProfile] : []),
+        site.contact.mapsLink,
       ];
       return sameAs.length > 0 ? { sameAs } : {};
     })(),

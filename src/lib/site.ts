@@ -101,9 +101,7 @@ export const site = {
   },
   warranty: "1-year clarity guarantee",
   /** Google Business Profile / Maps listing — used in sameAs for entity clarity. */
-  googleBusinessProfile: "https://share.google/KYeGevHeVdUkOEq4W" as
-    | string
-    | null,
+  googleBusinessProfile: null as string | null,
   /** Set profile URLs when each account is live. */
   social: {
     facebook: null as string | null,
