@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { HeadlightQuantity, HeadlightSizeId, ConditionSeverityId, ServiceMethodId } from "@/lib/booking";
+import { sanitizeAddOnIds } from "@/lib/booking";
 import {
   createAppointment,
   getAppointments,
@@ -22,6 +23,7 @@ type BookRequest = {
   quantity?: HeadlightQuantity;
   sizeId?: HeadlightSizeId;
   severityId?: ConditionSeverityId;
+  addOnIds?: string[];
   scheduledAt?: string;
   customerName?: string;
   email?: string;
@@ -159,6 +161,8 @@ export async function POST(request: Request) {
   const oneWayKm =
     body.serviceId === "mobile" ? (body.mobileOneWayKm ?? null) : null;
 
+  const addOnIds = sanitizeAddOnIds(body.addOnIds);
+
   const appointment = await createAppointment({
     serviceId: body.serviceId,
     scheduledAt: normalizedSlot,
@@ -171,6 +175,7 @@ export async function POST(request: Request) {
     quantity: body.quantity,
     sizeId: body.sizeId,
     severityId: body.severityId,
+    addOnIds: addOnIds.length > 0 ? addOnIds : undefined,
     mobileOneWayKm: oneWayKm ?? undefined,
     source: "online",
     status: "pending",

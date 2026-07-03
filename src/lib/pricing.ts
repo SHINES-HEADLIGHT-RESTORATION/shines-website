@@ -29,7 +29,7 @@ export const pricingTiers = [
     label: site.pricing.mailIn.label,
     from: site.pricing.mailIn.from,
     description: `Ship from anywhere in Europe when you cannot visit ${locationLabel()}.`,
-    includes: "Same OEM-grade process. Return shipping quoted separately.",
+    includes: `Same OEM-grade process. Fixed return shipping per country, from ${formatPrice(site.mailInReturnShipping.BE)}.`,
   },
 ] as const;
 
@@ -119,6 +119,11 @@ export const pricingModifiers = [
     id: "service",
     label: "Service method",
     detail: `Visit ${locationLabel()}, mobile service, or mail-in across Europe.`,
+  },
+  {
+    id: "add-ons",
+    label: "Optional add-ons",
+    detail: `Fog lights from ${formatPrice(site.addOnPricing.fog)} and tail lights from ${formatPrice(site.addOnPricing.tail)} per pair, restored in the same booking.`,
   },
 ] as const;
 

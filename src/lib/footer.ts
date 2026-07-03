@@ -8,7 +8,7 @@ import { processPagePath } from "@/lib/process";
 
 export const footerFinePrint = [
   `Prices shown are starting prices from ${formatPrice(site.pricing.pair.from)} for both headlights. Final price depends on headlight size, condition, and service method. Confirmed on the booking page before you pay.`,
-  `Mail-in return shipping is quoted separately based on your location. Local turnaround is ${site.turnaround.local.toLowerCase()}. Mail-in orders typically take ${site.turnaround.mailIn.toLowerCase()}.`,
+  `Mail-in return shipping is a fixed price per country (from ${formatPrice(site.mailInReturnShipping.BE)}), shown at booking and paid before dispatch. Local turnaround is ${site.turnaround.local.toLowerCase()}. Mail-in orders typically take ${site.turnaround.mailIn.toLowerCase()}.`,
   `Every restoration includes our ${site.warranty.toLowerCase()}. Results depend on lens condition; we assess each headlight before work begins.`,
 ] as const;
 
@@ -93,9 +93,6 @@ export function getFooterColumns(): FooterColumn[] {
   return withoutBookingLinks(baseFooterColumns);
 }
 
-/** @deprecated Use getFooterColumns() so booking links respect the feature flag. */
-export const footerColumns = baseFooterColumns;
-
 export const footerLegalLinks: FooterLink[] = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Use", href: "/terms" },
@@ -109,6 +106,3 @@ export function getFooterContactLine(): string {
   }
   return `Questions? Email ${site.email}.`;
 }
-
-/** @deprecated Use getFooterContactLine() so copy respects the feature flag. */
-export const footerContactLine = getFooterContactLine();

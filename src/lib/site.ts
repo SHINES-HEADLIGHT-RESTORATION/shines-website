@@ -1,3 +1,17 @@
+/**
+ * Positioning: the highest-priced specialist in the BE/NL market, on purpose.
+ * Benchmarks (checked 2026-07): AAS €100 single / €180 pair; Automotive
+ * Cardetailing ≈ €167 pair incl. BTW; idgarages network "from €89" per car.
+ * The premium is justified on-page: full strip of the failed factory layer,
+ * OEM-grade UV hard coat, in-shop cure before handover, clarity guarantee,
+ * and a shop that does nothing else.
+ */
+const SINGLE_FROM = 109;
+const PAIR_FROM = 189;
+/** Flat handling fee per service channel (incl. BTW). */
+const SHIP_HANDLING_FEE = 25;
+const MOBILE_SERVICE_FEE = 25;
+
 export const site = {
   name: "SHINES",
   email: "info@shines.be",
@@ -32,13 +46,20 @@ export const site = {
     restorations: null as number | null,
   },
   pricing: {
-    single: { from: 89, label: "Single headlight restoration" },
+    single: { from: SINGLE_FROM, label: "Single headlight restoration" },
     pair: {
-      from: 149,
+      from: PAIR_FROM,
       label: "Pair (both headlights)",
       popular: true,
     },
-    mailIn: { from: 129, label: "Mail-in restoration (Europe)" },
+    /**
+     * Mail-in minimum is derived from pair + handling so the advertised
+     * "from" price always equals the real checkout minimum. Never hardcode.
+     */
+    mailIn: {
+      from: PAIR_FROM + SHIP_HANDLING_FEE,
+      label: "Mail-in restoration (Europe)",
+    },
   },
   /** Garage coordinates for mobile travel fee calculations. */
   workshop: {
@@ -62,10 +83,20 @@ export const site = {
   },
   /** Flat fee per service channel (incl. BTW), covers handling / on-site setup. */
   serviceChannelFees: {
-    ship: 25,
-    mobile: 25,
+    ship: SHIP_HANDLING_FEE,
+    mobile: MOBILE_SERVICE_FEE,
   },
-  /** Calendar block length per booking type (minutes). Mobile uses distance tiers below. */
+  /** Optional lens add-ons (incl. BTW), restored in the same visit/parcel. */
+  addOnPricing: {
+    fog: 49,
+    tail: 79,
+  },
+  /**
+   * Base calendar block per booking type (minutes). Mobile uses distance tiers
+   * below; visit bookings additionally extend by pair/severity/size/add-ons at
+   * creation time (see getBookingDurationMinutes) so heavy jobs cannot cause
+   * double-booking.
+   */
   appointmentDurationMinutes: {
     visit: 60,
     ship: 60,
@@ -82,15 +113,24 @@ export const site = {
     /** Your Belgian VAT number (BE0xxx.xxx.xxx) for invoices */
     vatNumber: null as string | null,
   },
-  /** Fixed return shipping (incl. BTW) by customer country, tune from real carrier invoices. */
+  /**
+   * Fixed return shipping (incl. BTW) by customer country, charged via Stripe
+   * once the lights are ready to ship back. Values are grounded in bpost 2026
+   * list prices to an address incl. insurance (worst case): BE ≈ €9.40,
+   * surrounding countries (NL/DE/FR/LU) ≈ €20, rest of EU €38–56, UK/rest of
+   * Europe €41–79. Margin on top covers box + padding. Business carriers
+   * (DPD/GLS/Sendcloud) cost well below these list prices, so tune DOWN from
+   * real invoices — never below carrier cost. New export markets inherit
+   * OTHER (the safe ceiling) until a dedicated rate is added here.
+   */
   mailInReturnShipping: {
-    BE: 12,
-    NL: 15,
-    DE: 18,
-    FR: 18,
-    LU: 15,
-    GB: 22,
-    OTHER: 25,
+    BE: 15,
+    NL: 25,
+    DE: 25,
+    FR: 25,
+    LU: 25,
+    GB: 55,
+    OTHER: 55,
   },
   turnaround: {
     local:
@@ -99,9 +139,17 @@ export const site = {
       "Typically, restoration plus full in-shop cure takes about 30–60 minutes per headlight or tail light, or about 45–90 minutes for both headlights depending on size and oxidation severity. The coating is fully hardened before you drive away.",
     mailIn: "3–5 business days plus shipping",
   },
+  /**
+   * Single source of truth for the guarantee shown everywhere. Roadmap: move
+   * to a 5-year guarantee once the OEM coating line is in production
+   * (evaluating Red Spot UVT610 / UVT200 and SilFORT UVHC5000; likely starter
+   * coat: HBC 609-3). When that day comes, change only this string — no brand
+   * names on the public site until the coating is actually purchased.
+   */
   warranty: "1-year clarity guarantee",
   /** Google Business Profile / Maps listing — used in sameAs for entity clarity. */
-  googleBusinessProfile: null as string | null,
+  googleBusinessProfile:
+    "https://share.google/b8E078Gn5ikvTNfdy" as string | null,
   /** Set profile URLs when each account is live. */
   social: {
     facebook: null as string | null,
@@ -137,6 +185,15 @@ export function formatAddressLines(): string[] {
   return lines;
 }
 
+export function formatAddressInline(): string {
+  return formatAddressLines().join(", ");
+}
+
+/** Opens in Google Maps (or the user's default maps app on mobile). */
+export function workshopDirectionsUrl(): string {
+  return site.contact.mapsLink;
+}
+
 export function formatPrice(amount: number): string {
   return `€ ${amount.toFixed(2).replace(".", ",")}`;
 }
@@ -159,24 +216,54 @@ const socialPlatformLabels = {
   snapchat: "Snapchat",
 } as const;
 
+const googleBusinessLabel = "Google Business";
+
 export type SocialPlatformId = keyof typeof socialPlatformLabels;
 
-export function activeSocialLinks(): { id: SocialPlatformId; label: string; href: string }[] {
-  return (Object.keys(socialPlatformLabels) as SocialPlatformId[]).flatMap((id) => {
+export type SocialLink = {
+  id: SocialPlatformId | "googleBusiness";
+  label: string;
+  href: string;
+};
+
+export function activeSocialLinks(): SocialLink[] {
+  const links: SocialLink[] = (
+    Object.keys(socialPlatformLabels) as SocialPlatformId[]
+  ).flatMap((id) => {
     const href = site.social[id];
     if (!href) return [];
     return [{ id, label: socialPlatformLabels[id], href }];
   });
+  if (site.googleBusinessProfile) {
+    links.push({
+      id: "googleBusiness",
+      label: googleBusinessLabel,
+      href: site.googleBusinessProfile,
+    });
+  }
+  return links;
 }
 
 export function allSocialPlatforms(): {
-  id: SocialPlatformId;
+  id: SocialPlatformId | "googleBusiness";
   label: string;
   href: string | null;
 }[] {
-  return (Object.keys(socialPlatformLabels) as SocialPlatformId[]).map((id) => ({
+  const platforms: {
+    id: SocialPlatformId | "googleBusiness";
+    label: string;
+    href: string | null;
+  }[] = (Object.keys(socialPlatformLabels) as SocialPlatformId[]).map((id) => ({
     id,
     label: socialPlatformLabels[id],
     href: site.social[id],
   }));
+  if (site.googleBusinessProfile) {
+    platforms.push({
+      id: "googleBusiness",
+      label: googleBusinessLabel,
+      href: site.googleBusinessProfile,
+    });
+  }
+  return platforms;
 }

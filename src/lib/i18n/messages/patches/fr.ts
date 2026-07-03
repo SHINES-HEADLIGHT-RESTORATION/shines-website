@@ -4,7 +4,12 @@ import { fieldCategoriesHubPath } from "@/lib/field-categories";
 import { buildFieldCategoryMessagesFr } from "@/lib/field-category-content-fr";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
-import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
+import {
+  formatPrice,
+  locationLabel,
+  mailtoQuote,
+  site,
+} from "@/lib/site";
 import type { mergeMessages } from "../merge";
 
 const processUrl = `${site.url}${processPagePath}`;
@@ -12,6 +17,12 @@ const loc = locationLabel();
 const pairFrom = formatPrice(site.pricing.pair.from);
 const singleFrom = formatPrice(site.pricing.single.from);
 const mailInFrom = formatPrice(site.pricing.mailIn.from);
+const pairSavings = formatPrice(
+  site.pricing.single.from * 2 - site.pricing.pair.from,
+);
+const returnFromBe = formatPrice(site.mailInReturnShipping.BE);
+const fogFrom = formatPrice(site.addOnPricing.fog);
+const tailFrom = formatPrice(site.addOnPricing.tail);
 
 export const frPatch: Parameters<typeof mergeMessages>[1] = {
   common: {
@@ -268,7 +279,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       {
         label: site.pricing.mailIn.label,
         description: `Expédiez depuis n'importe où en Europe si vous ne pouvez pas venir à ${loc}.`,
-        includes: "Même processus de qualité OEM. Retour tarifé séparément.",
+        includes: `Même processus de qualité OEM. Retour à prix fixe par pays, dès ${returnFromBe}.`,
       },
     ],
     valueRows: [
@@ -296,6 +307,10 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       {
         label: "Mode de service",
         detail: `Visite à ${loc}, service mobile ou envoi postal en Europe.`,
+      },
+      {
+        label: "Options",
+        detail: `Antibrouillards dès ${fogFrom} et feux arrière dès ${tailFrom} la paire, restaurés dans la même réservation.`,
       },
     ],
     comparisonClosing:
@@ -508,14 +523,18 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       },
       {
         question: "Servez-vous les clients hors de Belgique ?",
-        answer: `Oui. Visitez notre atelier à ${loc}, réservez le service mobile où disponible, ou utilisez l'envoi postal partout en Europe. Nous vous guidons pour l'emballage, l'expédition entrante et le retour tarifé.`,
+        answer: `Oui. Visitez notre atelier à ${loc}, réservez le service mobile où disponible, ou utilisez l'envoi postal partout en Europe. Nous vous guidons pour l'emballage et l'expédition entrante ; le retour est un prix fixe par pays, affiché à la réservation.`,
+      },
+      {
+        question: "Restaurez-vous aussi les antibrouillards et les feux arrière ?",
+        answer: `Oui. Les antibrouillards et feux arrière utilisent les mêmes lentilles en polycarbonate et acrylique qui s'oxydent, ternissent et se rayent. Ajoutez-les à toute réservation de phares à prix fixe (antibrouillards dès ${fogFrom}, feux arrière dès ${tailFrom} la paire), restaurés avec le même processus de décapage et revêtement lors de la même visite.`,
       },
     ],
   },
   footer: {
     finePrint: [
       `Les prix affichés sont des tarifs de départ dès ${pairFrom} pour les deux phares. Le prix final dépend de la taille, de l'état et du mode de service. Confirmé sur la page de réservation avant paiement.`,
-      `Le retour postal est tarifé séparément selon votre localisation. Délai local : ${site.turnaround.local.toLowerCase()}. Commandes postales : généralement ${site.turnaround.mailIn.toLowerCase()}.`,
+      `Le retour postal est un prix fixe par pays (dès ${returnFromBe}), affiché à la réservation et payé avant expédition. Délai local : ${site.turnaround.local.toLowerCase()}. Commandes postales : généralement ${site.turnaround.mailIn.toLowerCase()}.`,
       `Chaque restauration inclut ${site.warranty.toLowerCase()}. Les résultats dépendent de l'état de la lentille ; nous évaluons chaque phare avant intervention.`,
     ],
     breadcrumb: "Restauration de phares",
@@ -593,7 +612,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     countryTitleTemplate: "Restauration de phares en {country}",
     countryIntroTemplate: `Restauration professionnelle pour les conducteurs en {country} ({countryLocal}). Envoyez vos phares à notre atelier belge ou visitez-nous à ${loc}. Polymérisation UV, durci avant votre départ.`,
     mailInNote:
-      "L'envoi postal inclut guide d'emballage, suivi, restauration et retour tarifé à votre adresse.",
+      "L'envoi postal inclut guide d'emballage, suivi, restauration et retour à prix fixe à votre adresse.",
     belgiumGarage: `Atelier à ${loc}`,
     viewPricing: "Voir les tarifs",
   },
@@ -656,7 +675,11 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       sizeHint:
         "Choisissez selon votre véhicule. Les phares plus grands ou complexes demandent plus de temps et de matériaux.",
       condition: "3. Quel est leur état ?",
-      conditionHint: "Soyez honnête. Les dommages profonds demandent plus de ponçage et de temps.",
+      conditionHint:
+        "Un doute ? Choisissez ce qui ressemble le plus. Nous confirmons le stade ensemble à la réception avant toute intervention, et le prix ne change jamais sans votre accord.",
+      addOns: "Ajoutez plus de clarté (optionnel)",
+      addOnsHint:
+        "Le même processus professionnel de décapage et revêtement, lors de la même visite ou du même colis.",
       service: "4. Comment souhaitez-vous être servi ?",
     },
     contactDetailsTitle: "Quelles sont vos coordonnées ?",
@@ -679,9 +702,12 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       quantity: "Quantité",
       pair: "Les deux phares",
       single: "Un phare",
+      addOns: "Options",
     },
     returnShippingNote:
-      "Le retour postal est tarifé séparément avant l'envoi de vos phares.",
+      "Le retour postal à prix fixe se paie sur votre page de réservation dès que vos phares sont prêts. Il n'est pas inclus dans le total d'aujourd'hui.",
+    returnShippingLine:
+      "Retour postal vers {country} : {price} · à payer plus tard",
     priceFrom: "dès {price}",
     mobileTravelQuote:
       "{km} km aller simple · Frais de déplacement {fee} (TVA incl.). {breakdown}",
@@ -699,14 +725,14 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       },
       {
         label: "Les deux phares",
-        description: "Le plus populaire, éclairage équilibré",
+        description: `Éclairage équilibré. Économisez ${pairSavings} par rapport à deux réservations séparées.`,
       },
     ],
     sizes: [
       {
         label: "Standard / Compact",
         description:
-          "Petits phares plats ou ronds, ex. VW Golf, berlines anciennes, citadines.",
+          "Petits phares plats ou ronds, ex. citadines, berlines anciennes, classiques.",
       },
       {
         label: "Grand / Enveloppant",
@@ -736,9 +762,23 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
         label: "Stade 3 : Dommages sévères",
         shortLabel: "Dommages sévères",
         description:
-          "Vernis qui s'écaille, ou rayures profondes visibles dues aux gravillons.",
+          "Vernis qui s'écaille, rayures profondes, microfissures en toile d'araignée ou revêtement DIY raté.",
       },
     ],
+    addOns: [
+      {
+        label: "Antibrouillards (paire)",
+        description:
+          "Les lentilles basses s'oxydent comme les phares. Restaurées et scellées UV lors de la même visite.",
+      },
+      {
+        label: "Feux arrière (paire)",
+        description:
+          "Élimine rayures et ternissement des feux arrière. Nous vérifions d'abord les dommages internes.",
+      },
+    ],
+    treatedBefore:
+      "Ces phares ont déjà été traités (kit DIY, spray ou restauration antérieure)",
     services: [
       {
         label: "Visite à notre atelier",
@@ -781,7 +821,7 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       postalCode: "Code postal",
       city: "Ville",
       country: "Pays / Région",
-      businessAddress: "Il s'agit d'une adresse professionnelle",
+      businessAddress: "J'ai besoin d'une facture TVA (réservation professionnelle)",
       companyName: "Nom de l'entreprise",
       vatNumber: "Numéro de TVA",
       billingAddress: "Adresse de facturation",
@@ -929,12 +969,12 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
       },
       {
         title: "Nous restaurons, polymérisons UV et renvoyons",
-        description: `Délai atelier habituel : ${site.turnaround.mailIn.toLowerCase()}. Nous restaurons, polymérisons entièrement le vernis UV, inspectons avec photos, puis renvoyons prêt à remonter. Le retour est tarifé avant expédition.`,
+        description: `Délai atelier habituel : ${site.turnaround.mailIn.toLowerCase()}. Nous restaurons, polymérisons entièrement le vernis UV, inspectons avec photos, puis renvoyons prêt à remonter. Le retour est un prix fixe par pays, payé sur votre page de réservation avant expédition.`,
       },
     ],
     notes: [
-      `Restauration dès ${formatPrice(site.pricing.mailIn.from)} par paire (hors envoi aller-retour).`,
-      "Le retour postal est tarifé selon votre pays et la taille du colis avant expédition.",
+      `Restauration dès ${formatPrice(site.pricing.mailIn.from)} par paire, frais de traitement inclus (hors envoi aller-retour).`,
+      `Le retour postal est un prix fixe par pays, dès ${returnFromBe} pour la Belgique. Affiché à la réservation, payé avant expédition.`,
       "N'envoyez que les unités phare, pas le véhicule entier.",
       "Utilisez un envoi suivi et assuré. Si nous ne recevons pas votre colis, rien n'est renvoyé.",
       "L'emballage est sous votre responsabilité. Conservez votre preuve d'envoi.",
@@ -943,10 +983,11 @@ export const frPatch: Parameters<typeof mergeMessages>[1] = {
     ],
     shipToNote:
       "Inscrivez votre référence de réservation à l'extérieur du colis. Utilisez un envoi suivi et assuré. Nous ne commençons pas tant que le colis n'est pas arrivé. Si nous ne le recevons pas, rien n'est renvoyé.",
-    visitNote: `Dépôt à notre atelier à ${loc}. ${site.turnaround.local}. ${site.contact.parkingNote}`,
+    visitNoteLead: "Dépôt à notre atelier :",
+    visitNoteTail: `${site.turnaround.local}. ${site.contact.parkingNote}`,
     unboxingNote:
       "Avant d'ouvrir votre colis, nous enregistrons le déballage en vidéo. Nous photographions ensuite chaque phare avant toute restauration. Cela vous protège, nous aussi, si une lentille est arrivée fissurée ou endommagée en transit. Note : nous ne sommes pas responsables des dommages survenus pendant l'expédition ou dus à un mauvais emballage.",
-    workshopNote: `Délai atelier habituel : ${site.turnaround.mailIn.toLowerCase()}. Nous restaurons, polymérisons entièrement le vernis UV, inspectons avec photos, puis renvoyons prêt à remonter. Le retour est tarifé avant expédition.`,
+    workshopNote: `Délai atelier habituel : ${site.turnaround.mailIn.toLowerCase()}. Nous restaurons, polymérisons entièrement le vernis UV, inspectons avec photos, puis renvoyons prêt à remonter. Le retour est un prix fixe par pays, payé avant expédition.`,
   },
   mailInStatus: {
     awaiting_parcel: "En attente du colis",

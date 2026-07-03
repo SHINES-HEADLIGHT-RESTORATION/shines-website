@@ -15,10 +15,7 @@ import {
 } from "@/components/BookingCheckoutFields";
 import { BookingAppointmentPicker } from "@/components/BookingAppointmentPicker";
 import { BookingConfirmation } from "@/components/BookingConfirmation";
-import {
-  BookingServiceNotes,
-  BookingVisitAddress,
-} from "@/components/BookingServiceNotes";
+import { BookingServiceNotes } from "@/components/BookingServiceNotes";
 import { SectionHeading, SectionShell } from "@/components/SectionShell";
 import { useMobileTravelQuote } from "@/hooks/useMobileTravelQuote";
 import { useBookingFieldValidation } from "@/hooks/useBookingFieldValidation";
@@ -28,6 +25,7 @@ import {
   getHeadlightSize,
   getServiceMethod,
   serviceMethodPriceLabel,
+  type BookingAddOnId,
   type ConditionSeverityId,
   type HeadlightQuantity,
   type HeadlightSizeId,
@@ -40,6 +38,7 @@ import {
 } from "@/lib/appointments/mobile-duration";
 import { formatMessage } from "@/lib/i18n/format-message";
 import {
+  getBookingAddOns,
   getConditionSeverities,
   getHeadlightQuantities,
   getHeadlightSizes,
@@ -53,6 +52,7 @@ import {
   type BookingCountryCode,
 } from "@/lib/booking-countries";
 import { defaultMobileTravelFee } from "@/lib/mobile-pricing";
+import { getReturnShippingEur } from "@/lib/return-shipping";
 import { formatPrice, formatPriceModifier, site } from "@/lib/site";
 
 function modifierLabel(modifier: number, includedLabel: string) {
@@ -67,6 +67,7 @@ function SelectCard({
   priceLabel,
   popular,
   popularLabel,
+  showCheck,
 }: {
   selected: boolean;
   onSelect: () => void;
@@ -75,6 +76,8 @@ function SelectCard({
   priceLabel: string;
   popular?: boolean;
   popularLabel: string;
+  /** Check glyph for multi-select toggles (add-ons); single-select groups rely on the border. */
+  showCheck?: boolean;
 }) {
   return (
     <button
@@ -92,7 +95,28 @@ function SelectCard({
           {popularLabel}
         </span>
       )}
-      <span className="block text-base font-semibold text-text-primary">{title}</span>
+      {showCheck && selected && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3 top-3 inline-flex text-action-primary"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="8.25" fill="currentColor" />
+            <path
+              d="M5.5 9.5L8 12L12.5 6.5"
+              stroke="#fff"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      )}
+      <span
+        className={`block text-base font-semibold text-text-primary ${showCheck ? "pr-7" : ""}`}
+      >
+        {title}
+      </span>
       <span className="mt-1 block text-sm leading-relaxed text-[#1d1d1f]">
         {description}
       </span>
@@ -110,10 +134,13 @@ export function BookingSection() {
   const headlightSizes = getHeadlightSizes(messages);
   const conditionSeverities = getConditionSeverities(messages);
   const serviceMethods = getServiceMethods(messages);
+  const bookingAddOns = getBookingAddOns(messages);
 
   const [quantity, setQuantity] = useState<HeadlightQuantity>("pair");
   const [sizeId, setSizeId] = useState<HeadlightSizeId>("standard");
   const [severityId, setSeverityId] = useState<ConditionSeverityId>("stage-1");
+  const [addOnIds, setAddOnIds] = useState<BookingAddOnId[]>([]);
+  const [treatedBefore, setTreatedBefore] = useState(false);
   const [serviceId, setServiceId] = useState<ServiceMethodId>("visit");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -217,13 +244,25 @@ export function BookingSection() {
         severityId,
         serviceId,
         mobileTravelForBreakdown,
+        addOnIds,
       ),
-    [quantity, sizeId, severityId, serviceId, mobileTravelForBreakdown],
+    [quantity, sizeId, severityId, serviceId, mobileTravelForBreakdown, addOnIds],
   );
 
   const selectedSize = getHeadlightSize(sizeId);
   const selectedSeverity = getConditionSeverity(severityId);
   const selectedService = getServiceMethod(serviceId);
+  const selectedAddOns = bookingAddOns.filter((addOn) =>
+    addOnIds.includes(addOn.id),
+  );
+
+  function toggleAddOn(id: BookingAddOnId) {
+    setAddOnIds((current) =>
+      current.includes(id)
+        ? current.filter((entry) => entry !== id)
+        : [...current, id],
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -238,6 +277,15 @@ export function BookingSection() {
     const bookingQuantity =
       serviceId === "mobile" && quantity === "single" ? "pair" : quantity;
 
+    const combinedNotes = [
+      treatedBefore
+        ? "Customer indicates lights were previously treated (DIY kit, spray, or earlier restoration)."
+        : null,
+      notes.trim() || null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
     const bookingResponse = await fetch("/api/appointments/book", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -246,6 +294,7 @@ export function BookingSection() {
         quantity: bookingQuantity,
         sizeId,
         severityId,
+        addOnIds,
         scheduledAt: isShip ? undefined : preferredSlot,
         mobileOneWayKm: isMobile ? mobileOneWayKm : undefined,
         street: needsAddress ? street : undefined,
@@ -257,7 +306,7 @@ export function BookingSection() {
         email,
         phone,
         vehicle,
-        notes: notes.trim() || undefined,
+        notes: combinedNotes || undefined,
         companyName: needsVatInvoice ? companyName.trim() || undefined : undefined,
         vatNumber: needsVatInvoice ? vatNumber.trim() || undefined : undefined,
         billingAddress:
@@ -389,6 +438,34 @@ export function BookingSection() {
                 />
               ))}
             </div>
+            <div className="mt-4 max-w-2xl">
+              <BookingCheckbox
+                checked={treatedBefore}
+                onChange={setTreatedBefore}
+                label={b.treatedBefore}
+              />
+            </div>
+          </fieldset>
+
+          <fieldset className="min-w-0 border-0 p-0">
+            <legend className="text-lg font-semibold text-text-primary">
+              {b.stepLegends.addOns}
+            </legend>
+            <p className="mt-2 text-sm text-text-body">{b.stepLegends.addOnsHint}</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {bookingAddOns.map((addOn) => (
+                <SelectCard
+                  key={addOn.id}
+                  selected={addOnIds.includes(addOn.id)}
+                  onSelect={() => toggleAddOn(addOn.id)}
+                  title={addOn.label}
+                  description={addOn.description}
+                  priceLabel={formatPriceModifier(addOn.modifier)}
+                  popularLabel={b.popularLabel}
+                  showCheck
+                />
+              ))}
+            </div>
           </fieldset>
 
           <fieldset className="min-w-0 border-0 p-0">
@@ -425,16 +502,11 @@ export function BookingSection() {
               {mobileQuantityAdjusted && (
                 <BookingFieldError
                   id="mobile-quantity-notice"
-                  message="We updated your booking to both headlights. Mobile visits aren't available for one light."
+                  message={b.pairOnlyMobile}
                 />
               )}
               {(serviceId === "visit" || serviceId === "ship") && (
                 <BookingServiceNotes serviceId={serviceId} />
-              )}
-              {serviceId === "visit" && (
-                <div className="mt-3">
-                  <BookingVisitAddress />
-                </div>
               )}
             </div>
           </fieldset>
@@ -800,6 +872,14 @@ export function BookingSection() {
                 </dd>
               </div>
             )}
+            {selectedAddOns.map((addOn) => (
+              <div key={addOn.id} className="flex justify-between gap-4">
+                <dt className="font-semibold">{addOn.label}</dt>
+                <dd className="font-semibold text-[#6E6E73]">
+                  {formatPriceModifier(addOn.modifier)}
+                </dd>
+              </div>
+            ))}
             {breakdown.serviceFee > 0 && (
               <div className="flex justify-between gap-4">
                 <dt className="font-semibold">
@@ -827,7 +907,15 @@ export function BookingSection() {
           </dl>
 
           {serviceId === "ship" && (
-            <p className="mt-4 text-sm text-text-body">{b.returnShippingNote}</p>
+            <>
+              <p className="mt-4 text-sm font-medium text-[#1d1d1f]">
+                {formatMessage(b.returnShippingLine, {
+                  country: getBookingCountryLabel(countryCode),
+                  price: formatPrice(getReturnShippingEur(countryCode)),
+                })}
+              </p>
+              <p className="mt-1 text-sm text-text-body">{b.returnShippingNote}</p>
+            </>
           )}
 
           {serviceId === "mobile" && manualNotice && (
@@ -861,6 +949,14 @@ export function BookingSection() {
                 ? b.summaryLabels.pair
                 : b.summaryLabels.single}
             </li>
+            {selectedAddOns.length > 0 && (
+              <li>
+                <span className="font-semibold text-[#0B0B0E]">
+                  {b.summaryLabels.addOns}:
+                </span>{" "}
+                {selectedAddOns.map((addOn) => addOn.label).join(", ")}
+              </li>
+            )}
           </ul>
         </aside>
       </div>

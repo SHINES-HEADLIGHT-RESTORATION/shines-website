@@ -1,4 +1,5 @@
 import {
+  bookingAddOns,
   conditionSeverities,
   headlightQuantities,
   headlightSizes,
@@ -17,7 +18,8 @@ import {
   mailInNotes,
   mailInShipToNote,
   mailInSteps,
-  visitDropOffNote,
+  visitDropOffNoteLead,
+  visitDropOffNoteTail,
 } from "@/lib/mail-in-flow";
 import { mailInStatusLabels } from "@/lib/mail-in-status";
 import { newsArticles } from "@/lib/news/articles-en";
@@ -426,7 +428,11 @@ export function buildEnMessages(): SiteMessages {
         },
         {
           question: "Do you serve customers outside Belgium?",
-          answer: `Yes. Visit our workshop in ${loc}, book mobile service where available, or use mail-in headlight restoration anywhere in Europe. We guide you through safe packing, inbound shipping, and quoted return delivery.`,
+          answer: `Yes. Visit our workshop in ${loc}, book mobile service where available, or use mail-in headlight restoration anywhere in Europe. We guide you through safe packing and inbound shipping, and return delivery is a fixed price per country shown at booking.`,
+        },
+        {
+          question: "Do you also restore fog lights and tail lights?",
+          answer: `Yes. Fog lights and tail lights use the same polycarbonate and acrylic lenses that oxidize, fade, and scratch. You can add them to any headlight booking at a fixed price (fog lights from ${formatPrice(site.addOnPricing.fog)}, tail lights from ${formatPrice(site.addOnPricing.tail)} per pair), restored with the same strip-and-recoat process in the same visit.`,
         },
       ],
     },
@@ -477,7 +483,7 @@ export function buildEnMessages(): SiteMessages {
       countryTitleTemplate: "Headlight restoration in {country}",
       countryIntroTemplate: `Professional headlight restoration for drivers in {country} ({countryLocal}). Ship your headlights to our Belgian workshop or visit us in ${loc}. UV-cured, hardened before you drive away.`,
       mailInNote:
-        "Mail-in service includes guided packing, tracked shipping, restoration, and quoted return delivery to your address.",
+        "Mail-in service includes guided packing, tracked shipping, restoration, and fixed-price return delivery to your address.",
       belgiumGarage: `Garage service in ${loc}`,
       viewPricing: "View pricing",
     },
@@ -535,7 +541,11 @@ export function buildEnMessages(): SiteMessages {
         sizeHint:
           "Choose based on your car. Larger or more complex lights take more time and materials.",
         condition: "3. How bad do they look?",
-        conditionHint: "Be honest. Deeper damage needs more sanding and takes longer.",
+        conditionHint:
+          "Not sure? Pick what looks closest. We confirm the stage together at intake before any work starts, and the price never changes without your OK.",
+        addOns: "Add more clarity (optional)",
+        addOnsHint:
+          "Same professional strip-and-coat process, done in the same visit or parcel.",
         service: "4. How would you like to get service?",
       },
       contactDetailsTitle: "What are your contact details?",
@@ -558,9 +568,11 @@ export function buildEnMessages(): SiteMessages {
         quantity: "Quantity",
         pair: "Both headlights",
         single: "One headlight",
+        addOns: "Add-ons",
       },
       returnShippingNote:
-        "Return shipping is quoted separately before we send your headlights back.",
+        "Fixed return shipping is paid on your booking page once your headlights are ready to ship back. It is not part of today's total.",
+      returnShippingLine: "Return shipping to {country}: {price} · paid later",
       priceFrom: "from {price}",
       mobileTravelQuote:
         "{km} km one-way · Travel fee {fee} (incl. BTW). {breakdown}",
@@ -584,6 +596,12 @@ export function buildEnMessages(): SiteMessages {
         shortLabel: c.shortLabel,
         description: c.description,
       })),
+      addOns: bookingAddOns.map((a) => ({
+        label: a.label,
+        description: a.description,
+      })),
+      treatedBefore:
+        "These lights were treated before (DIY kit, spray, or an earlier restoration)",
       services: serviceMethods.map((m) => ({
         label: m.label,
         description: m.description,
@@ -616,7 +634,7 @@ export function buildEnMessages(): SiteMessages {
         postalCode: "Postal code",
         city: "City",
         country: "Country / Region",
-        businessAddress: "This is a business address",
+        businessAddress: "I need a VAT invoice (business booking)",
         companyName: "Company name",
         vatNumber: "VAT number",
         billingAddress: "Billing address",
@@ -737,7 +755,8 @@ export function buildEnMessages(): SiteMessages {
       })),
       notes: [...mailInNotes],
       shipToNote: mailInShipToNote,
-      visitNote: visitDropOffNote,
+      visitNoteLead: visitDropOffNoteLead,
+      visitNoteTail: visitDropOffNoteTail,
       unboxingNote: mailInSteps[2]!.description,
       workshopNote: mailInSteps[3]!.description,
     },

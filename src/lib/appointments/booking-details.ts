@@ -1,5 +1,6 @@
 import type { Appointment } from "@/lib/appointments/types";
 import {
+  bookingAddOns,
   getConditionSeverity,
   getHeadlightSize,
   headlightQuantities,
@@ -25,6 +26,11 @@ export function formatAppointmentBookingLines(
 
   if (appointment.severityId) {
     lines.push(getConditionSeverity(appointment.severityId).shortLabel);
+  }
+
+  for (const addOnId of appointment.addOnIds ?? []) {
+    const addOn = bookingAddOns.find((entry) => entry.id === addOnId);
+    if (addOn) lines.push(addOn.label);
   }
 
   if (appointment.bookingTotal != null) {

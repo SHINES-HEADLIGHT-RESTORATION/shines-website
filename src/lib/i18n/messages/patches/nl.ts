@@ -4,7 +4,12 @@ import { europeHubPath } from "@/lib/europe-countries";
 import { fieldCategoriesHubPath } from "@/lib/field-categories";
 import { buildFieldCategoryMessagesNl } from "@/lib/field-category-content-nl";
 import { pricingPagePath } from "@/lib/pricing";
-import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
+import {
+  formatPrice,
+  locationLabel,
+  mailtoQuote,
+  site,
+} from "@/lib/site";
 import type { DeepPartial } from "../merge";
 import type { SiteMessages } from "../types";
 
@@ -13,6 +18,12 @@ const loc = locationLabel();
 const pairFrom = formatPrice(site.pricing.pair.from);
 const singleFrom = formatPrice(site.pricing.single.from);
 const mailInFrom = formatPrice(site.pricing.mailIn.from);
+const pairSavings = formatPrice(
+  site.pricing.single.from * 2 - site.pricing.pair.from,
+);
+const returnFromBe = formatPrice(site.mailInReturnShipping.BE);
+const fogFrom = formatPrice(site.addOnPricing.fog);
+const tailFrom = formatPrice(site.addOnPricing.tail);
 
 const pricingSummaryNl =
   "Vaste prijzen voor professionele koplamprestauratie. Geen offertegesprekken, geen verborgen kosten. Kies opties op de boekingspagina en zie meteen uw exacte prijs.";
@@ -287,7 +298,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       {
         label: "Postrestauratie (Europa)",
         description: `Verstuur vanuit heel Europa wanneer u ${loc} niet kunt bezoeken.`,
-        includes: "Hetzelfde OEM-proces. Retourverzending apart geoffreerd.",
+        includes: `Hetzelfde OEM-proces. Vaste retourverzending per land, vanaf ${returnFromBe}.`,
       },
     ],
     valueRows: [
@@ -315,6 +326,10 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       {
         label: "Servicemethode",
         detail: `Bezoek ${loc}, mobiele service of post in heel Europa.`,
+      },
+      {
+        label: "Optionele extra's",
+        detail: `Mistlampen vanaf ${fogFrom} en achterlichten vanaf ${tailFrom} per paar, hersteld in dezelfde boeking.`,
       },
     ],
     comparisonClosing:
@@ -526,14 +541,18 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       },
       {
         question: "Bedienen jullie klanten buiten België?",
-        answer: `Ja. Bezoek onze werkplaats in ${loc}, boek mobiele service waar beschikbaar, of gebruik postrestauratie overal in Europa. We begeleiden u bij veilig verpakken, heenzending en geoffreerde retourlevering.`,
+        answer: `Ja. Bezoek onze werkplaats in ${loc}, boek mobiele service waar beschikbaar, of gebruik postrestauratie overal in Europa. We begeleiden u bij veilig verpakken en heenzending; retourlevering is een vaste prijs per land, getoond bij het boeken.`,
+      },
+      {
+        question: "Herstellen jullie ook mistlampen en achterlichten?",
+        answer: `Ja. Mistlampen en achterlichten gebruiken dezelfde polycarbonaat- en acryllenzen die oxideren, vervagen en krassen. U voegt ze toe aan elke koplampboeking tegen vaste prijs (mistlampen vanaf ${fogFrom}, achterlichten vanaf ${tailFrom} per paar), hersteld met hetzelfde strip-en-recoatproces in hetzelfde bezoek.`,
       },
     ],
   },
   footer: {
     finePrint: [
       `Getoonde prijzen zijn startprijzen vanaf ${pairFrom} voor beide koplampen. Eindprijs hangt af van formaat, staat en servicemethode. Bevestigd op de boekingspagina vóór u betaalt.`,
-      `Retourverzending per post wordt apart geoffreerd op basis van uw locatie. Lokale doorlooptijd is ${turnaroundLocalNl.toLowerCase()}. Postorders duren typisch ${turnaroundMailInNl.toLowerCase()}.`,
+      `Retourverzending per post is een vaste prijs per land (vanaf ${returnFromBe}), getoond bij het boeken en betaald vóór verzending. Lokale doorlooptijd is ${turnaroundLocalNl.toLowerCase()}. Postorders duren typisch ${turnaroundMailInNl.toLowerCase()}.`,
       `Elke restauratie inclusief onze ${warrantyNl.toLowerCase()}. Resultaat hangt af van lensstaat; we beoordelen elke koplamp vóór we beginnen.`,
     ],
     breadcrumb: "Koplamprestauratie",
@@ -614,7 +633,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     countryTitleTemplate: "Koplamprestauratie in {country}",
     countryIntroTemplate: `Professionele koplamprestauratie voor bestuurders in {country} ({countryLocal}). Stuur uw koplampen naar onze Belgische werkplaats of bezoek ons in ${loc}. UV-gehard, hard vóór u vertrekt.`,
     mailInNote:
-      "Postservice omvat begeleide verpakking, tracking, restauratie en geoffreerde retourlevering naar uw adres.",
+      "Postservice omvat begeleide verpakking, tracking, restauratie en retourlevering tegen vaste prijs naar uw adres.",
     belgiumGarage: `Garageservice in ${loc}`,
     viewPricing: "Bekijk prijzen",
   },
@@ -677,7 +696,11 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       sizeHint:
         "Kies op basis van uw wagen. Grotere of complexere lampen kosten meer tijd en materiaal.",
       condition: "3. Hoe erg zien ze eruit?",
-      conditionHint: "Wees eerlijk. Diepere schade vraagt meer schuren en meer tijd.",
+      conditionHint:
+        "Twijfelt u? Kies wat het meest lijkt. We bevestigen de fase samen bij intake vóór we beginnen, en de prijs verandert nooit zonder uw akkoord.",
+      addOns: "Voeg meer helderheid toe (optioneel)",
+      addOnsHint:
+        "Hetzelfde professionele strip-en-coatproces, in hetzelfde bezoek of pakket.",
       service: "4. Hoe wilt u service ontvangen?",
     },
     contactDetailsTitle: "Wat zijn uw contactgegevens?",
@@ -700,9 +723,12 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       quantity: "Aantal",
       pair: "Beide koplampen",
       single: "Eén koplamp",
+      addOns: "Extra's",
     },
     returnShippingNote:
-      "Retourverzending wordt apart geoffreerd vóór we uw koplampen terugsturen.",
+      "Vaste retourverzending betaalt u op uw boekingspagina zodra uw koplampen klaar zijn voor retour. Ze zit niet in het totaal van vandaag.",
+    returnShippingLine:
+      "Retourverzending naar {country}: {price} · later te betalen",
     priceFrom: "vanaf {price}",
     mobileTravelQuote:
       "{km} km enkele rit · Reiskosten {fee} (incl. BTW). {breakdown}",
@@ -720,14 +746,14 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       },
       {
         label: "Beide koplampen",
-        description: "Meest populair, evenwichtig lichtbeeld",
+        description: `Evenwichtig lichtbeeld. Bespaart ${pairSavings} t.o.v. twee aparte lampen.`,
       },
     ],
     sizes: [
       {
         label: "Standaard / Compact",
         description:
-          "Kleine, platte of ronde lampen, bv. VW Golf, oudere sedans, stadsauto's.",
+          "Kleine, platte of ronde lampen, bv. stadsauto's, oudere sedans, klassiekers.",
       },
       {
         label: "Groot / Wraparound",
@@ -757,9 +783,23 @@ export const nlPatch: DeepPartial<SiteMessages> = {
         label: "Fase 3: Ernstige schade",
         shortLabel: "Ernstige schade",
         description:
-          "Afschilferende clear coat, of zichtbare diepe krassen door wegdebris.",
+          "Afschilferende clear coat, diepe krassen, spinnenwebbarstjes of een mislukte DIY-coating.",
       },
     ],
+    addOns: [
+      {
+        label: "Mistlampen (paar)",
+        description:
+          "Laaggemonteerde lenzen oxideren net als koplampen. Hersteld en UV-verzegeld in hetzelfde bezoek.",
+      },
+      {
+        label: "Achterlichten (paar)",
+        description:
+          "Verwijdert krassen en vervaging van achterlichtlenzen. We controleren eerst op interne schade.",
+      },
+    ],
+    treatedBefore:
+      "Deze lampen werden eerder behandeld (DIY-kit, spray of een eerdere restauratie)",
     services: [
       {
         label: "Bezoek onze garage",
@@ -802,7 +842,7 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       postalCode: "Postcode",
       city: "Stad",
       country: "Land / Regio",
-      businessAddress: "Dit is een zakelijk adres",
+      businessAddress: "Ik heb een BTW-factuur nodig (zakelijke boeking)",
       companyName: "Bedrijfsnaam",
       vatNumber: "BTW-nummer",
       billingAddress: "Facturatieadres",
@@ -949,12 +989,12 @@ export const nlPatch: DeepPartial<SiteMessages> = {
       },
       {
         title: "Wij restaureren, UV-harden en sturen terug",
-        description: `Typische werkplaatstijd is ${turnaroundMailInNl.toLowerCase()}. We restaureren, harden de UV-coating volledig uit, inspecteren met foto's en sturen terug klaar om te monteren. Retourverzending wordt geoffreerd vóór verzending.`,
+        description: `Typische werkplaatstijd is ${turnaroundMailInNl.toLowerCase()}. We restaureren, harden de UV-coating volledig uit, inspecteren met foto's en sturen terug klaar om te monteren. Retourverzending is een vaste prijs per land, te betalen op uw boekingspagina vóór verzending.`,
       },
     ],
     notes: [
-      `Restauratie vanaf ${mailInFrom} per paar (excl. verzending heen en terug).`,
-      "Retourverzending wordt geoffreerd op basis van uw land en doosgrootte vóór verzending.",
+      `Restauratie vanaf ${mailInFrom} per paar, afhandeling inbegrepen (excl. verzending heen en terug).`,
+      `Retourverzending is een vaste prijs per land, vanaf ${returnFromBe} in België. U ziet ze bij het boeken en betaalt vóór we verzenden.`,
       "Verstuur enkel koplampunits, niet het volledige voertuig.",
       "Gebruik tracking en verzekering. Ontvangen we uw pakket niet, sturen we niets terug.",
       "Hoe u verpakt is uw verantwoordelijkheid. Bewaar uw verzendbewijs.",
@@ -963,10 +1003,11 @@ export const nlPatch: DeepPartial<SiteMessages> = {
     ],
     shipToNote:
       "Schrijf uw boekingsreferentie op de buitenkant van de doos. Gebruik tracking en verzekering. We starten pas wanneer uw pakket aankomt. Ontvangen we het niet, sturen we niets terug.",
-    visitNote: `Afleveren in onze garage in ${loc}. ${turnaroundLocalNl}. ${parkingNoteNl}`,
+    visitNoteLead: "Afleveren in onze garage:",
+    visitNoteTail: `${turnaroundLocalNl}. ${parkingNoteNl}`,
     unboxingNote:
       "Vóór we uw pakket openen, nemen we de unboxing op video op. We fotograferen elke koplamp vóór restauratie. Dat beschermt u en ons als lenzen gebarsten of beschadigd aankwamen. Let op: we zijn niet verantwoordelijk voor schade tijdens verzending of door slechte verpakking.",
-    workshopNote: `Typische werkplaatstijd is ${turnaroundMailInNl.toLowerCase()}. We restaureren, harden de UV-coating volledig uit, inspecteren met foto's en sturen terug klaar om te monteren. Retourverzending wordt geoffreerd vóór verzending.`,
+    workshopNote: `Typische werkplaatstijd is ${turnaroundMailInNl.toLowerCase()}. We restaureren, harden de UV-coating volledig uit, inspecteren met foto's en sturen terug klaar om te monteren. Retourverzending is een vaste prijs per land, te betalen vóór verzending.`,
   },
   mailInStatus: {
     awaiting_parcel: "Wacht op pakket",

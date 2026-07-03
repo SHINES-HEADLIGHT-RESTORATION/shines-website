@@ -280,6 +280,8 @@ export type SiteMessages = {
       sizeHint: string;
       condition: string;
       conditionHint: string;
+      addOns: string;
+      addOnsHint: string;
       service: string;
     };
     contactDetailsTitle: string;
@@ -298,8 +300,10 @@ export type SiteMessages = {
       quantity: string;
       pair: string;
       single: string;
+      addOns: string;
     };
     returnShippingNote: string;
+    returnShippingLine: string;
     priceFrom: string;
     mobileTravelQuote: string;
     steps: { options: string; details: string; schedule: string; confirm: string };
@@ -307,6 +311,8 @@ export type SiteMessages = {
     quantity: LabeledOption[];
     sizes: LabeledOption[];
     conditions: (LabeledOption & { shortLabel: string })[];
+    addOns: LabeledOption[];
+    treatedBefore: string;
     services: LabeledOption[];
     priceLabels: {
       base: string;
@@ -409,7 +415,8 @@ export type SiteMessages = {
     stepDetails: { title: string; description: string }[];
     notes: string[];
     shipToNote: string;
-    visitNote: string;
+    visitNoteLead: string;
+    visitNoteTail: string;
     unboxingNote: string;
     workshopNote: string;
   };

@@ -5,6 +5,10 @@ export type HeadlightQuantity = "single" | "pair";
 export type HeadlightSizeId = "standard" | "large" | "complex";
 export type ConditionSeverityId = "stage-1" | "stage-2" | "stage-3";
 export type ServiceMethodId = "visit" | "ship" | "mobile";
+export type BookingAddOnId = "fog" | "tail";
+
+/** Booking a pair is cheaper than two singles; say it out loud on the card. */
+const pairSavings = site.pricing.single.from * 2 - site.pricing.pair.from;
 
 export const headlightQuantities = [
   {
@@ -16,7 +20,7 @@ export const headlightQuantities = [
   {
     id: "pair" as const,
     label: "Both headlights",
-    description: "Most popular, balanced light output",
+    description: `Balanced light output. Saves ${formatPrice(pairSavings)} vs two singles.`,
     basePrice: site.pricing.pair.from,
     popular: true,
   },
@@ -27,7 +31,7 @@ export const headlightSizes = [
     id: "standard" as const,
     label: "Standard / Compact",
     description:
-      "Small, flat, or round lights, e.g. VW Golf, older sedans, city cars.",
+      "Small, flat, or round lights, e.g. city cars, older sedans, classics.",
     modifier: 0,
   },
   {
@@ -68,8 +72,26 @@ export const conditionSeverities = [
     label: "Stage 3: Severe damage",
     shortLabel: "Severe damage",
     description:
-      "Clear coat flaking off, or visible deep scratches from road debris.",
+      "Flaking clear coat, deep scratches, spider-web cracks, or a failed DIY coating.",
     modifier: 40,
+  },
+];
+
+/** Optional lens add-ons, restored with the same strip-and-recoat process. */
+export const bookingAddOns = [
+  {
+    id: "fog" as const,
+    label: "Fog lights (pair)",
+    description:
+      "Low-mounted lenses oxidize just like headlights. Restored and UV-sealed in the same visit.",
+    modifier: site.addOnPricing.fog,
+  },
+  {
+    id: "tail" as const,
+    label: "Tail lights (pair)",
+    description:
+      "Removes scratches and fading from tail light lenses. We check for internal damage first.",
+    modifier: site.addOnPricing.tail,
   },
 ];
 
@@ -98,6 +120,8 @@ export type BookingPriceBreakdown = {
   base: number;
   sizeModifier: number;
   severityModifier: number;
+  addOns: { id: BookingAddOnId; modifier: number }[];
+  addOnsTotal: number;
   serviceFee: number;
   travelFee: number;
   total: number;
@@ -113,12 +137,20 @@ export function getMobileTravelFee(mobileTravelFee?: number | null): number {
   return mobileTravelFee ?? defaultMobileTravelFee();
 }
 
+export function sanitizeAddOnIds(ids: unknown): BookingAddOnId[] {
+  if (!Array.isArray(ids)) return [];
+  return bookingAddOns
+    .filter((addOn) => ids.includes(addOn.id))
+    .map((addOn) => addOn.id);
+}
+
 export function calculateBookingBreakdown(
   quantity: HeadlightQuantity,
   sizeId: HeadlightSizeId,
   severityId: ConditionSeverityId,
   serviceId: ServiceMethodId,
   mobileTravelFee?: number | null,
+  addOnIds: readonly BookingAddOnId[] = [],
 ): BookingPriceBreakdown {
   const base =
     quantity === "pair" ? site.pricing.pair.from : site.pricing.single.from;
@@ -126,6 +158,10 @@ export function calculateBookingBreakdown(
     headlightSizes.find((size) => size.id === sizeId)?.modifier ?? 0;
   const severityModifier =
     conditionSeverities.find((stage) => stage.id === severityId)?.modifier ?? 0;
+  const addOns = bookingAddOns
+    .filter((addOn) => addOnIds.includes(addOn.id))
+    .map((addOn) => ({ id: addOn.id, modifier: addOn.modifier }));
+  const addOnsTotal = addOns.reduce((sum, addOn) => sum + addOn.modifier, 0);
   const serviceFee = getChannelServiceFee(serviceId);
   const travelFee =
     serviceId === "mobile" ? getMobileTravelFee(mobileTravelFee) : 0;
@@ -134,9 +170,12 @@ export function calculateBookingBreakdown(
     base,
     sizeModifier,
     severityModifier,
+    addOns,
+    addOnsTotal,
     serviceFee,
     travelFee,
-    total: base + sizeModifier + severityModifier + serviceFee + travelFee,
+    total:
+      base + sizeModifier + severityModifier + addOnsTotal + serviceFee + travelFee,
   };
 }
 
@@ -152,142 +191,18 @@ export function getServiceMethod(id: ServiceMethodId) {
   return serviceMethods.find((method) => method.id === id)!;
 }
 
-export type BookingMailtoParams = {
-  quantity: HeadlightQuantity;
-  sizeId: HeadlightSizeId;
-  severityId: ConditionSeverityId;
-  serviceId: ServiceMethodId;
-  total: number;
-  name: string;
-  email: string;
-  phone: string;
-  vehicle: string;
-  preferredDate: string;
-  notes?: string;
-  street?: string;
-  addressLine2?: string;
-  postalCode?: string;
-  city?: string;
-  country?: string;
-  mobileOneWayKm?: number | null;
-  mobileTravelBreakdown?: string | null;
-  serviceFee?: number;
-  travelFee?: number;
-  needsVatInvoice?: boolean;
-  companyName?: string;
-  vatNumber?: string;
-  billingAddress?: string;
-};
-
-export function buildBookingMailto(params: BookingMailtoParams): string {
-  const size = getHeadlightSize(params.sizeId);
-  const severity = getConditionSeverity(params.severityId);
-  const service = getServiceMethod(params.serviceId);
-  const quantityLabel =
-    params.quantity === "pair" ? "Both headlights" : "One headlight";
-
-  const lines = [
-    "SHINES | New booking request",
-    "",
-    `Total (incl. BTW): ${formatPrice(params.total)}`,
-    site.vat.rateLabel,
-    "",
-    "Service",
-    `- Headlights: ${quantityLabel}`,
-    `- Size: ${size.label}`,
-    `- Condition: ${severity.label}`,
-    `- Method: ${service.label}`,
-  ];
-
-  if (params.serviceId === "mobile") {
-    if (params.serviceFee) {
-      lines.push(`- Mobile service fee: ${formatPrice(params.serviceFee)}`);
-    }
-  }
-
-  if (params.serviceId === "ship") {
-    lines.push(`- Mail-in handling: ${formatPrice(site.serviceChannelFees.ship)}`);
-    lines.push("- Return shipping: to be quoted before dispatch");
-  }
-
-  if (params.serviceId === "mobile" && params.street) {
-    const addressParts = [
-      params.street,
-      params.addressLine2,
-      `${params.postalCode} ${params.city}`,
-      params.country ?? "Belgium",
-    ].filter(Boolean);
-    lines.push(`- Service address: ${addressParts.join(", ")}`);
-    if (params.mobileOneWayKm != null) {
-      lines.push(`- Driving distance (one-way): ${params.mobileOneWayKm} km`);
-    }
-    if (params.travelFee != null && params.travelFee > 0) {
-      lines.push(`- Travel fee: ${formatPrice(params.travelFee)}`);
-    }
-    if (params.mobileTravelBreakdown) {
-      lines.push(`- Travel fee detail: ${params.mobileTravelBreakdown}`);
-    }
-  }
-
-  if (params.serviceId === "ship" && params.street) {
-    const addressParts = [
-      params.street,
-      params.addressLine2,
-      `${params.postalCode} ${params.city}`,
-      params.country ?? "Belgium",
-    ].filter(Boolean);
-    lines.push(`- Return address: ${addressParts.join(", ")}`);
-  }
-
-  lines.push(
-    "",
-    "Customer",
-    `- Name: ${params.name}`,
-    `- Email: ${params.email}`,
-    `- Phone: ${params.phone}`,
-    `- Vehicle: ${params.vehicle}`,
-    `- Preferred date: ${params.preferredDate}`,
-  );
-
-  if (params.needsVatInvoice) {
-    lines.push(
-      "",
-      "VAT invoice requested",
-      `- Company: ${params.companyName ?? ""}`,
-      `- VAT number: ${params.vatNumber ?? ""}`,
-    );
-    if (params.billingAddress) {
-      lines.push(`- Billing address: ${params.billingAddress}`);
-    }
-  }
-
-  if (params.notes) {
-    lines.push(`- Notes: ${params.notes}`);
-  }
-
-  lines.push(
-    "",
-    `${site.warranty}. Price confirmed at booking.`,
-    params.serviceId === "ship"
-      ? "Mail-in: you pack and ship at your own responsibility. We document condition on intake."
-      : "",
-  );
-
-  const body = lines.filter(Boolean).join("\n");
-
-  return `mailto:${site.email}?subject=${encodeURIComponent(
-    `Booking | ${service.label} | ${formatPrice(params.total)}`,
-  )}&body=${encodeURIComponent(body)}`;
+export function getBookingAddOn(id: BookingAddOnId) {
+  return bookingAddOns.find((addOn) => addOn.id === id)!;
 }
 
 export function serviceMethodPriceLabel(id: ServiceMethodId): string {
   if (id === "visit") return "Included";
   if (id === "ship") {
     const handling = site.serviceChannelFees.ship;
-    return `${formatPriceModifier(handling)} Mail-in Handling Fee\nReturn shipping quoted separately`;
+    const minReturn = site.mailInReturnShipping.BE;
+    return `${formatPriceModifier(handling)} Mail-in Handling Fee\nFixed return shipping from ${formatPrice(minReturn)} by country`;
   }
-  const travel = defaultMobileTravelFee();
-  const service = mobileServiceFee();
+  const combined = mobileServiceFee() + defaultMobileTravelFee();
   const km = site.mobileTravel.includedRadiusKm;
-  return `${formatPriceModifier(service)} Mobile Service Fee\n${formatPriceModifier(travel)} Travel Fee (Includes up to ${km}km)`;
+  return `${formatPriceModifier(combined)} Service & Travel (up to ${km} km)\nExact travel fee calculated from your address`;
 }

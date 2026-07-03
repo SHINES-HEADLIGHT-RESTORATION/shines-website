@@ -110,10 +110,21 @@ function AddressCell({ appointment }: { appointment: Appointment }) {
   );
 }
 
-function CustomerDetailsCell({ appointment }: { appointment: Appointment }) {
+function CustomerDetailsCell({
+  appointment,
+  bookingCount,
+}: {
+  appointment: Appointment;
+  bookingCount: number;
+}) {
   const fields = formatAppointmentCustomerFields(appointment);
   return (
     <div className="max-w-xs space-y-1 text-xs">
+      {bookingCount > 1 && (
+        <Badge className="border-transparent bg-blue-100 text-blue-800">
+          Returning · {bookingCount} bookings
+        </Badge>
+      )}
       {fields.map((field) => (
         <div key={field.label} className="text-text-body">
           <span className="font-medium text-text-primary">{field.label}:</span>{" "}
@@ -164,8 +175,19 @@ export function AppointmentsAdmin() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [serviceFilter, setServiceFilter] = useState<string>("all");
+  const [timeFilter, setTimeFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<SortField>("scheduledAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+
+  /** Bookings per email, to spot returning customers across the full history. */
+  const bookingCountByEmail = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const appointment of appointments) {
+      const key = appointment.email.trim().toLowerCase();
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return counts;
+  }, [appointments]);
 
   const filteredAppointments = useMemo(() => {
     let list = [...appointments];
@@ -194,6 +216,14 @@ export function AppointmentsAdmin() {
       list = list.filter((appointment) => appointment.serviceId === serviceFilter);
     }
 
+    if (timeFilter !== "all") {
+      const now = new Date().toISOString().slice(0, 19);
+      list = list.filter((appointment) => {
+        const when = appointment.scheduledAt ?? appointment.createdAt;
+        return timeFilter === "past" ? when < now : when >= now;
+      });
+    }
+
     list.sort((a, b) => {
       let compare = 0;
       switch (sortField) {
@@ -219,7 +249,15 @@ export function AppointmentsAdmin() {
     });
 
     return list;
-  }, [appointments, search, statusFilter, serviceFilter, sortField, sortDirection]);
+  }, [
+    appointments,
+    search,
+    statusFilter,
+    serviceFilter,
+    timeFilter,
+    sortField,
+    sortDirection,
+  ]);
 
   const loadAdminData = useCallback(async () => {
     try {
@@ -453,6 +491,16 @@ export function AppointmentsAdmin() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <Select value={timeFilter} onValueChange={setTimeFilter}>
+                    <SelectTrigger className="w-[190px]">
+                      <SelectValue placeholder="Period" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Full history</SelectItem>
+                      <SelectItem value="upcoming">Upcoming</SelectItem>
+                      <SelectItem value="past">Past (history)</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="gap-2">
@@ -603,7 +651,14 @@ export function AppointmentsAdmin() {
                         <AddressCell appointment={appointment} />
                       </TableCell>
                       <TableCell>
-                        <CustomerDetailsCell appointment={appointment} />
+                        <CustomerDetailsCell
+                          appointment={appointment}
+                          bookingCount={
+                            bookingCountByEmail.get(
+                              appointment.email.trim().toLowerCase(),
+                            ) ?? 1
+                          }
+                        />
                       </TableCell>
                       <TableCell>
                         <Badge className={cn(statusBadgeClass(appointment.status))}>

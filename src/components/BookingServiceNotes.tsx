@@ -1,16 +1,34 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
-import { site } from "@/lib/site";
 import type { ServiceMethodId } from "@/lib/booking";
+import {
+  formatAddressInline,
+  workshopDirectionsUrl,
+} from "@/lib/site";
 
 export function BookingServiceNotes({ serviceId }: { serviceId: ServiceMethodId }) {
   const { messages } = useI18n();
   const flow = messages.mailInFlow;
 
   if (serviceId === "visit") {
+    const address = formatAddressInline();
+    const mapsUrl = workshopDirectionsUrl();
+
     return (
-      <p className="text-sm leading-relaxed text-text-body">{flow.visitNote}</p>
+      <p className="text-sm leading-relaxed text-text-body">
+        {flow.visitNoteLead}{" "}
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-action-primary underline-offset-2 hover:underline"
+          aria-label={`${messages.contact.directionsLabel}: ${address}`}
+        >
+          {address}
+        </a>
+        . {flow.visitNoteTail}
+      </p>
     );
   }
 
@@ -48,18 +66,4 @@ export function BookingServiceNotes({ serviceId }: { serviceId: ServiceMethodId 
   }
 
   return null;
-}
-
-export function BookingVisitAddress() {
-  if (!site.contact.street) return null;
-
-  return (
-    <p className="text-sm leading-relaxed text-[#1d1d1f]">
-      {site.contact.street}
-      <br />
-      {site.contact.postalCode} {site.location.city}
-      <br />
-      {site.location.country}
-    </p>
-  );
 }

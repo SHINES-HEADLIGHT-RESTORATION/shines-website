@@ -203,6 +203,12 @@ export function MyBookingHub({ bookingId }: { bookingId: string }) {
               <dd>{booking.conditionLabel}</dd>
             </div>
           )}
+          {booking.addOnLabels.length > 0 && (
+            <div className="flex justify-between gap-4">
+              <dt className="font-medium text-text-primary">Add-ons</dt>
+              <dd className="text-right">{booking.addOnLabels.join(", ")}</dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4">
             <dt className="font-medium text-text-primary">Name</dt>
             <dd>{booking.customerName}</dd>

@@ -133,10 +133,3 @@ export function BookingConfirmation({
     </div>
   );
 }
-
-/** @deprecated Use BookingConfirmation */
-export function MailInBookingConfirmation(
-  props: Omit<BookingConfirmationProps, "serviceId"> & { serviceId?: never },
-) {
-  return <BookingConfirmation {...props} serviceId="ship" />;
-}

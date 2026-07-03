@@ -2,10 +2,12 @@ import type { SiteMessages } from "@/lib/i18n/messages/types";
 
 type BookingCatalogMessages = Pick<SiteMessages, "booking">;
 import {
+  bookingAddOns as addOnDefs,
   conditionSeverities as conditionDefs,
   headlightQuantities as quantityDefs,
   headlightSizes as sizeDefs,
   serviceMethods as serviceDefs,
+  type BookingAddOnId,
   type ConditionSeverityId,
   type HeadlightQuantity,
   type HeadlightSizeId,
@@ -44,6 +46,14 @@ export function getServiceMethods(m: BookingCatalogMessages) {
     ...item,
     label: m.booking.services[i]!.label,
     description: m.booking.services[i]!.description,
+  }));
+}
+
+export function getBookingAddOns(m: BookingCatalogMessages) {
+  return addOnDefs.map((item, i) => ({
+    ...item,
+    label: m.booking.addOns[i]?.label ?? item.label,
+    description: m.booking.addOns[i]?.description ?? item.description,
   }));
 }
 
@@ -99,4 +109,10 @@ export function validateBookingFieldsLocalized(
   return errors;
 }
 
-export type { HeadlightQuantity, HeadlightSizeId, ConditionSeverityId, ServiceMethodId };
+export type {
+  BookingAddOnId,
+  HeadlightQuantity,
+  HeadlightSizeId,
+  ConditionSeverityId,
+  ServiceMethodId,
+};

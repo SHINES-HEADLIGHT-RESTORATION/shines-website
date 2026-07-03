@@ -1,4 +1,4 @@
-import { formatPrice, formatAddressLines, locationLabel, site } from "@/lib/site";
+import { formatPrice, formatAddressLines, site } from "@/lib/site";
 
 export const mailInSteps = [
   {
@@ -18,13 +18,13 @@ export const mailInSteps = [
   },
   {
     title: "We restore, UV-cure, and return",
-    description: `Typical workshop time is ${site.turnaround.mailIn.toLowerCase()}. We restore, fully cure the UV coat, inspect with photos, then ship back ready to refit. Return shipping is quoted before dispatch.`,
+    description: `Typical workshop time is ${site.turnaround.mailIn.toLowerCase()}. We restore, fully cure the UV coat, inspect with photos, then ship back ready to refit. Return shipping is a fixed price per country, paid on your booking page before dispatch.`,
   },
 ] as const;
 
 export const mailInNotes = [
-  `Restoration from ${formatPrice(site.pricing.mailIn.from)} per pair (excl. shipping both ways).`,
-  "Return shipping is quoted based on your country and box size before we dispatch.",
+  `Restoration from ${formatPrice(site.pricing.mailIn.from)} per pair, handling included (excl. shipping both ways).`,
+  `Return shipping is a fixed price per country, from ${formatPrice(site.mailInReturnShipping.BE)} in Belgium. You see it at booking and pay it before we dispatch.`,
   "Only ship headlight units, not the entire vehicle.",
   "Use tracked and insured shipping. If we never receive your parcel, nothing is sent back.",
   "How you pack your headlights is your responsibility. Keep your shipping receipt.",
@@ -32,7 +32,8 @@ export const mailInNotes = [
   site.contact.mailInNote,
 ] as const;
 
-export const visitDropOffNote = `Drop off at our garage in ${locationLabel()}. ${site.turnaround.local}. ${site.contact.parkingNote}`;
+export const visitDropOffNoteLead = "Drop off at our garage:";
+export const visitDropOffNoteTail = `${site.turnaround.local}. ${site.contact.parkingNote}`;
 
 export const mailInShipToNote =
   "Write your booking reference on the outside of the box. Use tracked and insured shipping. We don't start work until your parcel arrives. If we never receive it, nothing is sent back.";

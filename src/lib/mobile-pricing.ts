@@ -1,6 +1,5 @@
 import { getMobileDurationMinutes } from "@/lib/appointments/mobile-duration";
 import { formatPrice, site } from "@/lib/site";
-import { hasWorkshopOriginConfig } from "@/lib/workshop-origin";
 
 export type MobileTravelQuote = {
   oneWayKm: number;
@@ -15,10 +14,6 @@ export type MobileTravelEvaluation =
   | { status: "quoted"; quote: MobileTravelQuote }
   | { status: "manual"; oneWayKm: number; message: string }
   | { status: "out_of_range"; oneWayKm: number };
-
-export function isMobileTravelConfigured(): boolean {
-  return hasWorkshopOriginConfig();
-}
 
 export function calculateMobileTravelFee(oneWayKm: number): MobileTravelQuote | null {
   const { mobileTravel } = site;
@@ -92,28 +87,4 @@ export function estimateMobileHourlyRate(
 ): number {
   const hours = getMobileDurationMinutes(oneWayKm) / 60;
   return Math.round((totalEuro / hours) * 10) / 10;
-}
-
-export function mobileTravelSummaryLines(): string[] {
-  const {
-    includedRadiusKm,
-    allInTravelFee,
-    perKmRate,
-    autoQuoteRadiusKm,
-    maxServiceRadiusKm,
-  } = site.mobileTravel;
-  const exampleOneWayKm = 40;
-  const exampleExcessOneWay = Math.max(0, exampleOneWayKm - includedRadiusKm);
-  const exampleKmFee = exampleExcessOneWay * 2 * perKmRate;
-  const exampleTotal = allInTravelFee + exampleKmFee;
-  const mobileFee = site.serviceChannelFees.mobile;
-
-  return [
-    `Mobile service fee: ${formatPrice(mobileFee)} (on-site convenience, incl. BTW).`,
-    `Within ${includedRadiusKm} km (one-way): ${formatPrice(allInTravelFee)} travel (incl. BTW).`,
-    `Beyond ${includedRadiusKm} km: ${formatPrice(allInTravelFee)} regio + ${formatPrice(perKmRate)}/km driven (round trip).`,
-    `Auto quote up to ${autoQuoteRadiusKm} km one-way; ${autoQuoteRadiusKm + 1}–${maxServiceRadiusKm} km confirmed manually.`,
-    `Example: ${exampleOneWayKm} km one-way → ${formatPrice(exampleTotal)} travel + ${formatPrice(mobileFee)} service.`,
-    `Online mobile booking: both headlights only. We serve up to ${maxServiceRadiusKm} km one-way (BE, FR, NL).`,
-  ];
 }

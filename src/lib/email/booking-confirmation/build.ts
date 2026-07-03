@@ -5,6 +5,7 @@ import type { Appointment } from "@/lib/appointments/types";
 const SLOT_KEY = "yyyy-MM-dd'T'HH:mm:ss";
 import type { MessageBundleKey } from "@/lib/i18n/config";
 import {
+  getBookingAddOns,
   getConditionSeverities,
   getHeadlightQuantities,
   getHeadlightSizes,
@@ -97,6 +98,19 @@ export function buildBookingConfirmationEmail(options: {
     { label: copy.detailLabels.size, value: sizeLabel },
     { label: copy.detailLabels.condition, value: conditionLabel },
   ];
+
+  if (appointment.addOnIds?.length) {
+    const addOns = getBookingAddOns(messages);
+    const addOnLabels = appointment.addOnIds
+      .map((id) => addOns.find((addOn) => addOn.id === id)?.label)
+      .filter((label): label is string => Boolean(label));
+    if (addOnLabels.length > 0) {
+      rows.push({
+        label: messages.booking.summaryLabels.addOns,
+        value: addOnLabels.join(", "),
+      });
+    }
+  }
 
   if (appointment.bookingTotal != null) {
     rows.push({

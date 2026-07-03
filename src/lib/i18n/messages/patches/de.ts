@@ -4,7 +4,12 @@ import { fieldCategoriesHubPath } from "@/lib/field-categories";
 import { buildFieldCategoryMessagesDe } from "@/lib/field-category-content-de";
 import { pricingPagePath } from "@/lib/pricing";
 import { processPagePath } from "@/lib/process";
-import { formatPrice, locationLabel, mailtoQuote, site } from "@/lib/site";
+import {
+  formatPrice,
+  locationLabel,
+  mailtoQuote,
+  site,
+} from "@/lib/site";
 import type { DeepPartial } from "../merge";
 import type { SiteMessages } from "../types";
 
@@ -13,6 +18,12 @@ const loc = locationLabel();
 const pairFrom = formatPrice(site.pricing.pair.from);
 const singleFrom = formatPrice(site.pricing.single.from);
 const mailInFrom = formatPrice(site.pricing.mailIn.from);
+const pairSavings = formatPrice(
+  site.pricing.single.from * 2 - site.pricing.pair.from,
+);
+const returnFromBe = formatPrice(site.mailInReturnShipping.BE);
+const fogFrom = formatPrice(site.addOnPricing.fog);
+const tailFrom = formatPrice(site.addOnPricing.tail);
 
 export const dePatch: DeepPartial<SiteMessages> = {
   common: {
@@ -268,7 +279,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
       {
         label: "Post-Restaurierung (Europa)",
         description: `Einsenden aus ganz Europa, wenn ein Besuch in ${loc} nicht möglich ist.`,
-        includes: "Gleicher OEM-Ablauf. Rückversand separat angeboten.",
+        includes: `Gleicher OEM-Ablauf. Fester Rückversand pro Land, ab ${returnFromBe}.`,
       },
     ],
     valueRows: [
@@ -296,6 +307,10 @@ export const dePatch: DeepPartial<SiteMessages> = {
       {
         label: "Servicemethode",
         detail: `Besuch in ${loc}, Mobile-Service oder Post in ganz Europa.`,
+      },
+      {
+        label: "Optionale Extras",
+        detail: `Nebelscheinwerfer ab ${fogFrom} und Rücklichter ab ${tailFrom} pro Paar, restauriert in derselben Buchung.`,
       },
     ],
     comparisonClosing:
@@ -508,14 +523,18 @@ export const dePatch: DeepPartial<SiteMessages> = {
       },
       {
         question: "Bedienen Sie Kunden außerhalb Belgiens?",
-        answer: `Ja. Besuchen Sie unsere Werkstatt in ${loc}, buchen Sie Mobile-Service wo verfügbar, oder nutzen Sie Post-Restaurierung in ganz Europa. Wir führen Sie durch sichere Verpackung, Einsendung und angebotenen Rückversand.`,
+        answer: `Ja. Besuchen Sie unsere Werkstatt in ${loc}, buchen Sie Mobile-Service wo verfügbar, oder nutzen Sie Post-Restaurierung in ganz Europa. Wir führen Sie durch sichere Verpackung und Einsendung; der Rückversand ist ein Festpreis pro Land, angezeigt bei der Buchung.`,
+      },
+      {
+        question: "Restaurieren Sie auch Nebelscheinwerfer und Rücklichter?",
+        answer: `Ja. Nebelscheinwerfer und Rücklichter haben dieselben Polycarbonat- und Acryllinsen, die oxidieren, ausbleichen und verkratzen. Sie können sie jeder Scheinwerfer-Buchung zum Festpreis hinzufügen (Nebelscheinwerfer ab ${fogFrom}, Rücklichter ab ${tailFrom} pro Paar), restauriert mit demselben Abtrag-und-Beschichtungsprozess im selben Besuch.`,
       },
     ],
   },
   footer: {
     finePrint: [
       `Angezeigte Preise sind Startpreise ab ${pairFrom} für beide Scheinwerfer. Endpreis hängt von Größe, Zustand und Servicemethode ab. Bestätigt auf der Buchungsseite vor der Zahlung.`,
-      `Rückversand bei Post wird separat nach Ihrem Standort angeboten. Lokale Bearbeitung: ${site.turnaround.local.toLowerCase()}. Postbestellungen typischerweise ${site.turnaround.mailIn.toLowerCase()}.`,
+      `Rückversand bei Post ist ein Festpreis pro Land (ab ${returnFromBe}), angezeigt bei der Buchung und gezahlt vor dem Versand. Lokale Bearbeitung: ${site.turnaround.local.toLowerCase()}. Postbestellungen typischerweise ${site.turnaround.mailIn.toLowerCase()}.`,
       `Jede Restaurierung inklusive ${site.warranty.toLowerCase()}. Ergebnisse hängen vom Linsenzustand ab; wir prüfen jeden Scheinwerfer vor Arbeitsbeginn.`,
     ],
     breadcrumb: "Scheinwerfer-Restaurierung",
@@ -584,7 +603,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
     countryTitleTemplate: "Scheinwerfer-Restaurierung in {country}",
     countryIntroTemplate: `Professionelle Scheinwerfer-Restaurierung für Fahrer in {country} ({countryLocal}). Scheinwerfer an unsere belgische Werkstatt senden oder uns in ${loc} besuchen. UV-ausgehärtet, ausgehärtet vor der Abfahrt.`,
     mailInNote:
-      "Postservice inklusive Verpackungsanleitung, Sendungsverfolgung, Restaurierung und angebotenem Rückversand an Ihre Adresse.",
+      "Postservice inklusive Verpackungsanleitung, Sendungsverfolgung, Restaurierung und Rückversand zum Festpreis an Ihre Adresse.",
     belgiumGarage: `Werkstattservice in ${loc}`,
     viewPricing: "Preise ansehen",
   },
@@ -647,7 +666,11 @@ export const dePatch: DeepPartial<SiteMessages> = {
       sizeHint:
         "Wählen Sie nach Fahrzeug. Größere oder komplexere Lichter brauchen mehr Zeit und Material.",
       condition: "3. Wie schlimm sehen sie aus?",
-      conditionHint: "Seien Sie ehrlich. Tieferer Schaden braucht mehr Schleifen und Zeit.",
+      conditionHint:
+        "Unsicher? Wählen Sie, was am ehesten passt. Wir bestätigen die Stufe gemeinsam bei der Annahme, bevor gearbeitet wird — der Preis ändert sich nie ohne Ihr OK.",
+      addOns: "Mehr Klarheit hinzufügen (optional)",
+      addOnsHint:
+        "Derselbe professionelle Abtrag-und-Beschichtungsprozess, im selben Besuch oder Paket.",
       service: "4. Wie möchten Sie Service erhalten?",
     },
     contactDetailsTitle: "Wie erreichen wir Sie?",
@@ -670,9 +693,12 @@ export const dePatch: DeepPartial<SiteMessages> = {
       quantity: "Anzahl",
       pair: "Beide Scheinwerfer",
       single: "Ein Scheinwerfer",
+      addOns: "Extras",
     },
     returnShippingNote:
-      "Rückversand wird separat angeboten, bevor wir Ihre Scheinwerfer zurücksenden.",
+      "Den festen Rückversand zahlen Sie auf Ihrer Buchungsseite, sobald Ihre Scheinwerfer versandbereit sind. Er ist nicht Teil der heutigen Summe.",
+    returnShippingLine:
+      "Rückversand nach {country}: {price} · später zu zahlen",
     priceFrom: "ab {price}",
     mobileTravelQuote:
       "{km} km einfache Strecke · Anfahrtsgebühr {fee} (inkl. MwSt.). {breakdown}",
@@ -685,12 +711,15 @@ export const dePatch: DeepPartial<SiteMessages> = {
     chooseOptions: "Optionen wählen",
     quantity: [
       { label: "Ein Scheinwerfer", description: "Restaurierung einer Linse" },
-      { label: "Beide Scheinwerfer", description: "Am beliebtesten, ausgewogene Lichtleistung" },
+      {
+        label: "Beide Scheinwerfer",
+        description: `Ausgewogene Lichtleistung. Spart ${pairSavings} gegenüber zwei Einzelbuchungen.`,
+      },
     ],
     sizes: [
       {
         label: "Standard / Kompakt",
-        description: "Kleine, flache oder runde Lichter, z. B. VW Golf, ältere Limousinen, Stadtautos.",
+        description: "Kleine, flache oder runde Lichter, z. B. Stadtautos, ältere Limousinen, Klassiker.",
       },
       {
         label: "Groß / Wraparound",
@@ -715,9 +744,24 @@ export const dePatch: DeepPartial<SiteMessages> = {
       {
         label: "Stufe 3: Schwerer Schaden",
         shortLabel: "Schwerer Schaden",
-        description: "Abblätternder Klarlack oder sichtbare tiefe Kratzer durch Steinschlag.",
+        description:
+          "Abblätternder Klarlack, tiefe Kratzer, Spinnennetz-Risse oder eine fehlgeschlagene DIY-Beschichtung.",
       },
     ],
+    addOns: [
+      {
+        label: "Nebelscheinwerfer (Paar)",
+        description:
+          "Tief montierte Linsen oxidieren wie Scheinwerfer. Restauriert und UV-versiegelt im selben Besuch.",
+      },
+      {
+        label: "Rücklichter (Paar)",
+        description:
+          "Entfernt Kratzer und Ausbleichen von Rücklichtlinsen. Wir prüfen zuerst auf innere Schäden.",
+      },
+    ],
+    treatedBefore:
+      "Diese Lichter wurden bereits behandelt (DIY-Kit, Spray oder frühere Restaurierung)",
     services: [
       {
         label: "Unsere Werkstatt besuchen",
@@ -760,7 +804,7 @@ export const dePatch: DeepPartial<SiteMessages> = {
       postalCode: "Postleitzahl",
       city: "Stadt",
       country: "Land / Region",
-      businessAddress: "Geschäftsadresse",
+      businessAddress: "Ich benötige eine USt-Rechnung (geschäftliche Buchung)",
       companyName: "Firmenname",
       vatNumber: "USt-IdNr.",
       billingAddress: "Rechnungsadresse",
@@ -907,12 +951,12 @@ export const dePatch: DeepPartial<SiteMessages> = {
       },
       {
         title: "Wir restaurieren, UV-härten und senden zurück",
-        description: `Typische Werkstattzeit: ${site.turnaround.mailIn.toLowerCase()}. Wir restaurieren, häuten die UV-Beschichtung vollständig aus, prüfen mit Fotos und senden montagefertig zurück. Rückversand wird vor Versand angeboten.`,
+        description: `Typische Werkstattzeit: ${site.turnaround.mailIn.toLowerCase()}. Wir restaurieren, härten die UV-Beschichtung vollständig aus, prüfen mit Fotos und senden montagefertig zurück. Der Rückversand ist ein Festpreis pro Land, zu zahlen auf Ihrer Buchungsseite vor dem Versand.`,
       },
     ],
     notes: [
-      `Restaurierung ab ${formatPrice(site.pricing.mailIn.from)} pro Paar (ohne Versand hin und zurück).`,
-      "Rückversand wird nach Land und Kartongröße vor Versand angeboten.",
+      `Restaurierung ab ${formatPrice(site.pricing.mailIn.from)} pro Paar, Bearbeitung inklusive (ohne Versand hin und zurück).`,
+      `Der Rückversand ist ein Festpreis pro Land, ab ${returnFromBe} für Belgien. Sie sehen ihn bei der Buchung und zahlen vor dem Versand.`,
       "Nur Scheinwerfer-Einheiten senden, nicht das ganze Fahrzeug.",
       "Tracking und Versicherung nutzen. Erhalten wir Ihr Paket nicht, senden wir nichts zurück.",
       "Verpackung liegt in Ihrer Verantwortung. Bewahren Sie den Versandbeleg auf.",
@@ -921,10 +965,11 @@ export const dePatch: DeepPartial<SiteMessages> = {
     ],
     shipToNote:
       "Schreiben Sie Ihre Buchungsreferenz auf die Außenseite der Box. Sendungsverfolgung und Versicherung nutzen. Wir beginnen erst, wenn Ihr Paket ankommt. Wenn wir es nie erhalten, wird nichts zurückgesendet.",
-    visitNote: `Abgabe in unserer Werkstatt in ${loc}. ${site.turnaround.local}. Kostenlose Parkplätze vor Ort für die Abgabe.`,
+    visitNoteLead: "Abgabe in unserer Werkstatt:",
+    visitNoteTail: `${site.turnaround.local}. Kostenlose Parkplätze vor Ort für die Abgabe.`,
     unboxingNote:
       "Vor dem Öffnen Ihres Pakets zeichnen wir das Auspacken per Video auf. Dann fotografieren wir jede Scheinwerfereinheit vor jeder Restaurierungsarbeit. Das schützt Sie und uns, falls Linsen beim Transport gebrochen oder beschädigt ankamen. Hinweis: Wir haften nicht für Schäden durch Versand oder schlechte Verpackung.",
-    workshopNote: `Typische Werkstattzeit: ${site.turnaround.mailIn.toLowerCase()}. Wir restaurieren, härten den UV-Coat vollständig aus, prüfen mit Fotos und senden versandfertig zurück. Rückversand wird vor Versand angeboten.`,
+    workshopNote: `Typische Werkstattzeit: ${site.turnaround.mailIn.toLowerCase()}. Wir restaurieren, härten den UV-Coat vollständig aus, prüfen mit Fotos und senden versandfertig zurück. Der Rückversand ist ein Festpreis pro Land, zu zahlen vor dem Versand.`,
   },
   mailInStatus: {
     awaiting_parcel: "Paket erwartet",

@@ -2,6 +2,7 @@ import { formatCustomerAddressLines } from "@/lib/appointments/address";
 import { formatAppointmentRange } from "@/lib/appointments/duration";
 import type { Appointment } from "@/lib/appointments/types";
 import {
+  bookingAddOns,
   getConditionSeverity,
   getHeadlightSize,
   getServiceMethod,
@@ -26,6 +27,7 @@ export type PublicBooking = {
   quantityLabel?: string;
   sizeLabel?: string;
   conditionLabel?: string;
+  addOnLabels: string[];
   inboundCarrier?: string;
   inboundTracking?: string;
   arrivedAt?: string;
@@ -87,6 +89,9 @@ export function toPublicBooking(appointment: Appointment): PublicBooking {
     quantityLabel: quantityLabel(appointment.quantity),
     sizeLabel: size?.label,
     conditionLabel: condition?.shortLabel,
+    addOnLabels: (appointment.addOnIds ?? [])
+      .map((id) => bookingAddOns.find((addOn) => addOn.id === id)?.label)
+      .filter((label): label is string => Boolean(label)),
     inboundCarrier: appointment.inboundCarrier,
     inboundTracking: appointment.inboundTracking,
     arrivedAt: appointment.arrivedAt,

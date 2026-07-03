@@ -14,9 +14,3 @@ export function getMobileDurationMinutes(oneWayKm?: number | null): number {
 export function mobileBlockHours(oneWayKm?: number | null): number {
   return getMobileDurationMinutes(oneWayKm) / 60;
 }
-
-export function mobileAppointmentNotice(oneWayKm?: number | null): string {
-  const hours = mobileBlockHours(oneWayKm);
-  const km = oneWayKm ?? MOBILE_DEFAULT_ONE_WAY_KM;
-  return `Mobile visits reserve ${hours} hours on your calendar (${km} km one-way estimate). Please have the vehicle ready at the arrival time. Delays can affect later appointments.`;
-}

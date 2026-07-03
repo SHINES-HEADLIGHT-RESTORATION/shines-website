@@ -22,9 +22,8 @@ export async function JsonLd() {
     ...(() => {
       const sameAs = [
         ...activeSocialLinks().map((link) => link.href),
-        ...(site.googleBusinessProfile ? [site.googleBusinessProfile] : []),
         site.contact.mapsLink,
-      ];
+      ].filter((url, index, urls) => urls.indexOf(url) === index);
       return sameAs.length > 0 ? { sameAs } : {};
     })(),
     description:
@@ -63,7 +62,7 @@ export async function JsonLd() {
           },
           priceSpecification: {
             "@type": "PriceSpecification",
-            price: site.pricing.single.from,
+            minPrice: site.pricing.single.from,
             priceCurrency: "EUR",
           },
         },
@@ -76,7 +75,49 @@ export async function JsonLd() {
           },
           priceSpecification: {
             "@type": "PriceSpecification",
-            price: site.pricing.pair.from,
+            minPrice: site.pricing.pair.from,
+            priceCurrency: "EUR",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: site.pricing.mailIn.label,
+            description:
+              "Mail-in headlight restoration across Europe, return shipping fixed per country",
+          },
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: site.pricing.mailIn.from,
+            priceCurrency: "EUR",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Fog light restoration (pair, add-on)",
+            description:
+              "Fog light lens restoration added to a headlight booking",
+          },
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: site.addOnPricing.fog,
+            priceCurrency: "EUR",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Tail light restoration (pair, add-on)",
+            description:
+              "Tail light lens restoration added to a headlight booking",
+          },
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: site.addOnPricing.tail,
             priceCurrency: "EUR",
           },
         },

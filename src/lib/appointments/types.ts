@@ -1,5 +1,10 @@
 import type { ServiceMethodId } from "@/lib/booking";
-import type { HeadlightQuantity, HeadlightSizeId, ConditionSeverityId } from "@/lib/booking";
+import type {
+  BookingAddOnId,
+  HeadlightQuantity,
+  HeadlightSizeId,
+  ConditionSeverityId,
+} from "@/lib/booking";
 
 export type DayHours = { start: string; end: string } | null;
 
@@ -42,6 +47,7 @@ export type Appointment = {
   quantity?: HeadlightQuantity;
   sizeId?: HeadlightSizeId;
   severityId?: ConditionSeverityId;
+  addOnIds?: BookingAddOnId[];
   durationMinutes?: number;
   mobileOneWayKm?: number;
   mailInStatus?: MailInStatus;
@@ -81,6 +87,7 @@ export type CreateAppointmentInput = {
   quantity?: HeadlightQuantity;
   sizeId?: HeadlightSizeId;
   severityId?: ConditionSeverityId;
+  addOnIds?: BookingAddOnId[];
   mobileOneWayKm?: number;
   durationMinutes?: number;
   reference?: string;

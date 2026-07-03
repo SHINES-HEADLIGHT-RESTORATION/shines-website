@@ -4,7 +4,7 @@ import type {
   CreateAppointmentInput,
   UpdateAppointmentPatch,
 } from "@/lib/appointments/types";
-import { getAppointmentDurationMinutes } from "@/lib/appointments/duration";
+import { getBookingDurationMinutes } from "@/lib/appointments/duration";
 import { nextBookingReference } from "@/lib/appointments/reference";
 import { getSql } from "@/lib/db/client";
 
@@ -116,9 +116,11 @@ export async function createAppointment(
     quantity: input.quantity,
     sizeId: input.sizeId,
     severityId: input.severityId,
-    durationMinutes: getAppointmentDurationMinutes(
+    addOnIds: input.addOnIds,
+    durationMinutes: getBookingDurationMinutes(
       input.serviceId,
       input.mobileOneWayKm,
+      input,
     ),
     mobileOneWayKm: input.mobileOneWayKm,
     mailInStatus:
