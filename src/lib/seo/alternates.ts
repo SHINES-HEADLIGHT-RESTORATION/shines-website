@@ -1,8 +1,7 @@
 import {
   localeKeepsQueryInUrl,
-  localeToHreflang,
   messageLocale,
-  supportedLocales,
+  type MessageBundleKey,
   type SupportedLocale,
 } from "@/lib/i18n/config";
 import { site } from "@/lib/site";
@@ -12,6 +11,22 @@ export function canonicalUrl(path: string): string {
   const clean = path === "/" ? "" : path;
   return `${site.url}${clean}`;
 }
+
+/**
+ * One canonical URL per translated language bundle. Regional variants of the
+ * same language (fr-BE / fr-FR / fr-LU, nl-BE / nl-NL) serve identical content,
+ * so they must consolidate to a single primary URL. Letting each variant
+ * self-canonicalize created a duplicate cluster that Google flagged as
+ * "duplicate without user-selected canonical" in Search Console.
+ */
+const bundlePrimaryLocale: Record<
+  Exclude<MessageBundleKey, "en">,
+  SupportedLocale
+> = {
+  nl: "nl-BE",
+  fr: "fr-BE",
+  de: "de-DE",
+};
 
 /**
  * URL used to address a locale.
@@ -35,30 +50,25 @@ export function localePathWithQuery(path: string, locale: SupportedLocale): stri
   return `${url.pathname}${url.search}`;
 }
 
-/** Locales with real translated content get their own indexable URL + hreflang. */
-const translatedLocales = supportedLocales.filter(
-  (locale) => messageLocale(locale) !== "en",
-);
-
 export function buildLanguageAlternates(
   path: string,
   activeLocale?: SupportedLocale,
 ) {
   const bare = canonicalUrl(path);
 
-  // Single "en" entry + x-default both resolve to the bare URL; translated
-  // locales advertise their own ?locale= URL. Untranslated locales (es/it/pt/pl)
-  // are intentionally omitted — they serve English and consolidate to bare.
+  // Language-only hreflang: one entry per bundle, each pointing at that
+  // bundle's canonical URL. Regional codes (nl-NL, fr-FR, fr-LU) are
+  // intentionally not advertised — their content is identical, so only the
+  // primary URL per language is indexable.
   const languages: Record<string, string> = { en: bare };
-  for (const locale of translatedLocales) {
-    languages[localeToHreflang(locale)] = localeUrl(path, locale);
+  for (const [lang, locale] of Object.entries(bundlePrimaryLocale)) {
+    languages[lang] = localeUrl(path, locale);
   }
   languages["x-default"] = bare;
 
+  const bundle = activeLocale ? messageLocale(activeLocale) : "en";
   const canonical =
-    activeLocale && messageLocale(activeLocale) !== "en"
-      ? localeUrl(path, activeLocale)
-      : bare;
+    bundle === "en" ? bare : localeUrl(path, bundlePrimaryLocale[bundle]);
 
   return { canonical, languages };
 }

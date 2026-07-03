@@ -7,18 +7,22 @@
 - Middleware and `next.config.ts` send **301/308** from `www.shines.be` → `shines.be` (path + query preserved).
 - `metadataBase` is set to `https://shines.be` in the root layout.
 
-### Canonical policy (hybrid, set in `src/lib/seo/alternates.ts`)
+### Canonical policy (one URL per language bundle, set in `src/lib/seo/alternates.ts`)
 
-The sitemap lists **bare paths** (`/contact`), so every page must be self-canonical to its bare path. Locale handling:
+The sitemap lists **bare paths** (`/contact`). Exactly **four indexable URLs per page**: bare (English), `?locale=nl-BE`, `?locale=fr-BE`, `?locale=de-DE`. Regional variants of the same language serve identical content and consolidate via canonical:
 
 | URL | Canonical | Why |
 |-----|-----------|-----|
 | `/contact` (bare) | `/contact` | self — matches sitemap |
-| `/contact?locale=nl-BE` / `fr-*` / `de-DE` | self (`?locale=…`) | real translations → indexable language pages |
-| `/contact?locale=en-GB` / `es-ES` / `it-IT` / `pt-PT` / `pl-PL` / `en-EU` | `/contact` (bare) | serve identical English → consolidate to bare |
+| `/contact?locale=nl-BE` | self | primary Dutch URL |
+| `/contact?locale=nl-NL` | `?locale=nl-BE` | identical Dutch → consolidate |
+| `/contact?locale=fr-BE` | self | primary French URL |
+| `/contact?locale=fr-FR` / `fr-LU` | `?locale=fr-BE` | identical French → consolidate (fixes GSC "duplicate without user-selected canonical") |
+| `/contact?locale=de-DE` | self | primary (only) German URL |
+| `/contact?locale=en-*` / `es-ES` / `it-IT` / `pt-PT` / `pl-PL` | `/contact` (bare) | serve identical English → consolidate to bare |
 
-- **hreflang** advertises only real languages: `en`/`x-default` → bare, plus `nl-BE`/`nl-NL`/`fr-BE`/`fr-FR`/`fr-LU`/`de-DE` → `?locale=`. Untranslated locales (es/it/pt/pl) are intentionally omitted.
-- Indexing requests should target **bare paths + the nl/fr/de variants** — English-region `?locale=` URLs now consolidate to bare, so submitting them is redundant.
+- **hreflang** is language-only: `en`/`x-default` → bare, `nl` → `?locale=nl-BE`, `fr` → `?locale=fr-BE`, `de` → `?locale=de-DE`. Regional hreflang codes are intentionally omitted — each language has one canonical URL that serves every region.
+- Indexing requests should target **bare paths + the nl-BE / fr-BE / de-DE variants only**. All other `?locale=` URLs consolidate via canonical, so submitting them is redundant.
 
 **Vercel:** In **Project → Settings → Domains**, keep `shines.be` as the primary domain. `www` should redirect to apex (code handles this even if Vercel UI is not set).
 

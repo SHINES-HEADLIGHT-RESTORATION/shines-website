@@ -21,11 +21,6 @@ export type SupportedLocale = (typeof supportedLocales)[number];
 
 export const defaultLocale: SupportedLocale = "en-BE";
 
-/** Maps BCP-47 locale to hreflang + Open Graph locale (underscore). */
-export function localeToHreflang(locale: SupportedLocale): string {
-  return locale;
-}
-
 export function localeToOpenGraph(locale: SupportedLocale): string {
   return locale.replace("-", "_");
 }
