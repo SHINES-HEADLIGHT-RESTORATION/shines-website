@@ -35,9 +35,11 @@ export function googleSiteVerification(): string | null {
   return envString("GOOGLE_SITE_VERIFICATION");
 }
 
-/** Bing Webmaster meta tag content (`msvalidate.01`). */
+/** Bing Webmaster meta tag content (`msvalidate.01`). Env overrides the known production value. */
 export function bingSiteVerification(): string | null {
-  return envString("BING_SITE_VERIFICATION");
+  return (
+    envString("BING_SITE_VERIFICATION") ?? "83CD583BEA5D12AF7A3D57557CA5B736"
+  );
 }
 
 export function formatPublicAddressLines(): string[] {

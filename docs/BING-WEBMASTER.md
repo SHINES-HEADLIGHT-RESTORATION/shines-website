@@ -2,7 +2,9 @@
 
 ## Site setup
 
-- **Property:** `https://shines.be/` (imported from Google Search Console: no separate meta-tag verification needed when GSC import succeeds).
+- **Property:** `https://shines.be/`
+- **Verification:** HTML meta tag `msvalidate.01` (GSC import can drop ownership; meta is the durable method).
+- **Token:** shipped in `bingSiteVerification()`; override with `BING_SITE_VERIFICATION` in Vercel if Bing rotates it.
 - **Dashboard:** [Bing Webmaster Tools](https://www.bing.com/webmasters)
 
 ## Sitemap
