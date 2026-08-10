@@ -9,6 +9,7 @@ import {
   type SupportedLocale,
 } from "@/lib/i18n/config";
 import { detectLocaleFromAcceptLanguage } from "@/lib/i18n/detect";
+import { toAsciiSlug } from "@/lib/ascii-slug";
 import { localeFromMarketPath } from "@/lib/market-paths";
 import { site } from "@/lib/site";
 
@@ -48,6 +49,23 @@ export function middleware(request: NextRequest) {
   if (hostRedirect) return hostRedirect;
 
   const { pathname } = request.nextUrl;
+
+  // Accented city paths (e.g. /locations/liège) → ASCII slug (…/liege).
+  const locationSlug = pathname.match(/^\/locations\/([^/]+)\/?$/)?.[1];
+  if (locationSlug) {
+    let decoded = locationSlug;
+    try {
+      decoded = decodeURIComponent(locationSlug);
+    } catch {
+      /* keep raw segment */
+    }
+    const ascii = toAsciiSlug(decoded);
+    if (ascii !== decoded) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/locations/${ascii}`;
+      return NextResponse.redirect(url, 308);
+    }
+  }
 
   const marketLocale = localeFromMarketPath(pathname);
   if (marketLocale) {

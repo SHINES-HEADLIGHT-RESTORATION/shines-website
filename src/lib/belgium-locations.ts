@@ -1,3 +1,5 @@
+import { toAsciiSlug } from "@/lib/ascii-slug";
+
 export type BelgiumCity = {
   name: string;
   slug: string;
@@ -14,7 +16,7 @@ export type BelgiumProvince = {
 function city(name: string, slug?: string): BelgiumCity {
   return {
     name,
-    slug: slug ?? name.toLowerCase().replace(/\s+/g, "-").replace(/'/g, ""),
+    slug: slug ?? toAsciiSlug(name),
   };
 }
 
@@ -281,7 +283,14 @@ export const allBelgiumCities = belgiumProvinces.flatMap((province) =>
 );
 
 export function getCityBySlug(slug: string) {
-  return allBelgiumCities.find((entry) => entry.slug === slug) ?? null;
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    /* keep raw */
+  }
+  const normalized = toAsciiSlug(decoded);
+  return allBelgiumCities.find((entry) => entry.slug === normalized) ?? null;
 }
 
 export const locationsPagePath = "/locations" as const;
